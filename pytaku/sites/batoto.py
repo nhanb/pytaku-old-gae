@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 
 class Batoto(Site):
 
+    netloc = 'www.batoto.net'
+
     def search_titles(self, keyword):
         url = 'http://www.batoto.net/search?'
         params = {

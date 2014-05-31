@@ -8,6 +8,8 @@ from pytaku.sites import Site
 
 class Kissmanga(Site):
 
+    netloc = 'kissmanga.com'
+
     # Return a list of dictionaries that store at least name and url:
     # [ { 'name': 'Naruto', 'url': 'http://...' }, {...}, ... ]
     def search_titles(self, keyword):

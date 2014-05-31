@@ -153,10 +153,9 @@ class SearchHandler(webapp2.RequestHandler):
     @auth
     def get(self):
         keyword = self.data['keyword']
-        s = sites.available_sites('TODO')
         titles = []
 
-        for site in s:
+        for site in sites.available_sites:
             titles.extend(site.search_titles(keyword))
 
         return True, {'titles': titles}
