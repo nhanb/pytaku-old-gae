@@ -66,3 +66,21 @@ class Title(ndb.Model):
     @classmethod
     def getByUrl(cls, url):
         return cls.query(cls.url == url).get()
+
+
+class Chapter(ndb.Model):
+    title = ndb.KeyProperty(kind='Title')
+    name = ndb.StringProperty(indexed=True)
+    url = ndb.StringProperty(indexed=True)
+    pages = ndb.JsonProperty()
+    created = ndb.DateTimeProperty(auto_now_add=True)
+
+    @classmethod
+    def create(cls, site, name, url):
+        obj = cls(site=site, name=name, url=url)
+        obj.put()
+        return obj
+
+    @classmethod
+    def getByUrl(cls, url):
+        return cls.query(cls.url == url).get()
