@@ -1,0 +1,29 @@
+application: pytaku
+version: 0-1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /static
+  static_dir: frontend/static
+  secure: always
+
+- url: /favicon\.ico
+  static_files: frontend/favicon.ico
+  upload: frontend/favicon\.ico
+
+- url: /app
+  static_files: frontend/app.html
+  upload: frontend/app\.html
+  secure: always
+
+- url: .*
+  script: main.app
+  secure: always
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: jinja2
+  version: "2.6"
