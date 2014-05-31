@@ -1,6 +1,6 @@
 import webapp2
 import json
-from pytaku.models import User, Rant, createUser
+from pytaku.models import User, createUser, Title
 from pytaku.helpers import validate_email
 
 
@@ -36,8 +36,9 @@ def wrap_json(func):
     return wrapped
 
 
-# Get data fields from request, check if all required fields are present
-def unpack_json(*fields):
+# Get data fields from request, check if all required fields are present.
+# All fields are JSON encoded in the POST body
+def unpack_post(*fields):
     def wrap(func):
         def wrapped(handler):
             try:
@@ -66,10 +67,34 @@ def unpack_json(*fields):
     return wrap
 
 
+# Similar to unpack_post, but using GET params in URL instead of POST body
+def unpack_get(*fields):
+    def wrap(func):
+        def wrapped(handler):
+            data = {}
+            fields_not_found = []
+
+            for field in fields:
+                data[field] = handler.request.get(field, None)
+                if data[field] is None:
+                    fields_not_found.append(field)
+
+            if fields_not_found:
+                return False, {
+                    'msg': 'required_fields_not_found',
+                    'fields_not_found': fields_not_found
+                }
+
+            handler.data = data
+            return func(handler)
+        return wrapped
+    return wrap
+
+
 class LoginHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_json('email', 'password')
+    @unpack_post('email', 'password')
     def post(self):
         email = self.data['email']
         password = self.data['password']
@@ -83,7 +108,7 @@ class LoginHandler(webapp2.RequestHandler):
 class UserHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_json('email', 'password')
+    @unpack_post('email', 'password')
     def post(self):
         email = self.data['email']
         password = self.data['password']
@@ -102,51 +127,19 @@ class UserHandler(webapp2.RequestHandler):
         }
 
 
-class RantsHandler(webapp2.RequestHandler):
+class TitleHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_json('category', 'title', 'content')
-    @auth
-    def post(self):
-        category = self.data['category']
-        title = self.data['title']
-        content = self.data['content']
-        rant = Rant.create(category, title, content, self.user)
-        return True, {
-            'msg': 'rant_created',
-            'id': rant.key.id()
-        }
-
-    @wrap_json
+    @unpack_get('url')
     @auth
     def get(self):
-        rants = Rant.getByUser(self.user)
-
-        if rants is not None:
-            return True, [{
-                'content': rant.content,
-                'title': rant.title,
-                'category': rant.category,
-                'created': str(rant.created),
-            } for rant in rants]
-
-        else:
-            return False, {'msg': 'rants_not_found'}
-
-
-class RantHandler(webapp2.RequestHandler):
-
-    @wrap_json
-    @auth
-    def get(self):
-        rant_id = int(self.request.path.split('/')[-1])
-        rant = Rant.getById(rant_id, self.user)
-        if rant is not None:
+        title = Title.getByUrl(self.data['url'])
+        if title is not None:
             return True, {
-                'content': rant.content,
-                'title': rant.title,
-                'category': rant.category,
-                'created': str(rant.created),
+                'site': title.site,
+                'name': title.name,
+                'url': title.url,
+                'created': str(title.created),
             }
         else:
-            return False, {'msg': 'rant_not_found'}
+            return False, {'msg': 'title_not_found'}

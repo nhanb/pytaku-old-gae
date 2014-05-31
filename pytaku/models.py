@@ -51,30 +51,18 @@ def createUser(email, password):
     return user
 
 
-class Rant(ndb.Model):
-    category = ndb.StringProperty(indexed=True)
-    title = ndb.StringProperty(indexed=True)
-    content = ndb.TextProperty()
+class Title(ndb.Model):
+    site = ndb.StringProperty(indexed=True)
+    name = ndb.StringProperty(indexed=True)
+    url = ndb.StringProperty(indexed=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
-    user = ndb.KeyProperty(kind="User")
 
     @classmethod
-    def create(cls, category, title, content, user):
-        obj = cls(category=category, title=title,
-                  content=content, user=user.key)
+    def create(cls, site, name, url):
+        obj = cls(site=site, name=name, url=url)
         obj.put()
         return obj
 
     @classmethod
-    def getById(cls, id, from_user):
-        rant = cls.get_by_id(id)
-        if rant is None or rant.user != from_user.key:
-            return None
-        return rant
-
-    @classmethod
-    def getByUser(cls, from_user):
-        rants = cls.query(cls.user == from_user.key)
-        if rants:
-            return rants
-        return None
+    def getByUrl(cls, url):
+        return cls.query(cls.url == url).get()
