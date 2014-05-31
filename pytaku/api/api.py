@@ -62,7 +62,7 @@ class TitleHandler(webapp2.RequestHandler):
 class SearchHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_get('sites', 'keyword')
+    @unpack_get('keyword')
     @auth
     def get(self):
         keyword = self.data['keyword']
