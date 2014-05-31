@@ -1,7 +1,7 @@
 import webapp2
 import json
-from pytaku.models import User, Rant
-from pytaku.helpers import validate_email, validate_name
+from pytaku.models import User, Rant, createUser
+from pytaku.helpers import validate_email
 
 
 def auth(func):
@@ -91,7 +91,10 @@ class UserHandler(webapp2.RequestHandler):
         if not validate_email(email):
             return False, {'msg': 'invalid_email'}
 
-        new_user = User.create(email, password)
+        new_user = createUser(email, password)
+        if new_user is None:
+            return False, {'msg': 'existing_email'}
+
         return True, {
             'id': new_user.key.id(),
             'msg': 'user_created',
