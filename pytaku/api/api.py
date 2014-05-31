@@ -2,6 +2,7 @@ import webapp2
 import json
 from pytaku.models import User, createUser, Title
 from pytaku.helpers import validate_email
+from pytaku import sites
 
 
 def auth(func):
@@ -143,3 +144,19 @@ class TitleHandler(webapp2.RequestHandler):
             }
         else:
             return False, {'msg': 'title_not_found'}
+
+
+class SearchHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @unpack_get('sites', 'keyword')
+    @auth
+    def get(self):
+        keyword = self.data['keyword']
+        s = sites.available_sites('TODO')
+        titles = []
+
+        for site in s:
+            titles.extend(site.search_titles(keyword))
+
+        return True, {'titles': titles}
