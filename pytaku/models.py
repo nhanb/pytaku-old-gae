@@ -6,7 +6,6 @@ from datetime import datetime
 
 class User(ndb.Model):
     email = ndb.StringProperty(indexed=True)
-    name = ndb.StringProperty()
     password_hash = ndb.StringProperty()
     api_token = ndb.StringProperty()
     last_login = ndb.DateTimeProperty(auto_now_add=True)
@@ -21,11 +20,11 @@ class User(ndb.Model):
     def hash_password(password):
         return pbkdf2_sha512.encrypt(password)
 
+    @ndb.transactional
     @classmethod
-    def create(cls, email, password, name):
+    def create(cls, email, password):
         user = cls(email=email,
                    password_hash=cls.hash_password(password),
-                   name=name,
                    id=str(uuid.uuid1()))
         user.generate_token()
         user.put()

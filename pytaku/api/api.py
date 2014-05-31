@@ -7,8 +7,8 @@ from pytaku.helpers import validate_email, validate_name
 def auth(func):
 
     def wrapped(handler):
-        email = handler.request.headers.get('X-Dear-Vanna-Email')
-        token = handler.request.headers.get('X-Dear-Vanna-Token')
+        email = handler.request.headers.get('X-Email')
+        token = handler.request.headers.get('X-Token')
         if not (email and token):
             return True, {'msg': 'auth_headers_not_found'}
 
@@ -83,19 +83,15 @@ class LoginHandler(webapp2.RequestHandler):
 class UserHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_json('name', 'email', 'password')
+    @unpack_json('email', 'password')
     def post(self):
         email = self.data['email']
         password = self.data['password']
-        name = self.data['name']
 
         if not validate_email(email):
             return False, {'msg': 'invalid_email'}
 
-        if not validate_name(name):
-            return True, {'msg': 'invalid_name'}
-
-        new_user = User.create(email, password, name)
+        new_user = User.create(email, password)
         return True, {
             'id': new_user.key.id(),
             'msg': 'user_created',
