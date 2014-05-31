@@ -1,4 +1,5 @@
 App = Ember.Application.create();
+App.ApplicationAdapter = DS.FixtureAdapter;
 
 App.LoginController = Ember.Controller.extend({
     login: function() {
@@ -30,3 +31,25 @@ App.RegisterController = Ember.Controller.extend({
         });
     }
 });
+
+App.Router.map(function() {
+    this.resource('login');
+    this.resource('register');
+    this.resource('sites');
+});
+
+App.SitesRoute = Ember.Route.extend({
+    model: function() {
+        return this.store.find('site');
+    }
+});
+
+App.Site = DS.Model.extend({
+    domain: DS.attr('string')
+});
+
+App.Site.FIXTURES = [
+    {id: 1, domain: 'kissmanga.com'},
+    {id: 2, domain: 'mangafox.com'},
+    {id: 3, domain: 'batoto.com'}
+];
