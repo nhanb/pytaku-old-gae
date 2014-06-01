@@ -56,11 +56,6 @@ class Chapter(ndb.Model):
     pages = ndb.JsonProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
 
-    def computeAge(self):
-        now = datetime.now()
-        return (now - self.created).days
-    age = ndb.ComputedProperty(computeAge)
-
     @classmethod
     def create(cls, url, pages):
         obj = cls(url=url, pages=pages)

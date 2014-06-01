@@ -93,23 +93,9 @@ class Batoto(Site):
         pages_htmls = [html]
         urls = urls[1:]
 
-        rpcs = []
+        # TODO: async download while respecting server
         for url in urls:
-            # Make async calls
-            rpc = urlfetch.create_rpc()
-            urlfetch.make_fetch_call(rpc, url)
-            rpcs.append((rpc, url))
-
-        # Get finished requests
-        for rpc, url in rpcs:
-            resp = rpc.get_result()
-            if resp.status_code == 200:
-                pages_htmls.append(resp.content)
-            else:
-                # Failed => retry:
-                new_rpc = urlfetch.create_rpc()
-                urlfetch.make_fetch_call(new_rpc, url)
-                rpcs.append((new_rpc, url))
+            pages_htmls.append(self.get_html(url))
 
         returns = []
         for page_html in pages_htmls:

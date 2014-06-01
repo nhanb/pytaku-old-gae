@@ -2,6 +2,7 @@ import webapp2
 from pytaku.models import User, createUser, Chapter
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
+from datetime import datetime
 
 
 class LoginHandler(webapp2.RequestHandler):
@@ -91,7 +92,7 @@ class ChapterHandler(webapp2.RequestHandler):
 
         chapter = Chapter.getByUrl(url)
 
-        if chapter is None or chapter.age < 3:
+        if chapter is None or (datetime.now() - chapter.created).days < 3:
             page_html = site.fetch_chapter_seed_page(url)
             chapter_pages = site.chapter_pages(page_html)
             pages = [page['url'] for page in chapter_pages]
