@@ -1,5 +1,6 @@
 import json
 from pytaku.models import User
+import validators
 
 
 def auth(func):
@@ -36,7 +37,7 @@ def wrap_json(func):
 
 # Get data fields from request, check if all required fields are present.
 # All fields are JSON encoded in the POST body
-def unpack_post(*fields):
+def unpack_post(**fields):
     def wrap(func):
         def wrapped(handler):
             try:
@@ -45,45 +46,55 @@ def unpack_post(*fields):
                 return True, {'data': handler.request.body}
                 return False, {'msg': 'malformed_request'}
 
-            data = {}
-            fields_not_found = []
-
-            for field in fields:
-                data[field] = req_data.get(field, None)
-                if data[field] is None:
-                    fields_not_found.append(field)
-
-            if fields_not_found:
-                return False, {
-                    'msg': 'required_fields_not_found',
-                    'fields_not_found': fields_not_found
-                }
-
-            handler.data = data
-            return func(handler)
+            return _process_fields(fields, req_data, handler, func)
         return wrapped
     return wrap
 
 
 # Similar to unpack_post, but using GET params in URL instead of POST body
-def unpack_get(*fields):
+def unpack_get(**fields):
     def wrap(func):
         def wrapped(handler):
-            data = {}
-            fields_not_found = []
-
-            for field in fields:
-                data[field] = handler.request.get(field, None)
-                if data[field] is None:
-                    fields_not_found.append(field)
-
-            if fields_not_found:
-                return False, {
-                    'msg': 'required_fields_not_found',
-                    'fields_not_found': fields_not_found
-                }
-
-            handler.data = data
-            return func(handler)
+            return _process_fields(fields, handler.request, handler, func)
         return wrapped
     return wrap
+
+
+# Common functionality of unpack_get() & unpack_post()
+# Examples of `fields`:
+#       @unpack_get(
+#           email=['ustring', 'email'],
+#           password=['ustring']
+#       )
+def _process_fields(fields, source, handler, func):
+    data = {}
+    invalid_fields = {}
+
+    for field, validations in fields.iteritems():
+        value = source.get(field, None)
+
+        if value is None:
+            invalid_fields[field] = 'not_found'
+            continue
+
+        for validator_name in validations:
+            validator = getattr(validators, validator_name, None)
+
+            if validator is None:
+                invalid_fields[field] = 'unknown_validator'
+                continue
+
+            success, val = validator(value)
+            if success:
+                data[field] = val
+            else:
+                invalid_fields[field] = val
+
+    if invalid_fields:
+        return False, {
+            'msg': 'invalid_fields',
+            'invalid_fields': invalid_fields
+        }
+
+    handler.data = data
+    return func(handler)

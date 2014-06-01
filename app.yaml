@@ -13,7 +13,7 @@ handlers:
   static_files: frontend/favicon.ico
   upload: frontend/favicon\.ico
 
-- url: /app
+- url: /
   static_files: frontend/app.html
   upload: frontend/app\.html
   secure: always

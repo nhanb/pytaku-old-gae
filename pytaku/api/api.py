@@ -1,6 +1,5 @@
 import webapp2
 from pytaku.models import User, createUser, Title
-from pytaku.helpers import validate_email
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 
@@ -8,7 +7,7 @@ from decorators import wrap_json, unpack_post, unpack_get, auth
 class LoginHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_post('email', 'password')
+    @unpack_post(email=['ustring', 'email'], password=['ustring'])
     def post(self):
         email = self.data['email']
         password = self.data['password']
@@ -22,13 +21,10 @@ class LoginHandler(webapp2.RequestHandler):
 class UserHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_post('email', 'password')
+    @unpack_post(email=['ustring', 'email'], password=['ustring'])
     def post(self):
         email = self.data['email']
         password = self.data['password']
-
-        if not validate_email(email):
-            return False, {'msg': 'invalid_email'}
 
         new_user = createUser(email, password)
         if new_user is None:
@@ -44,7 +40,7 @@ class UserHandler(webapp2.RequestHandler):
 class TitleHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_get('url')
+    @unpack_get(url=['ustring'])
     @auth
     def get(self):
         title = Title.getByUrl(self.data['url'])
@@ -62,7 +58,7 @@ class TitleHandler(webapp2.RequestHandler):
 class SearchHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_get('keyword')
+    @unpack_get(keyword=['ustring'])
     @auth
     def get(self):
         keyword = self.data['keyword']
