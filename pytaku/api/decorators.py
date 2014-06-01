@@ -1,6 +1,6 @@
 import json
 from pytaku.models import User
-from exceptions import FailedRequestError
+from exceptions import PyError
 import validators
 
 
@@ -10,14 +10,14 @@ def auth(func):
         email = handler.request.headers.get('X-Email')
         token = handler.request.headers.get('X-Token')
         if not (email and token):
-            return True, {'msg': 'auth_headers_not_found'}
+            raise PyError({'msg': 'auth_headers_not_found'})
 
         user, msg = User.auth_with_token(email, token)
         if user:
             handler.user = user
             return func(handler)
         else:
-            return False, {'msg': msg}
+            raise PyError({'msg': msg})
 
     return wrapped
 
@@ -26,20 +26,13 @@ def auth(func):
 def wrap_json(func):
     def wrapped(handler):
         try:
-            success, resp_body = func(handler)
-            resp_body['success'] = success
-            if hasattr(handler, 'extra_vals'):
-                resp_body.update(handler.extra_vals)
+            resp_body = func(handler)
+        except PyError, e:
+            resp_body = e.value
+            handler.response.set_status(e.status_code)
 
-            handler.response.headers['Content-Type'] = 'application/json'
-            handler.response.write(json.dumps(resp_body))
-
-        except FailedRequestError, e:
-            resp_body = {
-                'success': False,
-                'msg': 'external_request_failed',
-                'failed_url': e.value
-            }
+        handler.response.headers['Content-Type'] = 'application/json'
+        handler.response.write(json.dumps(resp_body))
 
     return wrapped
 
@@ -52,8 +45,7 @@ def unpack_post(**fields):
             try:
                 req_data = json.loads(handler.request.body)
             except ValueError:
-                return True, {'data': handler.request.body}
-                return False, {'msg': 'malformed_request'}
+                raise PyError({'msg': 'malformed_request'})
 
             return _process_fields(fields, req_data, handler, func)
         return wrapped
@@ -100,10 +92,10 @@ def _process_fields(fields, source, handler, func):
                 invalid_fields[field] = val
 
     if invalid_fields:
-        return False, {
+        raise PyError({
             'msg': 'invalid_fields',
             'invalid_fields': invalid_fields
-        }
+        })
 
     handler.data = data
     return func(handler)

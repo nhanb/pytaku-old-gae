@@ -3,6 +3,7 @@ from pytaku.models import User, createUser, Chapter
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from datetime import datetime
+from exceptions import PyError
 
 
 class LoginHandler(webapp2.RequestHandler):
@@ -14,9 +15,9 @@ class LoginHandler(webapp2.RequestHandler):
         password = self.data['password']
         user = User.auth_with_password(email, password)
         if user:
-            return True, {'token': user.api_token}
+            return {'token': user.api_token}
         else:
-            return False, {'msg': 'invalid_password'}
+            raise PyError({'msg': 'invalid_password'})
 
 
 class UserHandler(webapp2.RequestHandler):
@@ -29,9 +30,8 @@ class UserHandler(webapp2.RequestHandler):
 
         new_user = createUser(email, password)
         if new_user is None:
-            return False, {'msg': 'existing_email'}
-
-        return True, {
+            raise PyError({'msg': 'existing_email'})
+        return {
             'id': new_user.key.id(),
             'msg': 'user_created',
             'token': new_user.api_token,
@@ -49,12 +49,11 @@ class TitleHandler(webapp2.RequestHandler):
         # Check if this url is supported
         site = sites.get_site(url)
         if site is None:
-            return False, {'msg': 'unsupported_url'}
-
+            raise PyError({'msg': 'unsupported_url'})
         title_page = site.fetch_manga_seed_page(url)
         title = site.title_info(title_page)
 
-        return True, {
+        return {
             'site': site.netloc,
             'name': title['name'],
             'thumb_url': title['thumbnailUrl'],
@@ -74,7 +73,7 @@ class SearchHandler(webapp2.RequestHandler):
         for site in sites.available_sites:
             titles.extend(site.search_titles(keyword))
 
-        return True, {'titles': titles}
+        return titles
 
 
 class ChapterHandler(webapp2.RequestHandler):
@@ -88,7 +87,7 @@ class ChapterHandler(webapp2.RequestHandler):
         # Check if this url is supported
         site = sites.get_site(url)
         if site is None:
-            return False, {'msg': 'unsupported_url'}
+            raise PyError({'msg': 'unsupported_url'})
 
         chapter = Chapter.getByUrl(url)
 
@@ -101,6 +100,4 @@ class ChapterHandler(webapp2.RequestHandler):
             else:
                 chapter.pages = pages
 
-        return True, {
-            'pages': chapter.pages,
-        }
+        return chapter.pages

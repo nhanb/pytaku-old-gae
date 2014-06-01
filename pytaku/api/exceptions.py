@@ -1,7 +1,4 @@
-# Request to external site faild
-class FailedRequestError(Exception):
-    def __init__(self, value):
+class PyError(Exception):
+    def __init__(self, value, status_code=400):
         self.value = value
-
-    def __str__(self):
-        return repr(self.value)
+        self.status_code = status_code

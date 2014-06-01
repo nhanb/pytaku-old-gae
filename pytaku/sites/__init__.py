@@ -1,6 +1,6 @@
 import urlparse
 from google.appengine.api import urlfetch
-from pytaku.api.exceptions import FailedRequestError
+from pytaku.api.exceptions import PyError
 
 
 # Skeleton site. If a site requires special requests (custom headers, etc.)
@@ -10,7 +10,7 @@ class Site:
     def get_html(self, url, **kwargs):
         resp = urlfetch.fetch(url, **kwargs)
         if resp.status_code != 200:
-            raise FailedRequestError(url)
+            raise PyError({'msg': 'external_request_fail', 'url': url})
         return resp.content
 
     def fetch_manga_seed_page(self, url, **kwargs):
