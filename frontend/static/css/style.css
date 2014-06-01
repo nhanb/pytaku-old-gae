@@ -1,6 +1,6 @@
 /* Put your CSS here */
-.ember-application {
-    margin: 20px;
+#main-container {
+    margin-top: 70px;
 }
 
 .form-horizontal {

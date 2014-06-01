@@ -5,6 +5,7 @@
   <title>Ember Starter Kit</title>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -12,21 +13,34 @@
 <body>
 
   <script type="text/x-handlebars">
-  <div class="container">
 
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <ul class="nav navbar-nav navbar-right">
-              <li>{{#link-to 'index'}}Home{{/link-to}}</li>
-              <li>{{#link-to 'search'}}Search{{/link-to}}</li>
-              <li>{{#link-to 'login'}}Login{{/link-to}}</li>
-              <li>{{#link-to 'register'}}Register{{/link-to}}</li>
-            </ul>
-        </div>
+  <!-- Fixed navbar -->
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" tabindex="-1" href="#">Pytaku</a>
       </div>
 
-      {{outlet}}
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li>{{#link-to 'search' }}<i class="fa fa-search fa-lg"></i> Search{{/link-to}}</li>
+          <li>{{#link-to 'login' }}Login{{/link-to}}</li>
+          <li>{{#link-to 'register' }}Register{{/link-to}}</li>
+        </ul>
+
+      </div><!--/.nav-collapse -->
     </div>
+  </div>
+
+  <div class="container" id="main-container">
+  {{outlet}}
+  </div>
+
   </script>
 
   <script type="text/x-handlebars" id="index">
@@ -108,14 +122,37 @@
   </script>
 
   <script type="text/x-handlebars" id="search">
-    Boo
+    <div class="row-fluid"> <!-- input-row -->
+      <div class="col col-md-6 col-md-offset-3">
+        {{input type="text" value=search action="query"}}
+
+        <input type="text" class="form-control" id="text-search"
+        placeholder="Enter keyword here...">
+        <br>
+          <button class="btn btn-primary" id="btn-search" type="button"
+            data-bind="click: searchManga" tabindex="-1">
+            <i class="fa fa-lg fa-search"></i> Search manga title
+          </button>
+      </div>
+    </div> <!-- /input-row -->
+
+    {{outlet}}
+
+  </script>
+
+  <script type="text/x-handlebars" id="result">
+    {{#each model}}
+    <p>
+      {{url}}
+    </p>
+    {{/each}}
   </script>
 
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.7/ember-data.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.debug.js"></script>
   <script src="/static/js/app.js"></script>
 
 </body>
