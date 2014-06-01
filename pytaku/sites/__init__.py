@@ -1,19 +1,26 @@
 import urlparse
 from google.appengine.api import urlfetch
+from pytaku.api.exceptions import FailedRequestError
 
 
 # Skeleton site. If a site requires special requests (custom headers, etc.)
 # then the site implementation should override these methods.
 class Site:
 
-    def fetch_manga_seed_page(self, url):
-        return urlfetch.fetch(url)
+    def get_html(self, url, **kwargs):
+        resp = urlfetch.fetch(url, **kwargs)
+        if resp.status_code != 200:
+            raise FailedRequestError(url)
+        return resp.content
 
-    def fetch_chapter_seed_page(self, url):
-        return urlfetch.fetch(url)
+    def fetch_manga_seed_page(self, url, **kwargs):
+        return self.get_html(url, **kwargs)
 
-    def fetch_page_image(self, url):
-        return urlfetch.fetch(url)
+    def fetch_chapter_seed_page(self, url, **kwargs):
+        return self.get_html(url, **kwargs)
+
+    def fetch_page_image(self, url, **kwargs):
+        return self.get_html(url, **kwargs)
 
 from kissmanga import Kissmanga
 from batoto import Batoto
@@ -30,3 +37,4 @@ def get_site(url):
     for site in available_sites:
         if netloc == site.netloc:
             return site
+    return None

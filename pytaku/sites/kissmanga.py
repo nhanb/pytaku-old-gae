@@ -35,6 +35,7 @@ class Kissmanga(Site):
                 for item in parsed]
 
     # All kinds of data
+    # - name "Naruto"
     # - chapters [{name, url}, {}, ...] - latest first
     # - thumbnailUrl "url"
     # - tags [tag1, tag2, ...]
@@ -43,9 +44,11 @@ class Kissmanga(Site):
         chapters = self._chapters(soup)
         thumbnailUrl = self._thumbnail_url(soup)
         tags = self._tags(soup)
+        name = self._name(soup)
         return {'chapters': chapters,
                 'thumbnailUrl': thumbnailUrl,
-                'tags': tags}
+                'tags': tags,
+                'name': name}
 
     def _chapters(self, soup):
         table = soup.find('table', class_='listing')
@@ -60,6 +63,11 @@ class Kissmanga(Site):
         tags = soup.find('span', text='Genres:').find_next_siblings('a')
         return [text.string.lower() for text in tags]
 
+    def _name(self, soup):
+        # <link rel='alternate' title='Naruto manga' ...
+        # => must remove the ' manga' part
+        return soup.find('link', {'rel': 'alternate'})['title'][:-6]
+
     # Pages from a chapter: [{ 'filename': '...', 'url': '...' }]
     def chapter_pages(self, html):
         pat = re.compile('lstImages\.push\("(.+?)"\);')
@@ -73,4 +81,4 @@ class Kissmanga(Site):
 
     def fetch_manga_seed_page(self, url):
         header = {'Cookie': 'vns_Adult=yes'}
-        return urlfetch.fetch(url, headers=header)
+        return self.get_html(url, headers=header)

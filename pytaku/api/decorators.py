@@ -1,5 +1,6 @@
 import json
 from pytaku.models import User
+from exceptions import FailedRequestError
 import validators
 
 
@@ -24,13 +25,21 @@ def auth(func):
 # Wrap data from server to proper JSON format for response body
 def wrap_json(func):
     def wrapped(handler):
-        success, resp_body = func(handler)
-        resp_body['success'] = success
-        if hasattr(handler, 'extra_vals'):
-            resp_body.update(handler.extra_vals)
+        try:
+            success, resp_body = func(handler)
+            resp_body['success'] = success
+            if hasattr(handler, 'extra_vals'):
+                resp_body.update(handler.extra_vals)
 
-        handler.response.headers['Content-Type'] = 'application/json'
-        handler.response.write(json.dumps(resp_body))
+            handler.response.headers['Content-Type'] = 'application/json'
+            handler.response.write(json.dumps(resp_body))
+
+        except FailedRequestError, e:
+            resp_body = {
+                'success': False,
+                'msg': 'external_request_failed',
+                'failed_url': e.value
+            }
 
     return wrapped
 

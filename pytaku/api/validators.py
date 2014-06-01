@@ -1,10 +1,20 @@
 import re
+from urllib import unquote
 
 
 def integer(value):
     if isinstance(value, int):
         return True, value
     return False, 'invalid_int'
+
+
+# Either 1 or 0
+def boolean(value):
+    if value == '1':
+        return True, True
+    elif value == '0':
+        return True, False
+    return False, 'invalid_bool'
 
 
 def ustring(value):
@@ -20,3 +30,7 @@ def email(val):
     if bool(re.match(email_regex, val)):
         return True, val
     return False, 'invalid_email'
+
+
+def urlencoded(val):
+    return True, unquote(val)

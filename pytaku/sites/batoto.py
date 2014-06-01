@@ -40,9 +40,14 @@ class Batoto(Site):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
         thumbnailUrl, tags = self._thumbnail_url_and_tags(soup)
+        name = self._name(soup)
         return {'chapters': chapters,
                 'thumbnailUrl': thumbnailUrl,
+                'name': name,
                 'tags': tags}
+
+    def _name(self, soup):
+        return soup.find('h1', class_='ipsType_pagetitle').contents[0].strip()
 
     def _chapters(self, soup):
         try:
