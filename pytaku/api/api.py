@@ -1,5 +1,5 @@
 import webapp2
-from pytaku.models import User, createUser
+from pytaku.models import User, createUser, Chapter
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 
@@ -74,3 +74,32 @@ class SearchHandler(webapp2.RequestHandler):
             titles.extend(site.search_titles(keyword))
 
         return True, {'titles': titles}
+
+
+class ChapterHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @unpack_get(url=['ustring', 'urlencoded'])
+    @auth
+    def get(self):
+        url = self.data['url']
+
+        # Check if this url is supported
+        site = sites.get_site(url)
+        if site is None:
+            return False, {'msg': 'unsupported_url'}
+
+        chapter = Chapter.getByUrl(url)
+
+        if chapter is None or chapter.age < 3:
+            page_html = site.fetch_chapter_seed_page(url)
+            chapter_pages = site.chapter_pages(page_html)
+            pages = [page['url'] for page in chapter_pages]
+            if chapter is None:
+                chapter = Chapter.create(url, pages)
+            else:
+                chapter.pages = pages
+
+        return True, {
+            'pages': chapter.pages,
+        }

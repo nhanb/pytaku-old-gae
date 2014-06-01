@@ -52,14 +52,18 @@ def createUser(email, password):
 
 
 class Chapter(ndb.Model):
-    name = ndb.StringProperty(indexed=True)
     url = ndb.StringProperty(indexed=True)
     pages = ndb.JsonProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
 
+    def computeAge(self):
+        now = datetime.now()
+        return (now - self.created).days
+    age = ndb.ComputedProperty(computeAge)
+
     @classmethod
-    def create(cls, title, name, url):
-        obj = cls(site=title.key, name=name, url=url)
+    def create(cls, url, pages):
+        obj = cls(url=url, pages=pages)
         obj.put()
         return obj
 
