@@ -51,31 +51,7 @@ def createUser(email, password):
     return user
 
 
-class Title(ndb.Model):
-    site = ndb.StringProperty(indexed=True)
-    name = ndb.StringProperty(indexed=True)
-    url = ndb.StringProperty(indexed=True)
-    thumb_url = ndb.StringProperty()
-    created = ndb.DateTimeProperty(auto_now_add=True)
-
-    def getChapters(self):
-        return Chapter.query(Chapter.title == self.key).fetch()
-
-    @classmethod
-    def create(cls, site, name, url, thumbnailUrl, chapters):
-        title = cls(site=site, name=name, url=url, thumb_url=thumbnailUrl)
-        for chapter in chapters:
-            Chapter.create(title, chapter['name'], chapter['url'])
-        title.put()
-        return title
-
-    @classmethod
-    def getByUrl(cls, url):
-        return cls.query(cls.url == url).get()
-
-
 class Chapter(ndb.Model):
-    title = ndb.KeyProperty(kind='Title')
     name = ndb.StringProperty(indexed=True)
     url = ndb.StringProperty(indexed=True)
     pages = ndb.JsonProperty()

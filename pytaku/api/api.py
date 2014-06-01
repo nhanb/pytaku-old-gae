@@ -1,5 +1,5 @@
 import webapp2
-from pytaku.models import User, createUser, Title, Chapter
+from pytaku.models import User, createUser
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 
@@ -40,22 +40,10 @@ class UserHandler(webapp2.RequestHandler):
 class TitleHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_get(url=['ustring', 'urlencoded'], update=['boolean'])
+    @unpack_get(url=['ustring', 'urlencoded'])
     @auth
     def get(self):
         url = self.data['url']
-        existing_title = Title.getByUrl(url)
-        if existing_title is not None and not self.data['update']:
-            return True, {
-                'site': existing_title.site,
-                'name': existing_title.name,
-                'url': existing_title.url,
-                'full': True,
-                'chapters': existing_title.getChapters(),
-                'created': str(existing_title.created),
-            }
-
-        # ------------ Fetch latest version of title ---------
 
         # Check if this url is supported
         site = sites.get_site(url)
@@ -63,28 +51,14 @@ class TitleHandler(webapp2.RequestHandler):
             return False, {'msg': 'unsupported_url'}
 
         title_page = site.fetch_manga_seed_page(url)
-        title_info = site.title_info(title_page)
-        chapters = title_info['chapters']
-        thumb_url = title_info['thumbnailUrl']
-        tags = title_info['tags']
-        name = title_info['name']
+        title = site.title_info(title_page)
 
-        # This is a brand new title and (update == True or update == False)
-        if existing_title is None:
-            title = Title.create(site, name, url, thumb_url, tags, chapters)
-            return True, {
-                'site': title.site,
-                'name': title.name,
-                'url': title.url,
-                'full': False,
-                'created': str(title.created),
-            }
-
-        # Only possiblity left: this is an existing title and update == True
-        # => Look for this title's new chapters
-        for chapter in chapters:
-            existing_chapter = Chapter.getByUrl(chapter['url'])
-
+        return True, {
+            'site': site.netloc,
+            'name': title['name'],
+            'thumb_url': title['thumbnailUrl'],
+            'chapters': title['chapters'],
+        }
 
 
 class SearchHandler(webapp2.RequestHandler):
