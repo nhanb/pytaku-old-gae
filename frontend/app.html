@@ -2,170 +2,45 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ember Starter Kit</title>
+  <title>Pytaku</title>
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" >
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
 
-  <script type="text/x-handlebars">
-
-  <!-- Fixed navbar -->
-  <div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" tabindex="-1" href="#">Pytaku</a>
-      </div>
-
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li>{{#link-to 'search' }}<i class="fa fa-search fa-lg"></i> Search{{/link-to}}</li>
-          <li>{{#link-to 'login' }}Login{{/link-to}}</li>
-          <li>{{#link-to 'register' }}Register{{/link-to}}</li>
-        </ul>
-
-      </div><!--/.nav-collapse -->
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Pytaku</a>
     </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Search</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Register</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
   </div>
+</div>
 
-  <div class="container" id="main-container">
-  {{outlet}}
-  </div>
-
-  </script>
-
-  <script type="text/x-handlebars" id="index">
-    <h1>Welcome to Ember Digest</h1>
-    <p>Here we got all sorts of content!</p>
-  </script>
-
-  <script type="text/x-handlebars" id="login">
-
-  {{#if loggedIn}}
-    <p>You are already logged in!</p>
-  {{else}}
-
-    <form {{ action login on="submit" }} class="form-horizontal" role="form">
-      <div class="form-group">
-        <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-        <div class="col-sm-10">
-          {{input value=email type="text" placeholder="Email"
-          class="form-control" id=inputEmail}}
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="inputPassword" class="col-sm-2 control-label">Password</label>
-        <div class="col-sm-10">
-          {{input value=password type="password" placeholder="Password"
-          class="form-control" id="inputPassword"}}
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          {{input class="btn btn-default" type="submit" value="Log In"}}
-        </div>
-      </div>
-    </form>
-
-    {{#if errorMessage}}
-      <div class="alert alert-danger">{{errorMessage}}</div>
-    {{/if}}
-
-  {{/if}}
-
-  </script>
-
-
-  <script type="text/x-handlebars" id="register">
-
-  {{#if loggedIn}}
-    <p>You are already logged in!</p>
-  {{else}}
-
-    <form {{ action register on="submit" }} class="form-horizontal" role="form">
-      <div class="form-group">
-        <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-        <div class="col-sm-10">
-          {{input value=email type="text" placeholder="Email"
-          class="form-control" id=inputEmail}}
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="inputPassword" class="col-sm-2 control-label">Password</label>
-        <div class="col-sm-10">
-          {{input value=password type="password" placeholder="Password"
-          class="form-control" id="inputPassword"}}
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          {{input class="btn btn-default" type="submit" value="Register"}}
-        </div>
-      </div>
-    </form>
-
-    {{#if errorMessage}}
-      <div class="alert alert-danger">{{errorMessage}}</div>
-    {{/if}}
-
-  {{/if}}
-
-  </script>
-
-  <script type="text/x-handlebars" id="search">
-    <div class="row-fluid">
-      <div class="col col-md-12">
-        {{input type="text" value=search action="query" class="form-control"}}
-        <br>
-          <button class="btn btn-primary" id="btn-search" type="button"
-            data-bind="click: searchManga" tabindex="-1">
-            <i class="fa fa-lg fa-search"></i> Search manga title
-          </button>
-      </div>
-    </div>
-
-    {{outlet}}
-
-  </script>
-
-  <script type="text/x-handlebars" id="result">
-  <div class="row">
-  <div class="col col-md-6">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Site</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each model}}
-        <tr>
-          <td>{{name}}</td>
-          <td>{{site}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
-  </div>
-  </script>
-
-
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.5.1/ember.debug.js"></script>
-  <script src="/static/js/app.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
+<script src="/static/js/app.js"></script>
 
 </body>
 </html>
