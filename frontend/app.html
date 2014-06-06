@@ -122,8 +122,8 @@
   </script>
 
   <script type="text/x-handlebars" id="search">
-    <div class="row-fluid"> <!-- input-row -->
-      <div class="col col-md-6 col-md-offset-3">
+    <div class="row-fluid">
+      <div class="col col-md-12">
         {{input type="text" value=search action="query" class="form-control"}}
         <br>
           <button class="btn btn-primary" id="btn-search" type="button"
@@ -131,18 +131,33 @@
             <i class="fa fa-lg fa-search"></i> Search manga title
           </button>
       </div>
-    </div> <!-- /input-row -->
+    </div>
 
     {{outlet}}
 
   </script>
 
   <script type="text/x-handlebars" id="result">
-    {{#each model}}
-    <p>
-      {{url}}
-    </p>
-    {{/each}}
+  <div class="row">
+  <div class="col col-md-6">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Site</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each model}}
+        <tr>
+          <td>{{name}}</td>
+          <td>{{site}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  </div>
   </script>
 
 
