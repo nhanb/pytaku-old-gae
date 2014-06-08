@@ -6,7 +6,7 @@ var htmlmin = require('gulp-htmlmin');
 var minifycss = require('gulp-minify-css');
 
 gulp.task('jsx', function() {
-    gulp.src('frontend/jsx/**/*.jsx')
+    gulp.src(['frontend/jsx/components/*.jsx', 'frontend/jsx/*.jsx'])
     .pipe(react())
     .pipe(concat('main.js'))
     .pipe(gulp.dest('frontend-dist/static'));
