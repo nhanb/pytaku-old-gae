@@ -23,10 +23,32 @@ var TitleList = React.createClass({
     }
 });
 
+var SearchButton = React.createClass({
+    css: {margin: '10px', align: 'auto'},
+    className: function(searching) {
+        var common = 'fa fa-lg';
+        if (searching) {
+            common += 'fa-spinner fa-spin';
+        } else {
+            common += 'fa-search';
+        }
+        return common;
+    },
+
+    render: function() {
+        return (
+            <button className="btn btn-primary" style={this.css}>
+                <i className={this.className(this.props.searching)}></i> Search
+            </button>
+        );
+    }
+});
+
 var Search = React.createClass({
     getInitialState: function() {
         return {
             query: '',
+            searching: false,
             items: [
                 {name: 'foo', url: '#', site: 'kissmanga'},
                 {name: 'foo2', url: '#', site: 'batoto'}
@@ -40,12 +62,25 @@ var Search = React.createClass({
             return false;
         }
 
-        console.log(query);
+        this.setState({searching: true});
+
+        var self = this;
+        $.ajax({
+            url: '/api/search?keyword=' + encodeURIComponent(query),
+            dataType: 'json',
+            method: 'GET',
+            success: function(data) {
+                self.setState({items: data});
+            },
+            complete: function() {
+                self.setState({searching: false});
+            }
+        });
+
         return false;
     },
 
     css: {textAlign: 'center'},
-    btnCss: {margin: '10px', align: 'auto'},
 
     render: function(e) {
         return (
@@ -56,10 +91,7 @@ var Search = React.createClass({
                     <input className="form-control" type="text" ref="queryInput"
                         placeholder="Enter manga title" autoFocus="autofocus" />
 
-                    <button className="btn btn-primary" style={this.btnCss}>
-                        <i className="fa fa-search fa-lg"></i> Search
-                    </button>
-
+                    <SearchButton searching={this.state.searching} />
                 </form>
 
                 <TitleList items={this.state.items} />
