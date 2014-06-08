@@ -1,7 +1,6 @@
 let g:syntastic_python_checkers=['flake8']
 let NERDTreeIgnore = [
             \'.pyc$',
-            \'^frontend-dist$[[dir]]',
             \'^lib$[[dir]]',
             \'^node_modules$[[dir]]',
             \]
