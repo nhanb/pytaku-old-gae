@@ -1,1 +1,4 @@
-*.pyc
+**/*.pyc
+node_modules/
+lib/
+frontend-dist/

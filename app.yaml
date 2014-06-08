@@ -4,9 +4,19 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+skip_files:
+  # GAE default. Don't touch!
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+  # Custom rules go here
+- ^frontend/.*$  # ignore "frontend" dir (we use frontend-dist for deployment)
+
 handlers:
 - url: /static
-  static_dir: frontend/static
+  static_dir: frontend-dist/static
   secure: always
 
 - url: /favicon\.ico
@@ -14,8 +24,8 @@ handlers:
   upload: frontend/favicon\.ico
 
 - url: /
-  static_files: frontend/app.html
-  upload: frontend/app\.html
+  static_files: frontend-dist/app.html
+  upload: frontend-dist/app\.html
   secure: always
 
 - url: .*

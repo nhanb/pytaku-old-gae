@@ -1,0 +1,26 @@
+{
+  "name": "pytaku",
+  "version": "0.0.0",
+  "description": "[to be updated]",
+  "main": "Gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nhanb/pytaku.git"
+  },
+  "author": "Bui Thanh Nhan",
+  "bugs": {
+    "url": "https://github.com/nhanb/pytaku/issues"
+  },
+  "homepage": "https://github.com/nhanb/pytaku",
+  "devDependencies": {
+    "gulp": "^3.7.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-htmlmin": "^0.1.2",
+    "gulp-livereload": "^2.0.0",
+    "gulp-minify-css": "^0.3.4",
+    "gulp-react": "^0.3.3"
+  }
+}
