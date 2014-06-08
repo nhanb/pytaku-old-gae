@@ -26,7 +26,7 @@ var TitleList = React.createClass({
 var SearchButton = React.createClass({
     css: {margin: '10px', align: 'auto'},
     className: function(searching) {
-        var common = 'fa fa-lg';
+        var common = 'fa fa-lg ';
         if (searching) {
             common += 'fa-spinner fa-spin';
         } else {
