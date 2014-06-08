@@ -13,6 +13,7 @@ skip_files:
 - ^(.*/)?\..*$
   # Custom rules go here
 - ^frontend/.*$  # ignore "frontend" dir (we use frontend-dist for deployment)
+- ^node_modules/.*$  # hell no
 
 handlers:
 - url: /static
