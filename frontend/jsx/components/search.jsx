@@ -49,10 +49,7 @@ var Search = React.createClass({
         return {
             query: '',
             searching: false,
-            items: [
-                {name: 'foo', url: '#', site: 'kissmanga'},
-                {name: 'foo2', url: '#', site: 'batoto'}
-            ]
+            items: []
         }
     },
 
@@ -63,7 +60,6 @@ var Search = React.createClass({
         }
 
         this.setState({searching: true});
-
         var self = this;
         $.ajax({
             url: '/api/search?keyword=' + encodeURIComponent(query),

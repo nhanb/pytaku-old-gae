@@ -4,10 +4,12 @@ var livereload = require('gulp-livereload');
 var concat = require('gulp-concat');
 var htmlmin = require('gulp-htmlmin');
 var minifycss = require('gulp-minify-css');
+var notify = require('gulp-notify');
 
 gulp.task('jsx', function() {
     gulp.src(['frontend/jsx/components/*.jsx', 'frontend/jsx/*.jsx'])
     .pipe(react())
+    .on('error', notify.onError({message: 'JSX compilation failed!'}))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('frontend-dist/static'));
 });
