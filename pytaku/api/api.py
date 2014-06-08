@@ -42,7 +42,6 @@ class TitleHandler(webapp2.RequestHandler):
 
     @wrap_json
     @unpack_get(url=['ustring', 'urlencoded'])
-    @auth
     def get(self):
         url = self.data['url']
 
@@ -65,7 +64,6 @@ class SearchHandler(webapp2.RequestHandler):
 
     @wrap_json
     @unpack_get(keyword=['ustring'])
-    @auth
     def get(self):
         keyword = self.data['keyword']
         titles = []
@@ -80,7 +78,6 @@ class ChapterHandler(webapp2.RequestHandler):
 
     @wrap_json
     @unpack_get(url=['ustring', 'urlencoded'])
-    @auth
     def get(self):
         url = self.data['url']
 
