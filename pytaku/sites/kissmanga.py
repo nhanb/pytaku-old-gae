@@ -1,7 +1,6 @@
 import urllib
 from google.appengine.api import urlfetch
 import re
-import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 from pytaku.sites import Site
 
@@ -25,14 +24,11 @@ class Kissmanga(Site):
             return 'screwed'
 
         # Kissmanga returns manga titles and links in xml format
-        content = '<data>%s</data>' % resp.content
-        parsed = ET.fromstring(content)
-
-        return [{'name': item.text.strip(),
-                 'url': item.attrib['href'],
-                 'site': 'kissmanga',
-                 }
-                for item in parsed]
+        soup = BeautifulSoup(resp.content)
+        atags = soup.find_all('a')
+        return [{'name': a.string.strip(),
+                 'url': a['href'],
+                 'site': 'kissmanga'} for a in atags]
 
     # All kinds of data
     # - name "Naruto"
