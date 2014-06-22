@@ -77,7 +77,6 @@ var SearchButton = React.createClass({
 var Search = React.createClass({
     getInitialState: function() {
         return {
-            query: '',
             searching: false,
             items: []
         }
@@ -85,9 +84,10 @@ var Search = React.createClass({
 
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
-        if (!query || query.length < 2) {
+        if (!query || query.trim().length < 2) {
             return false;
         }
+        query = query.trim();
 
         this.setState({searching: true});
         var self = this;
