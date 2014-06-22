@@ -71,16 +71,12 @@ var Title = React.createClass({
     },
 
     getInitialState: function() {
-        return {
-            populating: false,
-            populated: false
-        }
+        return {populated: false};
     },
 
     populateInfo: function() {
         if (this.populated) return;
         var item = this.props.item;
-        this.setState({populating: true});
 
         var self = this;
         $.ajax({
