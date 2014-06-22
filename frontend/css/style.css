@@ -7,3 +7,8 @@
     max-width: 400px;
     margin: auto;
 }
+
+.thumbnail {
+    display: block;
+    margin: auto;
+}

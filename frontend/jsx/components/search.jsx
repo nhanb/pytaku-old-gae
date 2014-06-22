@@ -1,14 +1,39 @@
 /** @jsx React.DOM */
 
 var TitleInfo = React.createClass({
-    render: function() {
-        //var item = this.props.item;
+    renderChapter: function(chapter) {
         return (
-            <div className="list-group">
-            <a href="#" className="list-group-item">Dapibus ac facilisis in</a>
-            <a href="#" className="list-group-item">Morbi leo risus</a>
-            <a href="#" className="list-group-item">Porta ac consectetur ac</a>
-            <a href="#" className="list-group-item">Vestibulum at eros</a>
+            <a href={chapter.url} className="list-group-item">
+                {chapter.name}
+            </a>
+        )
+    },
+
+    render: function() {
+        var info = this.props.info;
+        return (
+            <div className="title-info">
+                <div className="row">
+
+                    <div className="col-md-4">
+                        <a className="thumbnail">
+                            <img src={info.thumb_url} alt="thumbnail" />
+                        </a>
+                    </div>
+
+                    <div className="col-md-8">
+                        <ul>
+                            <li><strong>Tags:</strong></li>
+                            <li><strong>Shit shit shit</strong></li>
+                            <li><strong>Lorem ipsum</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr />
+                <div className="list-group">
+                    {info.chapters.map(this.renderChapter)}
+                </div>
             </div>
         );
     }
@@ -20,12 +45,18 @@ var Title = React.createClass({
         var tagId = 'collapse' + this.props.id;
         var href = '#' + tagId;
 
+        if (this.state.populated) {
+            var titleInfo = <TitleInfo info={this.state.info}/>;
+        } else {
+            var titleInfo = "Fetching data...";
+        }
+
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">
                     <h4 className="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
-                            href={href}>
+                            href={href} onClick={this.populateInfo}>
                             {item.name}
                         </a>
                         <span className="badge pull-right">{item.site}</span>
@@ -33,11 +64,40 @@ var Title = React.createClass({
                 </div>
                 <div id={tagId} className="panel-collapse collapse">
                     <div className="panel-body">
-                        <TitleInfo />
+                        {titleInfo}
                     </div>
                 </div>
             </div>
         );
+    },
+
+    getInitialState: function() {
+        return {
+            populating: false,
+            populated: false
+        }
+    },
+
+    populateInfo: function() {
+        if (this.populated) return;
+        var item = this.props.item;
+        this.setState({populating: true});
+
+        var self = this;
+        $.ajax({
+            url: '/api/title?url=' + encodeURIComponent(item.url),
+            dataType: 'json',
+            method: 'GET',
+            success: function(data) {
+                self.setState({
+                    info: data,
+                    populated: true
+                });
+            },
+            complete: function() {
+                self.setState({populating: false});
+            }
+        });
     }
 });
 

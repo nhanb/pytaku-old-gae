@@ -44,7 +44,7 @@ gulp.task('watch', function() {
     gulp.watch('frontend/app.html', ['html']);
 
     var server = livereload();
-    gulp.watch(['frontend-dist/**', 'frontend']).on('change', function(file) {
+    gulp.watch(['frontend-dist/**/*', 'frontend']).on('change', function(file) {
         server.changed(file.path);
     });
 });
