@@ -1,20 +1,10 @@
 /** @jsx React.DOM */
 
 var Title = React.createClass({
-    getInitialState: function() {
-        var item = this.props.item;
-        return {
-            name: item.name,
-            url: item.url,
-            site: item.site,
-            id: this.props.id,
-            populated: false
-        }
-    },
 
     render: function() {
-        var state = this.state;
-        var tagId = 'collapse' + state.id;
+        var item = this.props.item;
+        var tagId = 'collapse' + this.props.id;
         var href = '#' + tagId;
 
         return (
@@ -23,9 +13,9 @@ var Title = React.createClass({
                     <h4 className="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion"
                             href={href}>
-                            {state.name}
+                            {item.name}
                         </a>
-                        <span className="badge pull-right">{state.site}</span>
+                        <span className="badge pull-right">{item.site}</span>
                     </h4>
                 </div>
                 <div id={tagId} className="panel-collapse collapse">
