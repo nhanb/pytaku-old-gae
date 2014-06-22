@@ -1,7 +1,20 @@
 /** @jsx React.DOM */
 
-var Title = React.createClass({
+var TitleInfo = React.createClass({
+    render: function() {
+        //var item = this.props.item;
+        return (
+            <div className="list-group">
+            <a href="#" className="list-group-item">Dapibus ac facilisis in</a>
+            <a href="#" className="list-group-item">Morbi leo risus</a>
+            <a href="#" className="list-group-item">Porta ac consectetur ac</a>
+            <a href="#" className="list-group-item">Vestibulum at eros</a>
+            </div>
+        );
+    }
+});
 
+var Title = React.createClass({
     render: function() {
         var item = this.props.item;
         var tagId = 'collapse' + this.props.id;
@@ -20,7 +33,7 @@ var Title = React.createClass({
                 </div>
                 <div id={tagId} className="panel-collapse collapse">
                     <div className="panel-body">
-                        TO BE UPDATED
+                        <TitleInfo />
                     </div>
                 </div>
             </div>
