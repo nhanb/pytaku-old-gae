@@ -108,7 +108,10 @@ var TitleList = React.createClass({
     },
 
     createTitle: function(item, id) {
-        return <Title item={item} id={id} />
+        // Assign unique key to make sure outdated Title components are
+        // destroyed instead of reused - http://fb.me/react-warning-keys
+        var key = item.url;
+        return <Title item={item} id={id} key={key} />
     },
 
     render: function() {
