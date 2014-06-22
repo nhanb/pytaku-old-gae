@@ -24,7 +24,6 @@ var TitleInfo = React.createClass({
                     <div className="col-md-8">
                         <ul>
                             <li><strong>Tags:</strong></li>
-                            <li><strong>Shit shit shit</strong></li>
                             <li><strong>Lorem ipsum</strong></li>
                         </ul>
                     </div>
