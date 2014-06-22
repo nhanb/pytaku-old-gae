@@ -25,9 +25,10 @@ var TitleList = React.createClass({
 
 var SearchButton = React.createClass({
     css: {margin: '10px', align: 'auto'},
-    className: function(searching) {
+
+    className: function() {
         var common = 'fa fa-lg ';
-        if (searching) {
+        if (this.props.searching) {
             common += 'fa-spinner fa-spin';
         } else {
             common += 'fa-search';
@@ -35,10 +36,15 @@ var SearchButton = React.createClass({
         return common;
     },
 
+    text: function() {
+        if (this.props.searching) return 'Searching...';
+        else return 'Search';
+    },
+
     render: function() {
         return (
             <button className="btn btn-primary" style={this.css}>
-                <i className={this.className(this.props.searching)}></i> Search
+                <i className={this.className()}></i> {this.text()}
             </button>
         );
     }
@@ -73,7 +79,7 @@ var Search = React.createClass({
             }
         });
 
-        return false;
+        return false; // So that browser won't submit an old-fashioned POST
     },
 
     css: {textAlign: 'center'},
