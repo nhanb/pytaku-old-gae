@@ -1,23 +1,57 @@
 /** @jsx React.DOM */
+
+var Title = React.createClass({
+    getInitialState: function() {
+        var item = this.props.item;
+        return {
+            name: item.name,
+            url: item.url,
+            site: item.site,
+            id: this.props.id,
+            populated: false
+        }
+    },
+
+    render: function() {
+        var state = this.state;
+        var tagId = 'collapse' + state.id;
+        var href = '#' + tagId;
+
+        return (
+            <div className="panel panel-default">
+                <div className="panel-heading">
+                    <h4 className="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion"
+                            href={href}>
+                            {state.name}
+                        </a>
+                        <span className="badge pull-right">{state.site}</span>
+                    </h4>
+                </div>
+                <div id={tagId} className="panel-collapse collapse">
+                    <div className="panel-body">
+                        TO BE UPDATED
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
 var TitleList = React.createClass({
     css: {
         maxWidth: '800px',
         margin: '10px auto'
     },
 
-    createItem: function(item) {
-        return (
-            <a href={item.url} className="list-group-item">
-                <span className="badge">{item.site}</span>
-                {item.name}
-            </a>
-        );
+    createTitle: function(item, id) {
+        return <Title item={item} id={id} />
     },
 
     render: function() {
         return (
-            <div className="list-group" style={this.css}>
-                {this.props.items.map(this.createItem)}
+            <div className="panel-group" id="accordion" style={this.css}>
+                {this.props.items.map(this.createTitle)}
             </div>
         );
     }
