@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Add Google App Engine SDK path and project home dir to $PYTHONPATH.
+# This helps with Jedi suggestions.
+export PYTHONPATH="$PYTHONPATH:$GAE_PATH:`pwd`"
+
+echo "GOT HERE"
