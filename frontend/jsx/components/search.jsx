@@ -52,12 +52,11 @@ var Title = React.createClass({
 
         return (
             <div className="panel panel-default">
-                <div className="panel-heading">
+                <div className="panel-heading clickable"
+                    data-toggle="collapse" data-target={href}
+                    data-parent="#accordion" onClick={this.populateInfo}>
                     <h4 className="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion"
-                            href={href} onClick={this.populateInfo}>
-                            {item.name}
-                        </a>
+                        <a>{item.name}</a>
                         <span className="badge pull-right">{item.site}</span>
                     </h4>
                 </div>

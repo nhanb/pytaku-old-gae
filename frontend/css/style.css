@@ -12,3 +12,7 @@
     display: block;
     margin: auto;
 }
+
+.clickable {
+    cursor: pointer;
+}
