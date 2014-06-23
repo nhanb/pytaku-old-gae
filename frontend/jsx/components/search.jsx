@@ -154,7 +154,7 @@ var Search = React.createClass({
 
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
-        if (!query || query.trim().length < 2) {
+        if (!query || query.trim().length < 2 || this.state.searching) {
             return false;
         }
         query = query.trim();
