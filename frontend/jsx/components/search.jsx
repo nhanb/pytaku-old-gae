@@ -114,15 +114,33 @@ var SearchButton = React.createClass({
 
 var Search = React.createClass({
     getInitialState: function() {
+        var searching = false;
+        if (this.props.query) {
+            this.search(this.props.query);
+            searching = true;
+        }
         return {
-            searching: false,
+            searching: searching,
             items: []
         };
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        var searching = false;
+        if (nextProps.query) {
+            this.search(nextProps.query);
+        }
+    },
+
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
-        if (!query || query.trim().length < 2 || this.state.searching) {
+        window.location.href = '/#/search/' + query;
+        return false; // So that browser won't submit an old-fashioned POST
+    },
+
+    search: function(query) {
+        if (!query || query.trim().length < 2 ||
+            (this.state && this.state.searching)) {
             return false;
         }
         query = query.trim();
@@ -140,8 +158,6 @@ var Search = React.createClass({
                 self.setState({searching: false});
             }
         });
-
-        return false; // So that browser won't submit an old-fashioned POST
     },
 
     css: {textAlign: 'center'},
