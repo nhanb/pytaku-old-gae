@@ -16,3 +16,8 @@
 .clickable {
     cursor: pointer;
 }
+
+.title-container {
+    max-width: 700px;
+    margin: auto;
+}

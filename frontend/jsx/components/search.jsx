@@ -1,53 +1,17 @@
 /** @jsx React.DOM */
 
-var TitleInfo = React.createClass({
-    renderChapter: function(chapter) {
-        return (
-            <a href={chapter.url} className="list-group-item">
-                {chapter.name}
-            </a>
-        )
-    },
-
-    render: function() {
-        var info = this.props.info;
-        return (
-            <div className="title-info">
-                <div className="row">
-
-                    <div className="col-md-4">
-                        <a className="thumbnail">
-                            <img src={info.thumb_url} alt="thumbnail" />
-                        </a>
-                    </div>
-
-                    <div className="col-md-8">
-                        <ul>
-                            <li><strong>Tags:</strong></li>
-                            <li><strong>Lorem ipsum</strong></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <hr />
-                <div className="list-group">
-                    {info.chapters.map(this.renderChapter)}
-                </div>
-            </div>
-        );
-    }
-});
-
-var Title = React.createClass({
+// This component reuses on <TitleInfo> from title.jsx
+var ResultTitle = React.createClass({
     render: function() {
         var item = this.props.item;
         var tagId = 'collapse' + this.props.id;
         var href = '#' + tagId;
+        var titleInfo;
 
         if (this.state.populated) {
-            var titleInfo = <TitleInfo info={this.state.info}/>;
+            titleInfo = <TitleInfo info={this.state.info}/>;
         } else {
-            var titleInfo = "Fetching data...";
+            titleInfo = "Fetching data...";
         }
 
         return (
@@ -75,6 +39,7 @@ var Title = React.createClass({
 
     populateInfo: function() {
         if (this.populated) return;
+        this.setState({populating: true});
         var item = this.props.item;
 
         var self = this;
@@ -83,6 +48,7 @@ var Title = React.createClass({
             dataType: 'json',
             method: 'GET',
             success: function(data) {
+                data.url=encodeURIComponent(item.url);
                 self.setState({
                     info: data,
                     populated: true
@@ -105,7 +71,7 @@ var TitleList = React.createClass({
         // Assign unique key to make sure outdated Title components are
         // destroyed instead of reused - http://fb.me/react-warning-keys
         var key = item.url;
-        return <Title item={item} id={id} key={key} />
+        return <ResultTitle item={item} id={id} key={key} />;
     },
 
     render: function() {
@@ -149,7 +115,7 @@ var Search = React.createClass({
         return {
             searching: false,
             items: []
-        }
+        };
     },
 
     handleSubmit: function(e) {
@@ -191,7 +157,6 @@ var Search = React.createClass({
                 </form>
 
                 <TitleList items={this.state.items} />
-            </div>
-        )
+            </div>);
     }
 });

@@ -7,7 +7,13 @@ var minifycss = require('gulp-minify-css');
 var notify = require('gulp-notify');
 
 gulp.task('jsx', function() {
-    gulp.src(['frontend/jsx/components/*.jsx', 'frontend/jsx/*.jsx'])
+    gulp.src([
+        'frontend/jsx/components/home.jsx',
+        'frontend/jsx/components/register.jsx',
+        'frontend/jsx/components/title.jsx',
+        'frontend/jsx/components/search.jsx',
+        'frontend/jsx/*.jsx'
+    ])
     .pipe(react())
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
     .pipe(concat('main.js'))
