@@ -1,7 +1,9 @@
+/** @jsx React.DOM */
 var TitleInfo = React.createClass({
     renderChapter: function(chapter) {
+        var href = '/#/chapter/' + encodeURIComponent(chapter.url);
         return (
-            <a href={chapter.url} className="list-group-item">
+            <a href={href} className="list-group-item">
                 {chapter.name}
             </a>
         );

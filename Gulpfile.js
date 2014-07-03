@@ -10,6 +10,7 @@ gulp.task('jsx', function() {
     gulp.src([
         'frontend/jsx/components/home.jsx',
         'frontend/jsx/components/register.jsx',
+        'frontend/jsx/components/chapter.jsx',
         'frontend/jsx/components/title.jsx',
         'frontend/jsx/components/search.jsx',
         'frontend/jsx/*.jsx'

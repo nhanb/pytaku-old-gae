@@ -8,6 +8,9 @@ $(document).ready(function() {
         '/search': function() {React.renderComponent(<Search /> , routed);},
         '/title/(.+)': function(url) {
             React.renderComponent(<Title url={url} /> , routed);
+        },
+        '/chapter/(.+)': function(url) {
+            React.renderComponent(<Chapter url={url} /> , routed);
         }
     };
     var routerHandler = new Router(routes);
