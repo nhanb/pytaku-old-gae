@@ -9,6 +9,7 @@ var TitleInfo = React.createClass({
 
     render: function() {
         var info = this.props.info;
+        var permalink = '/#/title/' + info.url;
         return (
             <div className="title-info">
                 <div className="row">
@@ -20,9 +21,10 @@ var TitleInfo = React.createClass({
                     </div>
 
                     <div className="col-md-8">
+                        <h2 className="title-name">{info.name}</h2>
                         <ul>
-                            <li><strong>Tags:</strong></li>
-                            <li><strong>Lorem ipsum</strong></li>
+                            <li><a href={permalink}>permanent link</a></li>
+                            <li><strong>more details to be implemented...</strong></li>
                         </ul>
                     </div>
                 </div>
@@ -52,6 +54,7 @@ var Title = React.createClass({
             dataType: 'json',
             method: 'GET',
             success: function(data) {
+                data.url = self.props.url;
                 self.setState({
                     info: data,
                     populated: true
