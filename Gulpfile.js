@@ -5,7 +5,56 @@ var concat = require('gulp-concat');
 var htmlmin = require('gulp-htmlmin');
 var minifycss = require('gulp-minify-css');
 var notify = require('gulp-notify');
+var bower = require('bower');
 
+/**
+ * The only tasks you'll ever need to call are:
+ *
+ * $ gulp
+ *   => Pull libraries with bower then compile everything.
+ *      Run this once after `npm install`.
+ *
+ * $ gulp watch
+ *   => Watch for changes in application code and trigger livereload.
+ */
+
+// Concat js libraries
+gulp.task('jslib', function() {
+    gulp.src([
+        'bower_components/jquery/dist/jquery.js',
+        'bower_components/bootstrap/dist/js/bootstrap.js',
+        'bower_components/react/react.js',
+        'bower_components/director/build/director.js',
+    ])
+    .pipe(concat('lib.js'))
+    .pipe(gulp.dest('frontend-dist/static/js'));
+});
+
+// Concat css libraries
+gulp.task('csslib', function() {
+    gulp.src([
+        'bower_components/normalize-css/normalize.css',
+        'bower_components/bootstrap/dist/css/bootstrap.css',
+        // Remember to copy fontawesome's `fonts` dir too
+        'bower_components/fontawesome/css/font-awesome.css',
+    ])
+    .pipe(concat('lib.css'))
+    .pipe(gulp.dest('frontend-dist/static/css'));
+
+    // Extra files required by fontawesome
+    gulp.src('bower_components/fontawesome/fonts/*')
+    .pipe(gulp.dest('frontend-dist/static/fonts'));
+});
+
+// Download & concat all libraries
+gulp.task('lib', function() {
+    bower.commands.install([], {save: true}, {})
+    .on('end', function(){
+        gulp.start('csslib', 'jslib');
+    });
+});
+
+// Compile application jsx
 gulp.task('jsx', function() {
     gulp.src([
         'frontend/jsx/components/home.jsx',
@@ -18,44 +67,45 @@ gulp.task('jsx', function() {
     .pipe(react())
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
     .pipe(concat('main.js'))
-    .pipe(gulp.dest('frontend-dist/static'));
+    .pipe(gulp.dest('frontend-dist/static/js'));
 });
 
-gulp.task('jslib', function() {
-    gulp.src('frontend/lib/**/*.js')
-    .pipe(concat('lib.js'))
-    .pipe(gulp.dest('frontend-dist/static'));
-});
-
+// Application css
 gulp.task('css', function() {
     gulp.src('frontend/css/**/*.css')
     .pipe(concat('main.css'))
-    .pipe(minifycss())
-    .pipe(gulp.dest('frontend-dist/static'));
+    .pipe(gulp.dest('frontend-dist/static/css'));
 });
 
+// Main html file. Nothing exciting here
 gulp.task('html', function() {
     gulp.src('frontend/app.html')
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(gulp.dest('frontend-dist'));
 });
 
+// Because every kick-ass site has a kick-ass favicon
 gulp.task('favicon', function() {
     gulp.src('frontend/favicon.ico')
     .pipe(gulp.dest('frontend-dist'));
 });
 
-
+// Basically do everything
 gulp.task('default', [], function() {
-    gulp.start('jsx', 'jslib', 'css', 'html', 'favicon');
+    gulp.start('lib', 'jsx', 'css', 'html', 'favicon');
 });
 
+
+// Watch for changes in application code and trigger livereload
 gulp.task('watch', function() {
+
+    // If there's a change in source code then build dist
     gulp.watch('frontend/css/**/*.css', ['css']);
     gulp.watch('frontend/jsx/**/*.jsx', ['jsx']);
-    gulp.watch('frontend/lib/**/*.js', ['jslib']);
     gulp.watch('frontend/app.html', ['html']);
+    gulp.watch('frontend/favicon.ico', ['favicon']);
 
+    // If there's a change in dist then trigger livereload
     var server = livereload();
     gulp.watch(['frontend-dist/**/*', 'frontend']).on('change', function(file) {
         server.changed(file.path);
