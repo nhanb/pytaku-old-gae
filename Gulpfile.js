@@ -1,12 +1,3 @@
-var gulp = require('gulp');
-var react = require('gulp-react');
-var livereload = require('gulp-livereload');
-var concat = require('gulp-concat');
-var htmlmin = require('gulp-htmlmin');
-var minifycss = require('gulp-minify-css');
-var notify = require('gulp-notify');
-var bower = require('bower');
-
 /**
  * The only tasks you'll ever need to call are:
  *
@@ -16,7 +7,23 @@ var bower = require('bower');
  *
  * $ gulp watch
  *   => Watch for changes in application code and trigger livereload.
+ *
+ * $ gulp deploy
+ *   => Similar to default `gulp` task, but also minify JS + CSS.
  */
+
+var gulp = require('gulp');
+var react = require('gulp-react');
+var livereload = require('gulp-livereload');
+var concat = require('gulp-concat');
+var htmlmin = require('gulp-htmlmin');
+var minifycss = require('gulp-minify-css');
+var notify = require('gulp-notify');
+var bower = require('bower');
+var gulpif = require('gulp-if');
+var uglify = require('gulp-uglify');
+
+var env = 'DEVELOPMENT';
 
 // Concat js libraries
 gulp.task('jslib', function() {
@@ -26,6 +33,7 @@ gulp.task('jslib', function() {
         'bower_components/react/react.js',
         'bower_components/director/build/director.js',
     ])
+    .pipe(gulpif(env == 'PRODUCTION', uglify()))
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('frontend-dist/static/js'));
 });
@@ -38,6 +46,7 @@ gulp.task('csslib', function() {
         // Remember to copy fontawesome's `fonts` dir too
         'bower_components/fontawesome/css/font-awesome.css',
     ])
+    .pipe(gulpif(env == 'PRODUCTION', minifycss()))
     .pipe(concat('lib.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));
 
@@ -66,6 +75,7 @@ gulp.task('jsx', function() {
     ])
     .pipe(react())
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
+    .pipe(gulpif(env == 'PRODUCTION', uglify()))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('frontend-dist/static/js'));
 });
@@ -73,6 +83,7 @@ gulp.task('jsx', function() {
 // Application css
 gulp.task('css', function() {
     gulp.src('frontend/css/**/*.css')
+    .pipe(gulpif(env == 'PRODUCTION', minifycss()))
     .pipe(concat('main.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));
 });
@@ -80,7 +91,7 @@ gulp.task('css', function() {
 // Main html file. Nothing exciting here
 gulp.task('html', function() {
     gulp.src('frontend/app.html')
-    .pipe(htmlmin({collapseWhitespace: true}))
+    .pipe(gulpif(env =='PRODUCTION', htmlmin({collapseWhitespace: true})))
     .pipe(gulp.dest('frontend-dist'));
 });
 
@@ -90,11 +101,16 @@ gulp.task('favicon', function() {
     .pipe(gulp.dest('frontend-dist'));
 });
 
-// Basically do everything
+// Download & build everything for development
 gulp.task('default', [], function() {
     gulp.start('lib', 'jsx', 'css', 'html', 'favicon');
 });
 
+// Download & build & minify everything for deployment
+gulp.task('deploy', function() {
+    env = 'PRODUCTION';
+    gulp.start('default');
+});
 
 // Watch for changes in application code and trigger livereload
 gulp.task('watch', function() {
