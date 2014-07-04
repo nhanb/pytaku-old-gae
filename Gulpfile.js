@@ -40,8 +40,14 @@ gulp.task('html', function() {
     .pipe(gulp.dest('frontend-dist'));
 });
 
+gulp.task('favicon', function() {
+    gulp.src('frontend/favicon.ico')
+    .pipe(gulp.dest('frontend-dist'));
+});
+
+
 gulp.task('default', [], function() {
-    gulp.start('jsx', 'jslib', 'css', 'html');
+    gulp.start('jsx', 'jslib', 'css', 'html', 'favicon');
 });
 
 gulp.task('watch', function() {

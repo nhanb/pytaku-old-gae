@@ -21,8 +21,8 @@ handlers:
   secure: always
 
 - url: /favicon\.ico
-  static_files: frontend/favicon.ico
-  upload: frontend/favicon\.ico
+  static_files: frontend-dist/favicon.ico
+  upload: frontend-dist/favicon\.ico
 
 - url: /
   static_files: frontend-dist/app.html
