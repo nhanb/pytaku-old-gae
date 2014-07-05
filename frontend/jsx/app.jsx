@@ -1,7 +1,12 @@
 /** @jsx React.DOM */
 $(document).ready(function() {
-    var routed = document.getElementById('routed');
 
+    // Render navbar
+    var navbar = document.getElementById('navbar');
+    React.renderComponent(<Navbar />, navbar);
+
+    // Render main content
+    var routed = document.getElementById('routed');
     var routes = {
         '/': function() {React.renderComponent(<Home />, routed);},
         '/register': function() {React.renderComponent(<Register />, routed);},
