@@ -2,7 +2,6 @@ import webapp2
 from pytaku.models import User, createUser, Chapter
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
-from datetime import datetime
 from exceptions import PyError
 
 
@@ -32,8 +31,6 @@ class UserHandler(webapp2.RequestHandler):
         if new_user is None:
             raise PyError({'msg': 'existing_email'})
         return {
-            'id': new_user.key.id(),
-            'msg': 'user_created',
             'token': new_user.api_token,
         }
 
