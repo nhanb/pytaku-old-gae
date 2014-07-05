@@ -23,12 +23,13 @@ var bower = require('bower');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 
-var env = 'DEVELOPMENT';
+var target = 'DEV';
+var PRODUCTION = 'PROD';
 
 // Concat js libraries
 gulp.task('jslib', function() {
     var files;
-    if (env === 'PRODUCTION') {
+    if (target === PRODUCTION) {
         files = [
             'bower_components/jquery/dist/jquery.min.js',
             'bower_components/bootstrap/dist/js/bootstrap.min.js',
@@ -45,7 +46,7 @@ gulp.task('jslib', function() {
     }
 
     gulp.src(files)
-    .pipe(gulpif(env == 'PRODUCTION', uglify()))
+    .pipe(gulpif(target === PRODUCTION, uglify()))
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('frontend-dist/static/js'));
 });
@@ -53,7 +54,7 @@ gulp.task('jslib', function() {
 // Concat css libraries
 gulp.task('csslib', function() {
     var files;
-    if (env === 'PRODUCTION') {
+    if (target === PRODUCTION) {
         files = [
             'bower_components/normalize-css/normalize.css',
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
@@ -68,7 +69,7 @@ gulp.task('csslib', function() {
     }
 
     gulp.src(files)
-    .pipe(gulpif(env == 'PRODUCTION', minifycss()))
+    .pipe(gulpif(target === PRODUCTION, minifycss()))
     .pipe(concat('lib.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));
 
@@ -98,7 +99,7 @@ gulp.task('jsx', function() {
     ])
     .pipe(react())
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
-    .pipe(gulpif(env == 'PRODUCTION', uglify()))
+    .pipe(gulpif(target === PRODUCTION, uglify()))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('frontend-dist/static/js'));
 });
@@ -106,7 +107,7 @@ gulp.task('jsx', function() {
 // Application css
 gulp.task('css', function() {
     gulp.src('frontend/css/**/*.css')
-    .pipe(gulpif(env == 'PRODUCTION', minifycss()))
+    .pipe(gulpif(target === PRODUCTION, minifycss()))
     .pipe(concat('main.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));
 });
@@ -114,7 +115,7 @@ gulp.task('css', function() {
 // Main html file. Nothing exciting here
 gulp.task('html', function() {
     gulp.src('frontend/app.html')
-    .pipe(gulpif(env =='PRODUCTION', htmlmin({collapseWhitespace: true})))
+    .pipe(gulpif(target === PRODUCTION, htmlmin({collapseWhitespace: true})))
     .pipe(gulp.dest('frontend-dist'));
 });
 
@@ -131,7 +132,7 @@ gulp.task('default', [], function() {
 
 // Download & build & minify everything for deployment
 gulp.task('deploy', function() {
-    env = 'PRODUCTION';
+    target = PRODUCTION;
     gulp.start('default');
 });
 
