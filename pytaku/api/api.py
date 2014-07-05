@@ -88,13 +88,10 @@ class ChapterHandler(webapp2.RequestHandler):
 
         chapter = Chapter.getByUrl(url)
 
-        if chapter is None or (datetime.now() - chapter.created).days < 3:
+        if chapter is None:
             page_html = site.fetch_chapter_seed_page(url)
             chapter_pages = site.chapter_pages(page_html)
             pages = [page['url'] for page in chapter_pages]
-            if chapter is None:
-                chapter = Chapter.create(url, pages)
-            else:
-                chapter.pages = pages
+            chapter = Chapter.create(url, pages)
 
         return chapter.pages
