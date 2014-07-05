@@ -11,7 +11,7 @@ var TextInput = React.createClass({
                     placeholder={this.props.placeholder} />
                 </div>
             </div>
-        )
+        );
     }
 });
 
@@ -31,7 +31,7 @@ var Register = React.createClass({
                 <TextInput label="Email" type="email" placeholder="Email" />
                 <TextInput label="Password" type="password" placeholder="Password" />
             </form>
-        )
+        );
     },
 
 });
