@@ -27,12 +27,24 @@ var env = 'DEVELOPMENT';
 
 // Concat js libraries
 gulp.task('jslib', function() {
-    gulp.src([
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/bootstrap/dist/js/bootstrap.js',
-        'bower_components/react/react.js',
-        'bower_components/director/build/director.js',
-    ])
+    var files;
+    if (env === 'PRODUCTION') {
+        files = [
+            'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/bootstrap/dist/js/bootstrap.min.js',
+            'bower_components/react/react.min.js',
+            'bower_components/director/build/director.min.js',
+        ];
+    } else {
+        files = [
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/bootstrap/dist/js/bootstrap.js',
+            'bower_components/react/react.js',
+            'bower_components/director/build/director.js',
+        ];
+    }
+
+    gulp.src(files)
     .pipe(gulpif(env == 'PRODUCTION', uglify()))
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('frontend-dist/static/js'));
@@ -40,12 +52,22 @@ gulp.task('jslib', function() {
 
 // Concat css libraries
 gulp.task('csslib', function() {
-    gulp.src([
-        'bower_components/normalize-css/normalize.css',
-        'bower_components/bootstrap/dist/css/bootstrap.css',
-        // Remember to copy fontawesome's `fonts` dir too
-        'bower_components/fontawesome/css/font-awesome.css',
-    ])
+    var files;
+    if (env === 'PRODUCTION') {
+        files = [
+            'bower_components/normalize-css/normalize.css',
+            'bower_components/bootstrap/dist/css/bootstrap.min.css',
+            'bower_components/fontawesome/css/font-awesome.min.css',
+        ];
+    } else {
+        files = [
+            'bower_components/normalize-css/normalize.css',
+            'bower_components/bootstrap/dist/css/bootstrap.css',
+            'bower_components/fontawesome/css/font-awesome.css',
+        ];
+    }
+
+    gulp.src(files)
     .pipe(gulpif(env == 'PRODUCTION', minifycss()))
     .pipe(concat('lib.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));
