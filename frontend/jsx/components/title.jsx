@@ -72,7 +72,7 @@ var Title = React.createClass({
         var titleInfo;
 
         if (this.state.populating) {
-            titleInfo = 'Fetching title info...';
+            titleInfo = <Loading />;
         } else if (this.state.populated) {
             titleInfo = <TitleInfo info={this.state.info} />;
         } else {

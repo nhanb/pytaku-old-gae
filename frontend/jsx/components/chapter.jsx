@@ -9,6 +9,7 @@ var Chapter = React.createClass({
 
         return (
             <div className="chapter-container">
+                <Loading loading={this.state.fetching} />
                 {pages}
             </div>
         );
@@ -16,10 +17,14 @@ var Chapter = React.createClass({
 
     getInitialState: function() {
         this.fetchChapters();
-        return {pageUrls: []};
+        return {
+            pageUrls: [],
+            fetching: true
+        };
     },
 
     fetchChapters: function() {
+        this.setState({fetching: true});
         var self = this;
         $.ajax({
             url: '/api/chapter?url=' + self.props.url,
@@ -29,6 +34,10 @@ var Chapter = React.createClass({
                 self.setState({
                     pageUrls: data
                 });
+            },
+            complete: function() {
+                self.setState({fetching: false});
+                console.log(self.state.fetching);
             }
         });
     },

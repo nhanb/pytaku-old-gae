@@ -66,6 +66,7 @@ gulp.task('lib', function() {
 // Compile application jsx
 gulp.task('jsx', function() {
     gulp.src([
+        'frontend/jsx/components/loading.jsx',
         'frontend/jsx/components/home.jsx',
         'frontend/jsx/components/register.jsx',
         'frontend/jsx/components/chapter.jsx',
