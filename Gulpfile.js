@@ -35,6 +35,7 @@ gulp.task('jslib', function() {
             'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/react/react.min.js',
             'bower_components/director/build/director.min.js',
+            'bower_components/eventEmitter/EventEmitter.min.js',
         ];
     } else {
         files = [
@@ -42,6 +43,7 @@ gulp.task('jslib', function() {
             'bower_components/bootstrap/dist/js/bootstrap.js',
             'bower_components/react/react.js',
             'bower_components/director/build/director.js',
+            'bower_components/eventEmitter/EventEmitter.js',
         ];
     }
 
@@ -89,10 +91,13 @@ gulp.task('lib', function() {
 // Compile application jsx
 gulp.task('jsx', function() {
     gulp.src([
+        'frontend/jsx/globals.jsx',
+        'frontend/jsx/components/auth_mixin.jsx',
         'frontend/jsx/components/navbar.jsx',
         'frontend/jsx/components/loading.jsx',
         'frontend/jsx/components/home.jsx',
         'frontend/jsx/components/register.jsx',
+        'frontend/jsx/components/login.jsx',
         'frontend/jsx/components/chapter.jsx',
         'frontend/jsx/components/title.jsx',
         'frontend/jsx/components/search.jsx',

@@ -1,15 +1,24 @@
 /** @jsx React.DOM */
 var Navbar = React.createClass({
-    render_right: function() {
-        return  (
-            <ul className="nav navbar-nav navbar-right">
-                <li><a href="#">Login</a></li>
-                <li><a href="#/register">Register</a></li>
-            </ul>
-        );
-    },
+    mixins: [AuthMixin],
 
     render: function() {
+        var right_navs;
+        if (this.state.loggedIn === true) {
+            right_navs = (
+                <p className="navbar-text navbar-right">
+                    Welcome, <strong>{this.getEmail()}</strong>
+                </p>
+            );
+        } else {
+            right_navs =  (
+                <ul className="nav navbar-nav navbar-right">
+                    <li><a href="#/login">Login</a></li>
+                    <li><a href="#/register">Register</a></li>
+                </ul>
+            );
+        }
+
         return (
 <div className="navbar navbar-default navbar-static-top" role="navigation">
   <div className="container">
@@ -26,7 +35,7 @@ var Navbar = React.createClass({
       <ul className="nav navbar-nav">
         <li><a href="#/search"><i className="fa fa-search fa-lg"></i> Search titles</a></li>
       </ul>
-      {this.render_right()}
+      {right_navs}
     </div>
   </div>
 </div>

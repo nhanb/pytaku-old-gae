@@ -1,33 +1,5 @@
 /** @jsx React.DOM */
-var TextInput = React.createClass({
-    getInitialState: function() {
-        return {value: ''};
-    },
-
-    handleChange: function(event) {
-        this.setState({value: event.target.value});
-    },
-
-    render: function(e) {
-        var label = this.props.label,
-            type = this.props.type,
-            placeholder = this.props.placeholder || '';
-
-        return (
-            <div className="form-group">
-                <label className="col-sm-2 control-label">
-                    {label}
-                </label>
-                <div className="col-sm-10">
-                    <input type={type} onChange={this.handleChange}
-                        className="form-control" placeholder={placeholder} />
-                </div>
-            </div>
-        );
-    }
-});
-
-var Register = React.createClass({
+var Login = React.createClass({
     mixins: [AuthMixin],
 
     getInitialState: function() {
@@ -54,14 +26,14 @@ var Register = React.createClass({
         });
         var self = this;
         $.ajax({
-            url: '/api/user',
+            url: '/api/auth',
             dataType: 'json',
             method: 'POST',
             data: data,
             success: function(data) {
                 self.setState({
                     msgType: 'success',
-                    msg: 'Account created.'
+                    msg: 'Successfully logged in.'
                 });
                 self.setLoggedIn(email, data.token);
                 window.location.href = '/#/';
@@ -94,7 +66,7 @@ var Register = React.createClass({
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-10">
                         <button type="submit" className="btn btn-primary">
-                            Register
+                            Login
                         </button>
                     </div>
                 </div>

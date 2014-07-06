@@ -10,6 +10,7 @@ $(document).ready(function() {
     var routes = {
         '/': function() {React.renderComponent(<Home />, routed);},
         '/register': function() {React.renderComponent(<Register />, routed);},
+        '/login': function() {React.renderComponent(<Login />, routed);},
         '/search': function() {React.renderComponent(<Search />, routed);},
         '/search/(.+)': function(query) {
             React.renderComponent(<Search query={query} />, routed);
