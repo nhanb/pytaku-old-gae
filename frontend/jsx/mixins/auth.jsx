@@ -89,6 +89,13 @@ var RequireLoginMixin = {
             // some proper fix for this but for now... whatever!
         }
     },
+
+    handleLogout: function() {
+        // When user wants to log out, they probably just want to close this
+        // page and not need to be redirected to any specific route.
+        // Home will do!
+        window.location.href = '/#/';
+    }
 };
 
 var HideWhenLoggedInMixin = {
