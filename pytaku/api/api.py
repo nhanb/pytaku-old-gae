@@ -1,8 +1,9 @@
 import webapp2
-from pytaku.models import User, createUser, Chapter
+from pytaku.models import User, createUser, Chapter, Title
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
+from google.appengine.ext import ndb
 
 
 class LoginHandler(webapp2.RequestHandler):
@@ -58,6 +59,29 @@ class TitleHandler(webapp2.RequestHandler):
         title_page = site.fetch_manga_seed_page(url)
         title = site.title_info(title_page)
 
+        # Create new title if not in db yet
+        title_record = Title.getByUrl(url)
+        if title_record is None:
+            title_record = Title.create(url, title['name'])
+
+        # Create newest chapters first, stop at first exising chapter record
+        chapters = title['chapters']
+        chapter_records = []
+        for num, chap in reversed(list(enumerate(chapters))):
+            existing_chapter = Chapter.getByUrl(chap['url'])
+            if existing_chapter is None:
+                c = Chapter.create(title_record, chap['url'], num,
+                                   chap['name'])
+                chapter_records.append(c)
+            else:
+                break
+        if len(chapter_records) > 0:
+            # Reverse again to have correct order (0, 1, 2...). This makes sure
+            # if something wrong happens during multiple puts (request timeout,
+            # etc) then we still have a contiguous list of records going from
+            # zero to whatever number without any missing chapter inbetween.
+            ndb.put_multi(reversed(chapter_records))
+
         return {
             'site': site.netloc,
             'name': title['name'],
@@ -95,12 +119,23 @@ class ChapterHandler(webapp2.RequestHandler):
         chapter = Chapter.getByUrl(url)
 
         if chapter is None:
+            # TODO: should we create a single chapter on the fly?
+            raise PyError('chapter_not_created')
+
+        if chapter.pages is None:
             page_html = site.fetch_chapter_seed_page(url)
             chapter_pages = site.chapter_pages(page_html)
-            pages = [page['url'] for page in chapter_pages]
-            chapter = Chapter.create(url, pages)
+            chapter.pages = [page['url'] for page in chapter_pages]
+            chapter.put()
 
-        return chapter.pages
+        return {
+            'name': chapter.name,
+            'url': chapter.url,
+            'number': chapter.number,
+            'pages': chapter.pages,
+            'next_chapter_url': chapter.next_chapter_url(),
+            'prev_chapter_url': chapter.prev_chapter_url(),
+        }
 
 
 class TestTokenHandler(webapp2.RequestHandler):

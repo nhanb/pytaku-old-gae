@@ -33,8 +33,9 @@ var Chapter = React.createClass({
             dataType: 'json',
             method: 'GET',
             success: function(data) {
+                console.log(data);
                 self.setState({
-                    pageUrls: data
+                    pageUrls: data.pages
                 });
             },
             complete: function() {

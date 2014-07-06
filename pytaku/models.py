@@ -56,15 +56,46 @@ def createUser(email, password):
     return user
 
 
-class Chapter(ndb.Model):
+class Title(ndb.Model):
     url = ndb.StringProperty(indexed=True)
+    name = ndb.StringProperty()
+
+    @classmethod
+    def create(cls, url, name):
+        obj = cls(url=url, name=name)
+        obj.put()
+        return obj
+
+    @classmethod
+    def getByUrl(cls, url):
+        return cls.query(cls.url == url).get()
+
+
+class Chapter(ndb.Model):
+    title = ndb.KeyProperty(kind=Title)
+    number = ndb.IntegerProperty(indexed=True)
+    url = ndb.StringProperty(indexed=True)
+    name = ndb.StringProperty(indexed=True)
     pages = ndb.JsonProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
 
+    def fill_pages(self, pages):
+        self.pages = pages
+        self.put()
+
+    def next_chapter_url(self):
+        ch = Chapter.query(Chapter.title == self.title,
+                           Chapter.number == self.number + 1).get()
+        return ch.url if ch is not None else None
+
+    def prev_chapter_url(self):
+        ch = Chapter.query(Chapter.title == self.title,
+                           Chapter.number == self.number - 1).get()
+        return ch.url if ch is not None else None
+
     @classmethod
-    def create(cls, url, pages):
-        obj = cls(url=url, pages=pages)
-        obj.put()
+    def create(cls, title, url, number, name):
+        obj = cls(title=title.key, url=url, number=number, name=name)
         return obj
 
     @classmethod
