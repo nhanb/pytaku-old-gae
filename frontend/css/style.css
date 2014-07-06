@@ -27,3 +27,7 @@
     max-width: 100%;
     margin: 10px auto;
 }
+
+button#logout {
+    margin-left: 10px;
+}

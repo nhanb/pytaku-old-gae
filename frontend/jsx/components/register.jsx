@@ -30,6 +30,10 @@ var TextInput = React.createClass({
 var Register = React.createClass({
     mixins: [AuthMixin],
 
+    handleLogin: function() {
+        window.location.href = '/#/';
+    },
+
     getInitialState: function() {
         return {
             msg: '',
@@ -64,7 +68,6 @@ var Register = React.createClass({
                     msg: 'Account created.'
                 });
                 self.setLoggedIn(email, data.token);
-                window.location.href = '/#/';
             },
             error: function(data) {
                 self.setState({

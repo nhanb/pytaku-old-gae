@@ -5,7 +5,14 @@ var AuthMixin = {
     getInitialState: function() {
         var self = this;
         emitter.addListener('login', function() {
-            self.setState({loggedIn: true});
+            if (self.hasOwnProperty('handleLogin')) {
+                self.handleLogin();
+            }
+        });
+        emitter.addListener('logout', function() {
+            if (self.hasOwnProperty('handleLogout')) {
+                self.handleLogout();
+            }
         });
 
         return {
@@ -14,36 +21,53 @@ var AuthMixin = {
     },
 
     isLoggedIn: function() {
-        var email = sessionStorage.getItem('email');
-        var token = sessionStorage.getItem('token');
+        var email = localStorage.getItem('email');
+        var token = localStorage.getItem('token');
         return (typeof(email) === 'string' && typeof(token) === 'string');
     },
 
     setLoggedIn: function(email, token) {
-        sessionStorage.setItem('email', email);
-        sessionStorage.setItem('token', token);
+        localStorage.setItem('email', email);
+        localStorage.setItem('token', token);
         emitter.emitEvent('login');
     },
 
+    logout: function() {
+        this.authedAjax({
+            url: '/api/logout',
+            method: 'POST',
+            success: function() {
+                localStorage.removeItem('email');
+                localStorage.removeItem('token');
+                emitter.emitEvent('logout');
+            }
+        });
+    },
+
     getEmail: function() {
-        return sessionStorage.getItem('email');
+        return localStorage.getItem('email');
     },
 
     validateCredentials: function(email, token) {
         var valid = false;
-        $.ajax({
+        this.authedAjax({
             async: false,
-            type: 'GET',
             url: '/api/test-token',
-            dataType: 'json',
-            headers: {
-                'X-Email': email,
-                'X-Token': token
-            },
             success: function() {
                 valid = true;
             }
         });
         return valid;
     },
+
+    authedAjax: function(options) {
+        var email = localStorage.getItem('email');
+        var token = localStorage.getItem('token');
+        options.dataType = 'json';
+        options.headers = {
+            'X-Email': email,
+            'X-Token': token
+        };
+        return $.ajax(options);
+    }
 };

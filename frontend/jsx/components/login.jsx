@@ -2,6 +2,10 @@
 var Login = React.createClass({
     mixins: [AuthMixin],
 
+    handleLogin: function() {
+        window.location.href = '/#/';
+    },
+
     getInitialState: function() {
         return {
             msg: '',
@@ -36,7 +40,6 @@ var Login = React.createClass({
                     msg: 'Successfully logged in.'
                 });
                 self.setLoggedIn(email, data.token);
-                window.location.href = '/#/';
             },
             error: function(data) {
                 self.setState({
