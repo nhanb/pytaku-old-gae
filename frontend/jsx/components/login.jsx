@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var Login = React.createClass({
-    mixins: [RouteMixin, AuthMixin],
+    mixins: [RouteMixin, AuthMixin, HideWhenLoggedInMixin],
     pageTitle: 'Login',
 
     getInitialState: function() {
