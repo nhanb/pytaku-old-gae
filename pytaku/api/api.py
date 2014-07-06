@@ -67,14 +67,18 @@ class TitleHandler(webapp2.RequestHandler):
         # Create newest chapters first, stop at first exising chapter record
         chapters = title['chapters']
         chapter_records = []
-        for num, chap in reversed(list(enumerate(chapters))):
-            existing_chapter = Chapter.getByUrl(chap['url'])
+        length = len(chapters)
+        for i in range(length):
+            chap_num = length - i
+            chap_url = chapters[i]['url']
+            chap_name = chapters[i]['name']
+            existing_chapter = Chapter.getByUrl(chap_url)
             if existing_chapter is None:
-                c = Chapter.create(title_record, chap['url'], num,
-                                   chap['name'])
+                c = Chapter.create(title_record, chap_url, chap_num, chap_name)
                 chapter_records.append(c)
             else:
                 break
+
         if len(chapter_records) > 0:
             # Reverse again to have correct order (0, 1, 2...). This makes sure
             # if something wrong happens during multiple puts (request timeout,
