@@ -41,6 +41,9 @@ var TitleInfo = React.createClass({
 });
 
 var Title = React.createClass({
+    mixins: [RouteMixin],
+    pageTitle: 'Manga title info',
+
     getInitialState: function() {
         this.populateInfo();
         return {

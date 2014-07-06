@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var Login = React.createClass({
-    mixins: [AuthMixin],
+    mixins: [RouteMixin, AuthMixin],
+    pageTitle: 'Login',
 
     handleLogin: function() {
         window.location.href = '/#/';

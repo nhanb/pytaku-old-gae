@@ -92,7 +92,7 @@ gulp.task('lib', function() {
 gulp.task('jsx', function() {
     gulp.src([
         'frontend/jsx/globals.jsx',
-        'frontend/jsx/components/auth_mixin.jsx',
+        'frontend/jsx/mixins/*.jsx',
         'frontend/jsx/components/navbar.jsx',
         'frontend/jsx/components/loading.jsx',
         'frontend/jsx/components/home.jsx',

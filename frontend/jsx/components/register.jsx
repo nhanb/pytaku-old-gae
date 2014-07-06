@@ -28,7 +28,8 @@ var TextInput = React.createClass({
 });
 
 var Register = React.createClass({
-    mixins: [AuthMixin],
+    mixins: [RouteMixin, AuthMixin],
+    pageTitle: 'Register',
 
     handleLogin: function() {
         window.location.href = '/#/';
