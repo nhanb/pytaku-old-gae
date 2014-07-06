@@ -92,3 +92,10 @@ class ChapterHandler(webapp2.RequestHandler):
             chapter = Chapter.create(url, pages)
 
         return chapter.pages
+
+
+class TestTokenHandler(webapp2.RequestHandler):
+    @wrap_json
+    @auth
+    def get(self):
+        return {}
