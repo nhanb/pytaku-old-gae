@@ -3,10 +3,6 @@ var Login = React.createClass({
     mixins: [RouteMixin, AuthMixin],
     pageTitle: 'Login',
 
-    handleLogin: function() {
-        window.location.href = '/#/';
-    },
-
     getInitialState: function() {
         return {
             msg: '',

@@ -71,3 +71,13 @@ var AuthMixin = {
         return $.ajax(options);
     }
 };
+
+// =========== The following mixins assume AuthMixin is also used ============
+
+var RequireLoginMixin = {
+    componentDidMount: function() {
+        if (this.isLoggedIn() === false) {
+            window.location.href = '/#/login';
+        }
+    },
+};
