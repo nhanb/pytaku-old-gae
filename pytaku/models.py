@@ -7,7 +7,7 @@ from datetime import datetime
 # Email is stored as id to ensure uniqueness
 class User(ndb.Model):
     password_hash = ndb.StringProperty()
-    api_token = ndb.StringProperty()
+    api_token = ndb.StringProperty(default=None)
     last_login = ndb.DateTimeProperty(auto_now_add=True)
 
     def verify_password(self, password):
@@ -15,6 +15,10 @@ class User(ndb.Model):
 
     def generate_token(self):
         self.api_token = str(uuid.uuid4())
+
+    def logout(self):
+        self.api_token = None
+        self.put()
 
     @staticmethod
     def hash_password(password):
@@ -25,6 +29,7 @@ class User(ndb.Model):
         user = cls.get_by_id(email)
         if user is not None and user.verify_password(password):
             user.generate_token()
+            user.put()
             return user
         else:
             return None
@@ -32,7 +37,7 @@ class User(ndb.Model):
     @classmethod
     def auth_with_token(cls, email, token):
         user = cls.get_by_id(email)
-        if user is None or user.api_token != token:
+        if user is None or user.api_token is None or user.api_token != token:
             return None, 'invalid_token'
         if (datetime.now() - user.last_login).days > 30:
             return None, 'expired_token'

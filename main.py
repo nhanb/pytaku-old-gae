@@ -2,12 +2,13 @@ import sys
 sys.path.insert(0, 'lib')
 import webapp2
 from pytaku.api.api import UserHandler, LoginHandler, TitleHandler,\
-    SearchHandler, ChapterHandler, TestTokenHandler
+    SearchHandler, ChapterHandler, TestTokenHandler, LogoutHandler
 
 
 app = webapp2.WSGIApplication([
     ('/api/user', UserHandler),
     ('/api/auth', LoginHandler),
+    ('/api/logout', LogoutHandler),
     ('/api/title', TitleHandler),
     ('/api/chapter', ChapterHandler),
     ('/api/search', SearchHandler),

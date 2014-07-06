@@ -19,6 +19,15 @@ class LoginHandler(webapp2.RequestHandler):
             raise PyError({'msg': 'invalid_password'})
 
 
+class LogoutHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @auth
+    def post(self):
+        self.user.logout()
+        return {}
+
+
 class UserHandler(webapp2.RequestHandler):
 
     @wrap_json
