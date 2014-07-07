@@ -25,8 +25,12 @@ var Chapter = React.createClass({
         );
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.fetchPages(nextProps.url);
+    },
+
     getInitialState: function() {
-        this.fetchChapters();
+        this.fetchPages(this.props.url);
         return {
             pageUrls: [],
             name: '',
@@ -36,11 +40,14 @@ var Chapter = React.createClass({
         };
     },
 
-    fetchChapters: function() {
-        this.setState({fetching: true});
+    fetchPages: function(url) {
+        this.setState({
+            fetching: true,
+            pageUrls: [], // So that old pages disappear while fetching new
+        });
         var self = this;
         $.ajax({
-            url: '/api/chapter?url=' + self.props.url,
+            url: '/api/chapter?url=' + url,
             dataType: 'json',
             method: 'GET',
             success: function(data) {
@@ -52,7 +59,6 @@ var Chapter = React.createClass({
                 if (prev_url !== null) {
                     prev_url = '/#/chapter/' + encodeURIComponent(prev_url);
                 }
-
                 self.setState({
                     pageUrls: data.pages,
                     name: data.name,
@@ -62,7 +68,6 @@ var Chapter = React.createClass({
             },
             complete: function() {
                 self.setState({fetching: false});
-                console.log(self.state.fetching);
             }
         });
     },
