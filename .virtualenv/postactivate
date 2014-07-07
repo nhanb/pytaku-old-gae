@@ -4,4 +4,5 @@
 # This helps with Jedi suggestions.
 export PYTHONPATH="$PYTHONPATH:$GAE_PATH:`pwd`"
 
-echo "GOT HERE"
+# Build frontend assets + deploy to google app engine
+alias deploy="gulp deploy && python $GAE_PATH/appcfg.py --oauth2 update ."
