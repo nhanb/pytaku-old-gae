@@ -54,6 +54,9 @@ var PytakuApp = React.createClass({
         var token = localStorage.getItem('token');
         var loggedIn = (typeof(email) === 'string' &&
                         typeof(token) === 'string');
+        if (loggedIn === true) {
+            this.validateCredentialsFunc()();
+        }
         return {
             route: app.HOME,
             loggedIn: loggedIn,
@@ -127,15 +130,13 @@ var PytakuApp = React.createClass({
     validateCredentialsFunc: function() {
         var self = this;
         return function(email, token) {
-            var valid = false;
             self.authedAjax({
-                async: false,
                 url: '/api/test-token',
-                success: function() {
-                    valid = true;
+                error: function() {
+                    alert('Access token mismatched. Please login again :)');
+                    self.setState({loggedIn: false});
                 }
             });
-            return valid;
         };
     },
 
