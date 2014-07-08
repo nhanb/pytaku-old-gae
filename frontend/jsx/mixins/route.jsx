@@ -2,10 +2,15 @@
 var RouteMixin = {
     componentDidMount: function() {
         var title;
-        if (this.pageTitle) {
-            title = this.pageTitle + ' | Pytaku';
-        } else {
-            title = "Pytaku - The last manga reader page you'll ever need";
+        switch (typeof(this.pageTitle)) {
+            case 'string':
+                title = this.pageTitle + ' | Pytaku';
+                break;
+            case 'function':
+                title = this.pageTitle() + ' | Pytaku';
+                break;
+            default:
+                title = "Pytaku - The last manga reader page you'll ever need";
         }
         document.title = title;
     }
