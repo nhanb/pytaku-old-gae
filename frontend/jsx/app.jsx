@@ -117,12 +117,12 @@ var PytakuApp = React.createClass({
     logoutFunc: function() {
         var self = this;
         return function() {
-            localStorage.removeItem('email');
-            localStorage.removeItem('token');
             self.authedAjax({
                 url: '/api/logout',
                 method: 'POST'
             });
+            localStorage.removeItem('email');
+            localStorage.removeItem('token');
             self.setState({loggedIn: false});
         };
     },
