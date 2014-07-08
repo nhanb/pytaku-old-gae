@@ -19,7 +19,7 @@ class Batoto(Site):
         resp = urlfetch.fetch(url, method='GET')
 
         if resp.status_code != 200:
-            return 'screwed'
+            return []  # TODO maybe show some meaningful error alert to user?
 
         soup = BeautifulSoup(resp.content)
         table = soup.find('table', class_='chapters_list')

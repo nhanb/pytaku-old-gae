@@ -21,7 +21,7 @@ class Kissmanga(Site):
         resp = urlfetch.fetch(url, payload=payloads, method='POST')
 
         if resp.status_code != 200:
-            return 'screwed'
+            return []  # TODO maybe show some meaningful error alert to user?
 
         # Kissmanga returns manga titles and links in xml format
         soup = BeautifulSoup(resp.content)
