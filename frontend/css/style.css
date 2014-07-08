@@ -1,4 +1,12 @@
-/* Put your CSS here */
+/*
+ * Make scrollbar always visible and only active when needed
+ * http://stackoverflow.com/questions/1202425/making-the-main-scrollbar-always-visible
+ */
+html {
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;
+}
+
 #main-container {
     margin-top: 70px;
 }
