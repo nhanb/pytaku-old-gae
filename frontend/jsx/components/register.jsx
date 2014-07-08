@@ -28,7 +28,7 @@ var TextInput = React.createClass({
 });
 
 var Register = React.createClass({
-    mixins: [RouteMixin, AuthMixin, HideWhenLoggedInMixin],
+    mixins: [RouteMixin, HideWhenLoggedInMixin],
     pageTitle: 'Register',
 
     getInitialState: function() {
@@ -64,7 +64,7 @@ var Register = React.createClass({
                     msgType: 'success',
                     msg: 'Account created.'
                 });
-                self.setLoggedIn(email, data.token);
+                self.props.setLoggedIn(email, data.token);
             },
             error: function(data) {
                 self.setState({

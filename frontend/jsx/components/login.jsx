@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var Login = React.createClass({
-    mixins: [RouteMixin, AuthMixin, HideWhenLoggedInMixin],
+    mixins: [RouteMixin, HideWhenLoggedInMixin],
     pageTitle: 'Login',
 
     getInitialState: function() {
@@ -36,7 +36,7 @@ var Login = React.createClass({
                     msgType: 'success',
                     msg: 'Successfully logged in.'
                 });
-                self.setLoggedIn(email, data.token);
+                self.props.setLoggedIn(email, data.token);
             },
             error: function(data) {
                 self.setState({

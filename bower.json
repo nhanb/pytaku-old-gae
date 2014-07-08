@@ -22,7 +22,6 @@
     "react": "~0.10.0",
     "director": "~1.2.2",
     "fontawesome": "~4.1.0",
-    "normalize-css": "~3.0.1",
-    "eventEmitter": "~4.2.7"
+    "normalize-css": "~3.0.1"
   }
 }

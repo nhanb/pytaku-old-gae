@@ -50,8 +50,14 @@ var PytakuApp = React.createClass({
     },
 
     getInitialState: function() {
+        var email = localStorage.getItem('email');
+        var token = localStorage.getItem('token');
+        var loggedIn = (typeof(email) === 'string' &&
+                        typeof(token) === 'string');
         return {
-            route: app.HOME
+            route: app.HOME,
+            loggedIn: loggedIn,
+            email: email
         };
     },
 
@@ -59,13 +65,16 @@ var PytakuApp = React.createClass({
         var routeComponent;
         switch (this.state.route) {
             case app.REGISTER:
-                routeComponent = <Register />;
+                routeComponent = <Register loggedIn={this.state.loggedIn}
+                    setLoggedIn={this.setLoggedInFunc()} />;
                 break;
             case app.LOGIN:
-                routeComponent = <Login />;
+                routeComponent = <Login loggedIn={this.state.loggedIn}
+                    setLoggedIn={this.setLoggedInFunc()} />;
                 break;
             case app.SEARCH:
-                routeComponent = <Search query={this.state.query}/>;
+                routeComponent = <Search loggedIn={this.state.loggedIn}
+                    query={this.state.query}/>;
                 break;
             case app.TITLE:
                 routeComponent = <Title url={this.state.url}/>;
@@ -78,11 +87,69 @@ var PytakuApp = React.createClass({
         }
         return (
             <div>
-                <Navbar />
+                <Navbar loggedIn={this.state.loggedIn}
+                    logout={this.logoutFunc()}
+                    email={this.state.email}/>
                 {routeComponent}
             </div>
         );
-    }
+    },
+
+    /********************************
+     * Auth-related functionalities *
+     ********************************/
+
+    setLoggedInFunc: function() {
+        var self = this;
+        return function(email, token) {
+            localStorage.setItem('email', email);
+            localStorage.setItem('token', token);
+            self.setState({
+                loggedIn: true,
+                email: email,
+            });
+        };
+    },
+
+    logoutFunc: function() {
+        var self = this;
+        return function() {
+            self.setState({loggedIn: false});
+            localStorage.removeItem('email');
+            localStorage.removeItem('token');
+            self.authedAjax({
+                url: '/api/logout',
+                method: 'POST'
+            });
+            window.location.href = '/';
+        };
+    },
+
+    validateCredentialsFunc: function() {
+        var self = this;
+        return function(email, token) {
+            var valid = false;
+            self.authedAjax({
+                async: false,
+                url: '/api/test-token',
+                success: function() {
+                    valid = true;
+                }
+            });
+            return valid;
+        };
+    },
+
+    authedAjax: function(options) {
+        var email = localStorage.getItem('email');
+        var token = localStorage.getItem('token');
+        options.dataType = 'json';
+        options.headers = {
+            'X-Email': email,
+            'X-Token': token
+        };
+        return $.ajax(options);
+    },
 });
 
 React.renderComponent(<PytakuApp />, document.getElementById('app'));

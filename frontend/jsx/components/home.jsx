@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var Home = React.createClass({
-    mixins: [RouteMixin, AuthMixin],
+    mixins: [RouteMixin],
     render: function() {
         return (
             <div className="container">
