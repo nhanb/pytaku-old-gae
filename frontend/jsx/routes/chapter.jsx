@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
 var Chapter = React.createClass({
     mixins: [RouteMixin],
-    pageTitle: 'Chapter viewer',
+    pageTitle: function() {
+        return this.state.name;
+    },
     render: function() {
         var pages = this.state.pageUrls.map(function(url) {
             return (

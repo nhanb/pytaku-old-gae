@@ -113,7 +113,14 @@ var SearchButton = React.createClass({
 
 var Search = React.createClass({
     mixins: [RouteMixin],
-    pageTitle: 'Search manga title',
+    pageTitle: function() {
+        var query = this.props.query;
+        if (query) {
+            return query + ' - Manga title search';
+        } else {
+            return 'Search manga title';
+        }
+    },
 
     getInitialState: function() {
         var searching = false;
