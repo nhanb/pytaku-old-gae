@@ -57,7 +57,8 @@ gulp.task('csslib', function() {
     if (target === PRODUCTION) {
         files = [
             'bower_components/normalize-css/normalize.css',
-            'bower_components/bootstrap/dist/css/bootstrap.min.css',
+            // Bootstrap min requires including source map. Screw it!
+            'bower_components/bootstrap/dist/css/bootstrap.css',
             'bower_components/fontawesome/css/font-awesome.min.css',
         ];
     } else {
