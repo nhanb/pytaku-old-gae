@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
 
-// This component reuses on <TitleInfo> from title.jsx
 // TODO: Some parts of this are similar to <Title> component. Refactor the
 // common part out later.
 var ResultTitle = React.createClass({
