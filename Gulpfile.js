@@ -90,15 +90,10 @@ gulp.task('lib', function() {
 gulp.task('jsx', function() {
     gulp.src([
         'frontend/jsx/mixins/*.jsx',
-        'frontend/jsx/components/navbar.jsx',
-        'frontend/jsx/components/loading.jsx',
-        'frontend/jsx/components/home.jsx',
-        'frontend/jsx/components/register.jsx',
-        'frontend/jsx/components/login.jsx',
-        'frontend/jsx/components/chapter.jsx',
-        'frontend/jsx/components/title.jsx',
-        'frontend/jsx/components/search.jsx',
-        'frontend/jsx/*.jsx'
+        'frontend/jsx/shared_components/*.jsx',
+        'frontend/jsx/routes/*.jsx',
+        'frontend/jsx/navbar.jsx',
+        'frontend/jsx/app.jsx'
     ])
     .pipe(react())
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
