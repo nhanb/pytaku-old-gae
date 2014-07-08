@@ -12,7 +12,7 @@ var Loading = React.createClass({
 
         var text = <h4>{this.props.text}</h4> || '';
         return (
-            <div class='icon-container' style={this.css}>
+            <div className='icon-container' style={this.css}>
                 <i className='fa fa-5x fa-spinner fa-spin'></i>
                 {text}
             </div>

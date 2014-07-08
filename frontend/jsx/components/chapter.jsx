@@ -5,7 +5,7 @@ var Chapter = React.createClass({
     render: function() {
         var pages = this.state.pageUrls.map(function(url) {
             return (
-                <img className="page-img" src={url} />
+                <img className="page-img" key={url} src={url} />
             );
         });
 
@@ -16,7 +16,7 @@ var Chapter = React.createClass({
 
         return (
             <div className="chapter-container">
-                <h2 class="chapter-name">{name}</h2>
+                <h2 className="chapter-name">{name}</h2>
                 <ChapterNavs prev={prev} next={next} />
                 <Loading loading={fetching} />
                 {pages}
