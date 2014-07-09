@@ -130,7 +130,7 @@ class ChapterHandler(webapp2.RequestHandler):
 
         if chapter is None:
             # TODO: should we create a single chapter on the fly?
-            raise PyError('chapter_not_created')
+            raise PyError({'msg': 'chapter_not_created'})
 
         if chapter.pages is None:
             page_html = site.fetch_chapter_seed_page(url)
@@ -166,3 +166,18 @@ class ReadListHandler(webapp2.RequestHandler):
             'name': title.name,
             'url': title.url,
         } for title in titles]
+
+    @wrap_json
+    @unpack_post(url=['ustring', 'urlencoded'])
+    @auth()
+    def post(self):
+        "Add title from provided URL to read list"
+
+        title = Title.get_by_url(self.data['url'])
+        if title is None:
+            raise PyError({'msg': 'title_not_created'})
+
+        if self.user.add_to_read_list(title):
+            return {}
+        else:
+            raise PyError({'msg': 'title_already_in_run_list'})
