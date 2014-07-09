@@ -23,7 +23,7 @@ class LoginHandler(webapp2.RequestHandler):
 class LogoutHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @auth
+    @auth()
     def post(self):
         self.user.logout()
         return {}
@@ -144,6 +144,6 @@ class ChapterHandler(webapp2.RequestHandler):
 
 class TestTokenHandler(webapp2.RequestHandler):
     @wrap_json
-    @auth
+    @auth()
     def get(self):
         return {}

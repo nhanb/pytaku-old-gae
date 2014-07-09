@@ -4,22 +4,28 @@ from exceptions import PyError
 import validators
 
 
-def auth(func):
+# When required == False: do authentication if auth headers are provided,
+# otherwise still process request just like an unauthenticated API.
+def auth(required=True):
+    def decorator(func):
+        def wrapped(handler):
+            email = handler.request.headers.get('X-Email')
+            token = handler.request.headers.get('X-Token')
+            if not (email and token):
+                if required:
+                    raise PyError({'msg': 'auth_headers_not_found'})
+                else:
+                    return func(handler)
 
-    def wrapped(handler):
-        email = handler.request.headers.get('X-Email')
-        token = handler.request.headers.get('X-Token')
-        if not (email and token):
-            raise PyError({'msg': 'auth_headers_not_found'})
+            user, msg = User.auth_with_token(email, token)
+            if user:
+                handler.user = user
+                return func(handler)
+            else:
+                raise PyError({'msg': msg})
 
-        user, msg = User.auth_with_token(email, token)
-        if user:
-            handler.user = user
-            return func(handler)
-        else:
-            raise PyError({'msg': msg})
-
-    return wrapped
+        return wrapped
+    return decorator
 
 
 # Wrap data from server to proper JSON format for response body
