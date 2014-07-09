@@ -48,6 +48,7 @@ class UserHandler(webapp2.RequestHandler):
 class TitleHandler(webapp2.RequestHandler):
 
     @wrap_json
+    @auth(required=False)
     @unpack_get(url=['ustring', 'urlencoded'])
     def get(self):
         url = self.data['url']
@@ -86,12 +87,17 @@ class TitleHandler(webapp2.RequestHandler):
             # zero to whatever number without any missing chapter inbetween.
             ndb.put_multi(reversed(chapter_records))
 
-        return {
+        resp = {
             'site': site.netloc,
             'name': title['name'],
             'thumb_url': title['thumbnailUrl'],
             'chapters': title['chapters'],
         }
+
+        if hasattr(self, 'user'):
+            resp['is_in_read_list'] = title_record.is_in_read_list(self.user)
+
+        return resp
 
 
 class SearchHandler(webapp2.RequestHandler):
