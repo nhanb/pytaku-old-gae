@@ -61,7 +61,7 @@ class TitleHandler(webapp2.RequestHandler):
         title = site.title_info(title_page)
 
         # Create new title if not in db yet
-        title_record = Title.getByUrl(url)
+        title_record = Title.get_by_url(url)
         if title_record is None:
             title_record = Title.create(url, title['name'])
 
@@ -73,7 +73,7 @@ class TitleHandler(webapp2.RequestHandler):
             chap_num = length - i
             chap_url = chapters[i]['url']
             chap_name = chapters[i]['name']
-            existing_chapter = Chapter.getByUrl(chap_url)
+            existing_chapter = Chapter.get_by_url(chap_url)
             if existing_chapter is None:
                 c = Chapter.create(title_record, chap_url, chap_num, chap_name)
                 chapter_records.append(c)
@@ -126,7 +126,7 @@ class ChapterHandler(webapp2.RequestHandler):
         if site is None:
             raise PyError({'msg': 'unsupported_url'})
 
-        chapter = Chapter.getByUrl(url)
+        chapter = Chapter.get_by_url(url)
 
         if chapter is None:
             # TODO: should we create a single chapter on the fly?

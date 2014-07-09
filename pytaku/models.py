@@ -18,7 +18,7 @@ class Title(ndb.Model):
         return obj
 
     @classmethod
-    def getByUrl(cls, url):
+    def get_by_url(cls, url):
         return cls.query(cls.url == url).get()
 
 
@@ -50,7 +50,7 @@ class Chapter(ndb.Model):
         return obj
 
     @classmethod
-    def getByUrl(cls, url):
+    def get_by_url(cls, url):
         return cls.query(cls.url == url).get()
 
 
