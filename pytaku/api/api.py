@@ -63,7 +63,7 @@ class TitleHandler(webapp2.RequestHandler):
         # Create new title if not in db yet
         title_record = Title.get_by_url(url)
         if title_record is None:
-            title_record = Title.create(url, title['name'])
+            title_record = Title.create(url, site.netloc, title['name'])
 
         # Create newest chapters first, stop at first exising chapter record
         chapters = title['chapters']
@@ -153,3 +153,16 @@ class TestTokenHandler(webapp2.RequestHandler):
     @auth()
     def get(self):
         return {}
+
+
+class ReadListHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @auth()
+    def get(self):
+        titles = [title_key.get() for title_key in self.user.read_list]
+        return [{
+            'site': title.site,
+            'name': title.name,
+            'url': title.url,
+        } for title in titles]

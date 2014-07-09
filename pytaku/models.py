@@ -7,13 +7,14 @@ from datetime import datetime
 class Title(ndb.Model):
     url = ndb.StringProperty(indexed=True)
     name = ndb.StringProperty()
+    site = ndb.StringProperty()
 
     def is_in_read_list(self, user):
         return self.key in user.read_list
 
     @classmethod
-    def create(cls, url, name):
-        obj = cls(url=url, name=name)
+    def create(cls, url, site, name):
+        obj = cls(url=url, site=site, name=name)
         obj.put()
         return obj
 
