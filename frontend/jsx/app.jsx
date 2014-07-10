@@ -6,7 +6,8 @@ var app = {
     LOGIN: 'login',
     SEARCH: 'search',
     TITLE: 'title',
-    CHAPTER: 'chapter'
+    CHAPTER: 'chapter',
+    READLIST: 'readlist',
 };
 
 var PytakuApp = React.createClass({
@@ -17,6 +18,7 @@ var PytakuApp = React.createClass({
             '/': setState.bind(this, {route: app.HOME}),
             '/register': setState.bind(this, {route: app.REGISTER}),
             '/login': setState.bind(this, {route: app.LOGIN}),
+            '/readlist': setState.bind(this, {route: app.READLIST}),
             '/search': setState.bind(this, {route: app.SEARCH}),
 
             '/search/(.+)': (function() {
@@ -84,6 +86,10 @@ var PytakuApp = React.createClass({
                 break;
             case app.CHAPTER:
                 routeComponent = <Chapter url={this.state.url}/>;
+                break;
+            case app.READLIST:
+                routeComponent = <ReadList loggedIn={this.state.loggedIn}
+                    authedAjax={this.authedAjax} />;
                 break;
             default:
                 routeComponent = <Home />;

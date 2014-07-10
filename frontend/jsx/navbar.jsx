@@ -40,6 +40,7 @@ var Navbar = React.createClass({
     <div className="navbar-collapse collapse">
       <ul className="nav navbar-nav">
         <li><a href="#/search"><i className="fa fa-search fa-lg"></i> Search titles</a></li>
+        <li><a href="#/readlist"><i className="fa fa-star fa-lg"></i> My read list</a></li>
       </ul>
       {right_navs}
     </div>
