@@ -17,7 +17,7 @@ var ReadList = React.createClass({
         }
         var self = this;
         this.setState({loading: true});
-        this.props.authedAjax({
+        this.props.ajax({
             url: '/api/read-list',
             success: function(data) {
                 self.setState({

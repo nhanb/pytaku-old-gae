@@ -16,7 +16,7 @@ var ResultTitle = React.createClass({
         var titleInfo;
 
         titleInfo = <TitleInfo url={this.props.item.url}
-            authedAjax={this.props.authedAjax}
+            ajax={this.props.ajax}
             loggedIn={this.setState.bind(this)}
             doPopulate={this.state.doPopulate} />;
 
@@ -53,7 +53,7 @@ var TitleList = React.createClass({
         // destroyed instead of reused - http://fb.me/react-warning-keys
         var key = item.url;
         return <ResultTitle item={item} id={id} key={key}
-            authedAjax={this.props.authedAjax}
+            ajax={this.props.ajax}
             loggedIn={this.props.loggedIn} />;
     },
 
@@ -167,7 +167,7 @@ var Search = React.createClass({
 
                 <TitleList items={this.state.items}
                     loggedIn={this.props.loggedIn}
-                    authedAjax={this.props.authedAjax} />
+                    ajax={this.props.ajax} />
             </div>);
     }
 });

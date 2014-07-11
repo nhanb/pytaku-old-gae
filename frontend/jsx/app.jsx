@@ -79,18 +79,18 @@ var PytakuApp = React.createClass({
                 break;
             case app.SEARCH:
                 routeComponent = <Search loggedIn={this.state.loggedIn}
-                    query={this.state.query} authedAjax={this.authedAjax} />;
+                    query={this.state.query} ajax={this.ajax} />;
                 break;
             case app.TITLE:
                 routeComponent = <Title loggedIn={this.state.loggedIn}
-                    url={this.state.url} authedAjax={this.authedAjax} />;
+                    url={this.state.url} ajax={this.ajax} />;
                 break;
             case app.CHAPTER:
                 routeComponent = <Chapter url={this.state.url}/>;
                 break;
             case app.READLIST:
                 routeComponent = <ReadList loggedIn={this.state.loggedIn}
-                    authedAjax={this.authedAjax} />;
+                    ajax={this.ajax} />;
                 break;
             default:
                 routeComponent = <Home />;
@@ -157,6 +157,20 @@ var PytakuApp = React.createClass({
         };
         return $.ajax(options);
     },
+
+    normalAjax: function(options) {
+        options.dataType = 'json';
+        return $.ajax(options);
+    },
+
+    ajax: function(options) {
+        var self=this;
+        if (self.state.loggedIn) {
+            return self.authedAjax(options);
+        } else {
+            return self.normalAjax(options);
+        }
+    }
 });
 
 React.renderComponent(<PytakuApp />, document.getElementById('app'));

@@ -26,11 +26,7 @@ var TitleInfo = React.createClass({
     populateInfo: function() {
         this.setState({populating: true});
         var self = this;
-        var ajax = $.ajax;
-        if (this.props.loggedIn) {
-            ajax = this.props.authedAjax;
-        }
-        ajax({
+        this.props.ajax({
             url: '/api/title?url=' + self.props.url,
             dataType: 'json',
             method: 'GET',
@@ -79,7 +75,7 @@ var TitleInfo = React.createClass({
 
     addToReadList: function() {
         var self = this;
-        this.props.authedAjax({
+        this.props.ajax({
             url: '/api/read-list',
             method: 'POST',
             data: JSON.stringify({url: self.state.info.url}),
