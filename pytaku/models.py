@@ -79,6 +79,13 @@ class User(ndb.Model):
             return True
         return False
 
+    def remove_from_read_list(self, title):
+        if title.key in self.read_list:
+            self.read_list.remove(title.key)
+            self.put()
+            return True
+        return False
+
     @staticmethod
     def hash_password(password):
         return pbkdf2_sha512.encrypt(password)

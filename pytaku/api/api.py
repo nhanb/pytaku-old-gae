@@ -168,16 +168,24 @@ class ReadListHandler(webapp2.RequestHandler):
         } for title in titles]
 
     @wrap_json
-    @unpack_post(url=['ustring'])
+    @unpack_post(url=['ustring'], action=['ustring'])
     @auth()
     def post(self):
-        "Add title from provided URL to read list"
+        "Add or remove title from provided URL to read list"
+
+        if self.data['action'] not in ('add', 'remove'):
+            raise PyError({'msg': 'invalid_action'})
 
         title = Title.get_by_url(self.data['url'])
         if title is None:
             raise PyError({'msg': 'title_not_created'})
 
-        if self.user.add_to_read_list(title):
+        if self.data['action'] == 'add':
+            if not self.user.add_to_read_list(title):
+                raise PyError({'msg': 'title_already_in_read_list'})
             return {}
+
         else:
-            raise PyError({'msg': 'title_already_in_read_list'})
+            if not self.user.remove_from_read_list(title):
+                raise PyError({'msg': 'title_already_in_read_list'})
+            return {}

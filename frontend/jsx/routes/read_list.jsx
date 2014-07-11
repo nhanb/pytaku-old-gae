@@ -6,6 +6,7 @@ var ReadListItem = React.createClass({
         return {
             chapters: [],
             loading: false,
+            removed: false,
         };
     },
 
@@ -24,10 +25,17 @@ var ReadListItem = React.createClass({
     },
 
     render: function() {
+        if (this.state.removed === true) {
+            return <tbody></tbody>;
+        }
+
         var returnVal;
         var chapters = this.state.chapters;
         var latestChapters = '';
         var nameRowSpan = 1;
+
+        var removeBtn = <button onClick={this.remove}
+            className="btn btn-danger">remove</button>;
 
         if (!this.state.loading) {
             // number of chapters to show. TODO refactor it to be configurable
@@ -49,7 +57,7 @@ var ReadListItem = React.createClass({
             returnVal =  (
                 <tbody>
                     <tr key={this.props.url}>
-                        <td rowSpan={nameRowSpan}>{this.props.name}</td>
+                        <td rowSpan={nameRowSpan}>{removeBtn} {this.props.name}</td>
                         <td>{firstChapter}</td>
                     </tr>
                     {remaining}
@@ -60,7 +68,7 @@ var ReadListItem = React.createClass({
             returnVal = (
                 <tbody>
                     <tr key={this.props.url}>
-                        <td>{this.props.name}</td>
+                        <td>{removeBtn} {this.props.name}</td>
                         <td><i className="fa fa-lg fa-spinner fa-spin"></i></td>
                     </tr>
                 </tbody>
@@ -68,6 +76,21 @@ var ReadListItem = React.createClass({
         }
 
         return returnVal;
+    },
+
+    remove: function() {
+        var self = this;
+        this.props.ajax({
+            url: '/api/read-list',
+            method: 'POST',
+            data: JSON.stringify({
+                url: this.props.url,
+                action: 'remove'
+            }),
+            success: function() {
+                self.setState({removed: true});
+            }
+        });
     }
 });
 

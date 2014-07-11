@@ -80,7 +80,10 @@ var TitleInfo = React.createClass({
         this.props.ajax({
             url: '/api/read-list',
             method: 'POST',
-            data: JSON.stringify({url: self.state.info.url}),
+            data: JSON.stringify({
+                url: self.state.info.url,
+                action: 'add'
+            }),
             success: function() {
                 info = self.state.info;
                 info.is_in_read_list = true;
