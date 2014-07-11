@@ -1,19 +1,24 @@
 /** @jsx React.DOM */
 
-// TODO: Some parts of this are similar to <Title> component. Refactor the
-// common part out later.
 var ResultTitle = React.createClass({
+    getInitialState: function() {
+        return {doPopulate: false};
+    },
+
+    populateInfo: function() {
+        this.setState({doPopulate: true});
+    },
+
     render: function() {
         var item = this.props.item;
         var tagId = 'collapse' + this.props.id;
         var href = '#' + tagId;
         var titleInfo;
 
-        if (this.state.populated) {
-            titleInfo = <TitleInfo info={this.state.info}/>;
-        } else {
-            titleInfo = "Fetching data...";
-        }
+        titleInfo = <TitleInfo url={this.props.item.url}
+            authedAjax={this.props.authedAjax}
+            loggedIn={this.setState.bind(this)}
+            doPopulate={this.state.doPopulate} />;
 
         return (
             <div className="panel panel-default">
@@ -34,32 +39,7 @@ var ResultTitle = React.createClass({
         );
     },
 
-    getInitialState: function() {
-        return {populated: false};
-    },
 
-    populateInfo: function() {
-        if (this.populated) return;
-        this.setState({populating: true});
-        var item = this.props.item;
-
-        var self = this;
-        $.ajax({
-            url: '/api/title?url=' + encodeURIComponent(item.url),
-            dataType: 'json',
-            method: 'GET',
-            success: function(data) {
-                data.url=encodeURIComponent(item.url);
-                self.setState({
-                    info: data,
-                    populated: true
-                });
-            },
-            complete: function() {
-                self.setState({populating: false});
-            }
-        });
-    }
 });
 
 var TitleList = React.createClass({
@@ -72,7 +52,9 @@ var TitleList = React.createClass({
         // Assign unique key to make sure outdated Title components are
         // destroyed instead of reused - http://fb.me/react-warning-keys
         var key = item.url;
-        return <ResultTitle item={item} id={id} key={key} />;
+        return <ResultTitle item={item} id={id} key={key}
+            authedAjax={this.props.authedAjax}
+            loggedIn={this.props.loggedIn} />;
     },
 
     render: function() {
@@ -183,7 +165,9 @@ var Search = React.createClass({
                     <SearchButton searching={this.state.searching} />
                 </form>
 
-                <TitleList items={this.state.items} />
+                <TitleList items={this.state.items}
+                    loggedIn={this.props.loggedIn}
+                    authedAjax={this.props.authedAjax} />
             </div>);
     }
 });

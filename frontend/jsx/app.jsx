@@ -79,10 +79,11 @@ var PytakuApp = React.createClass({
                 break;
             case app.SEARCH:
                 routeComponent = <Search loggedIn={this.state.loggedIn}
-                    query={this.state.query}/>;
+                    query={this.state.query} authedAjax={this.authedAjax} />;
                 break;
             case app.TITLE:
-                routeComponent = <Title url={this.state.url}/>;
+                routeComponent = <Title loggedIn={this.state.loggedIn}
+                    url={this.state.url} authedAjax={this.authedAjax} />;
                 break;
             case app.CHAPTER:
                 routeComponent = <Chapter url={this.state.url}/>;
