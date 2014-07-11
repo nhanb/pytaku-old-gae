@@ -180,4 +180,4 @@ class ReadListHandler(webapp2.RequestHandler):
         if self.user.add_to_read_list(title):
             return {}
         else:
-            raise PyError({'msg': 'title_already_in_run_list'})
+            raise PyError({'msg': 'title_already_in_read_list'})
