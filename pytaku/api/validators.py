@@ -3,9 +3,11 @@ from urllib import unquote
 
 
 def integer(value):
-    if isinstance(value, int):
+    try:
+        value = int(value)
         return True, value
-    return False, 'invalid_int'
+    except ValueError:
+        return False, 'invalid_int'
 
 
 # Either 1 or 0

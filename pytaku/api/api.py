@@ -49,7 +49,7 @@ class TitleHandler(webapp2.RequestHandler):
 
     @wrap_json
     @auth(required=False)
-    @unpack_get(url=['ustring', 'urlencoded'])
+    @unpack_get(url=['ustring', 'urlencoded'], chapter_limit=['integer'])
     def get(self):
         url = self.data['url']
 
@@ -87,11 +87,17 @@ class TitleHandler(webapp2.RequestHandler):
             # zero to whatever number without any missing chapter inbetween.
             ndb.put_multi(reversed(chapter_records))
 
+        # If the provided chapter_limit is valid, return only that many
+        # chapters in API response.
+        chapter_limit = self.data['chapter_limit']
+        if chapter_limit in range(length):
+            chapters = chapters[:chapter_limit]
+
         resp = {
             'site': site.netloc,
             'name': title['name'],
             'thumb_url': title['thumbnailUrl'],
-            'chapters': title['chapters'],
+            'chapters': chapters,
         }
 
         if hasattr(self, 'user'):

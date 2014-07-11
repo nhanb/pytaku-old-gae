@@ -27,9 +27,13 @@ var TitleInfo = React.createClass({
 
     populateInfo: function() {
         this.setState({populating: true});
+
+        url = '/api/title?url=' + encodeURIComponent(this.props.url);
+        url += '&chapter_limit=-1';
+
         var self = this;
         this.props.ajax({
-            url: '/api/title?url=' + encodeURIComponent(self.props.url),
+            url: url,
             dataType: 'json',
             method: 'GET',
             success: function(data) {

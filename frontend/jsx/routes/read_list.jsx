@@ -12,9 +12,13 @@ var ReadListItem = React.createClass({
 
     componentDidMount: function() {
         this.setState({loading: true});
+
+        url = '/api/title?url=' + encodeURIComponent(this.props.url);
+        url += '&chapter_limit=' + this.props.chapter_num;
+
         var self = this;
         this.props.ajax({
-            url: '/api/title?url=' + encodeURIComponent(self.props.url),
+            url: url,
             success: function(data) {
                 self.setState({
                     chapters: data.chapters,
@@ -38,10 +42,8 @@ var ReadListItem = React.createClass({
             className="btn btn-danger">remove</button>;
 
         if (!this.state.loading) {
-            // number of chapters to show. TODO refactor it to be configurable
-            var CHAPTER_NUM = 5;
 
-            var latest = chapters.slice(0, CHAPTER_NUM);
+            var latest = chapters.slice(0, this.props.chapter_num);
             nameRowSpan = latest.length;
 
             var chapterArray = latest.map(function(chapter) {
@@ -164,7 +166,7 @@ var ReadList = React.createClass({
             var self = this;
             var table_body = this.state.titles.map(function(title) {
                 return <ReadListItem url={title.url} name={title.name}
-                    ajax={self.props.ajax} key={title.url} />;
+                    ajax={self.props.ajax} key={title.url} chapter_num="5" />;
             });
 
             content = (
