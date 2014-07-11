@@ -1,4 +1,76 @@
 /** @jsx React.DOM */
+
+// Each item represents a title, displaying its name and latest chapters
+var ReadListItem = React.createClass({
+    getInitialState: function() {
+        return {
+            chapters: [],
+            loading: false,
+        };
+    },
+
+    componentDidMount: function() {
+        this.setState({loading: true});
+        var self = this;
+        this.props.ajax({
+            url: '/api/title?url=' + encodeURIComponent(self.props.url),
+            success: function(data) {
+                self.setState({
+                    chapters: data.chapters,
+                    loading: false
+                });
+            }
+        });
+    },
+
+    render: function() {
+        var returnVal;
+        var chapters = this.state.chapters;
+        var latestChapters = '';
+        var nameRowSpan = 1;
+
+        if (!this.state.loading) {
+            // number of chapters to show. TODO refactor it to be configurable
+            var CHAPTER_NUM = 5;
+
+            var latest = chapters.slice(0, CHAPTER_NUM);
+            nameRowSpan = latest.length;
+
+            var chapterArray = latest.map(function(chapter) {
+                var href = '/#/chapter/' + encodeURIComponent(chapter.url);
+                return <a href={href}>{chapter.name}</a>;
+            });
+            var firstChapter = chapterArray.splice(0,1);
+
+            var remaining = chapterArray.map(function(chapter) {
+                return <tr><td>{chapter}</td></tr>;
+            });
+
+            returnVal =  (
+                <tbody>
+                    <tr key={this.props.url}>
+                        <td rowSpan={nameRowSpan}>{this.props.name}</td>
+                        <td>{firstChapter}</td>
+                    </tr>
+                    {remaining}
+                </tbody>
+            );
+
+        } else {
+            returnVal = (
+                <tbody>
+                    <tr key={this.props.url}>
+                        <td>{this.props.name}</td>
+                        <td><i className="fa fa-lg fa-spinner fa-spin"></i></td>
+                    </tr>
+                </tbody>
+            );
+        }
+
+        return returnVal;
+    }
+});
+
 var ReadList = React.createClass({
     mixins: [RouteMixin],
     pageTitle: 'My manga read list',
@@ -66,29 +138,21 @@ var ReadList = React.createClass({
 
         // Everything worked! Let's render some useful data:
         } else {
-
+            var self = this;
             var table_body = this.state.titles.map(function(title) {
-                return (
-                    <tr key={title.url}>
-                        <td>{title.name}</td>
-                        <td>blah</td>
-                        <td>blah</td>
-                    </tr>
-                );
+                return <ReadListItem url={title.url} name={title.name}
+                    ajax={self.props.ajax} key={title.url} />;
             });
 
             content = (
-                <table className="table table-bordered table-hover">
+                <table className="table table-bordered">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Latest chapter</th>
-                            <th>Go to chapter</th>
+                            <th>Latest chapters</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {table_body}
-                    </tbody>
+                    {table_body}
                 </table>
             );
         }
