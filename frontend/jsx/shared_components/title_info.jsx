@@ -12,13 +12,15 @@ var TitleInfo = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (nextProps.doPopulate && !this.state.populating) {
+        if (nextProps.doPopulate && !this.state.populating &&
+            !this.state.populated) {
             this.populateInfo();
         }
     },
 
     componentDidMount: function() {
-        if (this.props.doPopulate && !this.state.populating) {
+        if (this.props.doPopulate && !this.state.populating &&
+            !this.state.populated) {
             this.populateInfo();
         }
     },
