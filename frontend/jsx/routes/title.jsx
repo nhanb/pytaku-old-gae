@@ -8,7 +8,7 @@ var Title = React.createClass({
     render: function() {
         return (
             <TitleInfo loggedIn={this.props.loggedIn}
-                ajax={this.props.ajax} url={this.props.url} />
+                ajax={this.props.ajax} url={decodeURIComponent(this.props.url)} />
         );
     }
 });

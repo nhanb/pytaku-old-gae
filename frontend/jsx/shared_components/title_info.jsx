@@ -27,7 +27,7 @@ var TitleInfo = React.createClass({
         this.setState({populating: true});
         var self = this;
         this.props.ajax({
-            url: '/api/title?url=' + self.props.url,
+            url: '/api/title?url=' + encodeURIComponent(self.props.url),
             dataType: 'json',
             method: 'GET',
             success: function(data) {
@@ -95,7 +95,7 @@ var TitleInfo = React.createClass({
 
         } else if (this.state.populated) {
             var info = this.state.info;
-            var permalink = '/#/title/' + info.url;
+            var permalink = '/#/title/' + encodeURIComponent(info.url);
 
             body = (
                 <div className="title-info">

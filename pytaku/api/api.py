@@ -168,7 +168,7 @@ class ReadListHandler(webapp2.RequestHandler):
         } for title in titles]
 
     @wrap_json
-    @unpack_post(url=['ustring', 'urlencoded'])
+    @unpack_post(url=['ustring'])
     @auth()
     def post(self):
         "Add title from provided URL to read list"
