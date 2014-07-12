@@ -57,13 +57,35 @@ class TitleHandler(webapp2.RequestHandler):
         site = sites.get_site(url)
         if site is None:
             raise PyError({'msg': 'unsupported_url'})
+
+        # Check if title is already in db
+        title_record = Title.get_by_url(url)
+
+        # Skip reloading title info if updated recently
+        if title_record and title_record.is_fresh():
+            limit = self.data['chapter_limit']
+            if limit < 1:
+                limit = None
+            chapters = title_record.find_chapters(limit)
+            resp = {
+                'site': site.netloc,
+                'name': title_record.name,
+                'thumb_url': title_record.thumb_url,
+                'chapters': [{'name': c.name, 'url': c.url} for c in chapters],
+            }
+            if hasattr(self, 'user'):
+                user = self.user
+                resp['is_in_read_list'] = title_record.is_in_read_list(user)
+            return resp
+
+        # Fetch basic title info (name, thumburl, chapter list)
         title_page = site.fetch_manga_seed_page(url)
         title = site.title_info(title_page)
 
         # Create new title if not in db yet
-        title_record = Title.get_by_url(url)
         if title_record is None:
-            title_record = Title.create(url, site.netloc, title['name'])
+            title_record = Title.create(url, site.netloc,
+                                        title['name'], title['thumbnailUrl'])
 
         # Create newest chapters first, stop at first exising chapter record
         chapters = title['chapters']
@@ -86,6 +108,9 @@ class TitleHandler(webapp2.RequestHandler):
             # etc) then we still have a contiguous list of records going from
             # zero to whatever number without any missing chapter inbetween.
             ndb.put_multi(reversed(chapter_records))
+
+        # Tell db this title has just been updated
+        title_record.refresh()
 
         # If the provided chapter_limit is valid, return only that many
         # chapters in API response.

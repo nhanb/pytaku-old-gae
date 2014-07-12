@@ -8,13 +8,26 @@ class Title(ndb.Model):
     url = ndb.StringProperty(indexed=True)
     name = ndb.StringProperty()
     site = ndb.StringProperty()
+    thumb_url = ndb.StringProperty()
+    last_update = ndb.DateTimeProperty(auto_now_add=True)
 
     def is_in_read_list(self, user):
         return self.key in user.read_list
 
+    def is_fresh(self):
+        # fresh == updated less than an hour ago
+        return (datetime.now() - self.last_update).seconds < 3600
+
+    def refresh(self):
+        self.last_updated = datetime.now()
+        self.put()
+
+    def find_chapters(self, limit=None):
+        return Chapter.get_by_title(self, limit)
+
     @classmethod
-    def create(cls, url, site, name):
-        obj = cls(url=url, site=site, name=name)
+    def create(cls, url, site, name, thumb_url):
+        obj = cls(url=url, site=site, name=name, thumb_url=thumb_url)
         obj.put()
         return obj
 
@@ -53,6 +66,10 @@ class Chapter(ndb.Model):
     @classmethod
     def get_by_url(cls, url):
         return cls.query(cls.url == url).get()
+
+    @classmethod
+    def get_by_title(cls, title, max=None):
+        return cls.query(cls.title == title.key).order(-cls.number).fetch(max)
 
 
 # Email is stored as id to ensure uniqueness
