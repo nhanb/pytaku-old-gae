@@ -41,6 +41,9 @@ var ReadListItem = React.createClass({
         var removeBtn = <button onClick={this.remove}
             className="btn btn-danger">remove</button>;
 
+        var titleHref = '/#/title/' + encodeURIComponent(this.props.url);
+        var titleA = <a href={titleHref}>{this.props.name}</a>;
+
         if (!this.state.loading) {
 
             var latest = chapters.slice(0, this.props.chapter_num);
@@ -59,7 +62,7 @@ var ReadListItem = React.createClass({
             returnVal =  (
                 <tbody>
                     <tr key={this.props.url}>
-                        <td rowSpan={nameRowSpan}>{removeBtn} {this.props.name}</td>
+                        <td rowSpan={nameRowSpan}>{removeBtn} {titleA}</td>
                         <td>{firstChapter}</td>
                     </tr>
                     {remaining}
@@ -70,7 +73,7 @@ var ReadListItem = React.createClass({
             returnVal = (
                 <tbody>
                     <tr key={this.props.url}>
-                        <td>{removeBtn} {this.props.name}</td>
+                        <td>{removeBtn} {titleA}</td>
                         <td><i className="fa fa-lg fa-spinner fa-spin"></i></td>
                     </tr>
                 </tbody>
