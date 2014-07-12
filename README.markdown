@@ -1,5 +1,9 @@
 # Pytaku
+
 ... is the last online manga reader you'll ever need!
+
+Join the chat room for latest development updates and official support:  
+[![Gitter chat](https://badges.gitter.im/nhanb/pytaku.png)](https://gitter.im/nhanb/pytaku)
 
 # How to use
 
@@ -10,6 +14,10 @@
 Pytaku currently gets data from [batoto][1] and [kissmanga][2]. Manga info is saved to Pytaku's own
 database after first view, so naturally popular manga titles will be blazing fast because somebody
 else has probably triggered the first view before you :)
+
+There's also a backup site: https://pytaku2.appspot.com - Note that it uses a completely separate
+database so your data from the main site will not be there, and it will most likely be a few
+commits behind the main site. Use it when I've somehow messed up the main one :)
 
 # How to develop
 
