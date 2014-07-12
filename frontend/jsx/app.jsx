@@ -174,3 +174,9 @@ var PytakuApp = React.createClass({
 });
 
 React.renderComponent(<PytakuApp />, document.getElementById('app'));
+
+// "Go to top" button.
+// Only show this on non-mobile devices where screen real estate is plenty
+if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    React.renderComponent(<ScrollToTopBtn />, document.getElementById('up-component'));
+}

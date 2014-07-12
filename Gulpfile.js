@@ -94,6 +94,7 @@ gulp.task('jsx', function() {
         'frontend/jsx/shared_components/*.jsx',
         'frontend/jsx/routes/*.jsx',
         'frontend/jsx/navbar.jsx',
+        'frontend/jsx/scroll_to_top.jsx',
         'frontend/jsx/app.jsx'
     ])
     .pipe(react())
