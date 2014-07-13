@@ -1,7 +1,17 @@
 import urllib
+import re
 from google.appengine.api import urlfetch
 from pytaku.sites import Site
 from bs4 import BeautifulSoup
+
+
+# Define custom BeautifulSoup filter to get <img> tags that are sure to hold
+# manga page image url
+def _page_img_tag(tag):
+    if tag.name == 'img' and 'src' in tag.attrs:
+        _page_url_pat = re.compile('^http://img.batoto.net/comics/\d{4}.*$')
+        return bool(_page_url_pat.match(tag.attrs['src']))
+    return False
 
 
 class Batoto(Site):
@@ -83,6 +93,18 @@ class Batoto(Site):
 
     def chapter_pages(self, html):
         soup = BeautifulSoup(html)
+
+        # For webtoons, all pages are shown in a single page.
+        # When that's the case, there's this element that asks if you want to
+        # view page-by-page instead. Let's use this element to check if we're
+        # parsing a webtoon chapter.
+        webtoon = soup.find('a', href='?supress_webtoon=t')
+        if webtoon is not None:
+            img_tags = soup.find_all(_page_img_tag)
+            return [{
+                'url': tag['src'],
+                'filename': tag['src'].split('/')[-1]
+            } for tag in img_tags]
 
         # a <select> tag has options that each points to a page
         opts = soup.find('select', id='page_select').find_all('option')
