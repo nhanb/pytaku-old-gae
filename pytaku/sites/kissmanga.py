@@ -69,7 +69,8 @@ class Kissmanga(Site):
         pat = re.compile('lstImages\.push\("(.+?)"\);')
         matches = pat.findall(html)
         pages = []
-        name_pat = '.*([0-9]{3}\.[a-zA-Z]+)\?.*'
+        # file names can be: 01, 001, 01-02 (dot whatever)
+        name_pat = '.*([0-9-]{2,}\.[a-zA-Z]+)\?.*'
         for url in matches:
             filename = re.match(name_pat, url).group(1)
             pages.append({'filename': filename, 'url': url})
