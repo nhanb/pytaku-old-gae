@@ -140,7 +140,7 @@ var PytakuApp = React.createClass({
             self.authedAjax({
                 url: '/api/test-token',
                 error: function() {
-                    alert('Access token mismatched. Please login again :)');
+                    localStorage.removeItem('token');
                     self.setState({loggedIn: false});
                 }
             });
