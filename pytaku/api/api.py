@@ -66,17 +66,20 @@ class TitleHandler(webapp2.RequestHandler):
             limit = self.data['chapter_limit']
             if limit < 1:
                 limit = None
-            chapters = title_record.find_chapters(limit)
+            chapters = title_record.chapters[:limit]
             resp = {
                 'site': site.netloc,
                 'name': title_record.name,
                 'thumb_url': title_record.thumb_url,
-                'chapters': [{'name': c.name, 'url': c.url} for c in chapters],
+                'chapters': [{'name': c['name'], 'url': c['url']}
+                             for c in chapters]
             }
             if hasattr(self, 'user'):
                 user = self.user
                 resp['is_in_read_list'] = title_record.is_in_read_list(user)
             return resp
+
+        # =============== Create/Update title record ====================
 
         # Fetch basic title info (name, thumburl, chapter list)
         title_page = site.fetch_manga_seed_page(url)
@@ -84,38 +87,18 @@ class TitleHandler(webapp2.RequestHandler):
 
         # Create new title if not in db yet
         if title_record is None:
-            title_record = Title.create(url, site.netloc,
-                                        title['name'], title['thumbnailUrl'])
-
-        # Create newest chapters first, stop at first exising chapter record
-        chapters = title['chapters']
-        chapter_records = []
-        length = len(chapters)
-        for i in range(length):
-            chap_num = length - i
-            chap_url = chapters[i]['url']
-            chap_name = chapters[i]['name']
-            existing_chapter = Chapter.get_by_url(chap_url)
-            if existing_chapter is None:
-                c = Chapter.create(title_record, chap_url, chap_num, chap_name)
-                chapter_records.append(c)
-            else:
-                break
-
-        if len(chapter_records) > 0:
-            # Reverse again to have correct order (0, 1, 2...). This makes sure
-            # if something wrong happens during multiple puts (request timeout,
-            # etc) then we still have a contiguous list of records going from
-            # zero to whatever number without any missing chapter inbetween.
-            ndb.put_multi(reversed(chapter_records))
-
-        # Tell db this title has just been updated
-        title_record.refresh()
+            title_record = Title.create(url, site.netloc, title['name'],
+                                        title['thumbnailUrl'],
+                                        title['chapters'])
+        else:
+            title_record.update(site.netloc, title['name'],
+                                title['thumbnailUrl'], title['chapters'])
 
         # If the provided chapter_limit is valid, return only that many
         # chapters in API response.
+        chapters = title['chapters']
         chapter_limit = self.data['chapter_limit']
-        if chapter_limit in range(length):
+        if chapter_limit in range(len(chapters)):
             chapters = chapters[:chapter_limit]
 
         resp = {
@@ -158,24 +141,20 @@ class ChapterHandler(webapp2.RequestHandler):
             raise PyError({'msg': 'unsupported_url'})
 
         chapter = Chapter.get_by_url(url)
-
         if chapter is None:
-            # TODO: should we create a single chapter on the fly?
-            raise PyError({'msg': 'chapter_not_created'})
-
-        if chapter.pages is None:
             page_html = site.fetch_chapter_seed_page(url)
-            chapter_pages = site.chapter_pages(page_html)
-            chapter.pages = [page['url'] for page in chapter_pages]
+            info = site.chapter_info(page_html)
+            chapter = Chapter.create(url, info['name'], info['pages'],
+                                     info['prev_chapter_url'],
+                                     info['next_chapter_url'])
             chapter.put()
 
         return {
             'name': chapter.name,
             'url': chapter.url,
-            'number': chapter.number,
-            'pages': chapter.pages,
-            'next_chapter_url': chapter.next_chapter_url(),
-            'prev_chapter_url': chapter.prev_chapter_url(),
+            'pages': [p['url'] for p in chapter.pages],
+            'next_chapter_url': chapter.next_chapter_url,
+            'prev_chapter_url': chapter.prev_chapter_url,
         }
 
 

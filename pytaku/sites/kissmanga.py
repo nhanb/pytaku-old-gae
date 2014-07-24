@@ -64,8 +64,37 @@ class Kissmanga(Site):
         # => must remove the ' manga' part
         return soup.find('link', {'rel': 'alternate'})['title'][:-6]
 
-    # Pages from a chapter: [{ 'filename': '...', 'url': '...' }]
-    def chapter_pages(self, html):
+    # Chapter data
+    # - name "Naruto Ch.101"
+    # - pages [{filename, url}, {}, ...] - in ascending order
+    # - prev_chapter_url
+    # - next_chapter_url
+    def chapter_info(self, html):
+        pages = self._chapter_pages(html)
+        soup = BeautifulSoup(html)
+        name = self._chapter_name(soup)
+        prev, next = self._chapter_prev_next(soup)
+        return {
+            'name': name,
+            'pages': pages,
+            'next_chapter_url': next,
+            'prev_chapter_url': prev,
+        }
+
+    def _chapter_prev_next(self, soup):
+        next = soup.find('img', class_='btnNext')
+        if next is not None:
+            next = next.parent['href']
+        prev = soup.find('img', class_='btnPrevious')
+        if prev is not None:
+            prev = prev.parent['href']
+        return prev, next
+
+    def _chapter_name(self, soup):
+        select = soup.find('select', class_='selectChapter')
+        return select.find('option', selected=True).text.strip()
+
+    def _chapter_pages(self, html):
         pat = re.compile('lstImages\.push\("(.+?)"\);')
         matches = pat.findall(html)
         pages = []

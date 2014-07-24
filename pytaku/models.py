@@ -10,6 +10,7 @@ class Title(ndb.Model):
     site = ndb.StringProperty()
     thumb_url = ndb.StringProperty()
     last_update = ndb.DateTimeProperty(auto_now_add=True)
+    chapters = ndb.JsonProperty()  # [{'name': 'Ch.101', 'url': 'http...'}]
 
     def is_in_read_list(self, user):
         return self.key in user.read_list
@@ -18,16 +19,19 @@ class Title(ndb.Model):
         # fresh == updated less than an hour ago
         return (datetime.now() - self.last_update).seconds < 3600
 
-    def refresh(self):
-        self.last_updated = datetime.now()
+    def update(self, site, name, thumb_url, chapters):
+        self.site = site
+        self.name = name
+        self.thumb_url = thumb_url
+        self.chapters = chapters
+        self.last_updated = datetime.now()  # "refresh" this title
         self.put()
-
-    def find_chapters(self, limit=None):
-        return Chapter.get_by_title(self, limit)
+        return self
 
     @classmethod
-    def create(cls, url, site, name, thumb_url):
-        obj = cls(url=url, site=site, name=name, thumb_url=thumb_url)
+    def create(cls, url, site, name, thumb_url, chapters):
+        obj = cls(url=url, site=site, name=name, thumb_url=thumb_url,
+                  chapters=chapters)
         obj.put()
         return obj
 
@@ -37,39 +41,27 @@ class Title(ndb.Model):
 
 
 class Chapter(ndb.Model):
-    title = ndb.KeyProperty(kind=Title)
-    number = ndb.IntegerProperty(indexed=True)
     url = ndb.StringProperty(indexed=True)
     name = ndb.StringProperty(indexed=True)
     pages = ndb.JsonProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
+    next_chapter_url = ndb.StringProperty()
+    prev_chapter_url = ndb.StringProperty()
 
     def fill_pages(self, pages):
         self.pages = pages
         self.put()
 
-    def next_chapter_url(self):
-        ch = Chapter.query(Chapter.title == self.title,
-                           Chapter.number == self.number + 1).get()
-        return ch.url if ch is not None else None
-
-    def prev_chapter_url(self):
-        ch = Chapter.query(Chapter.title == self.title,
-                           Chapter.number == self.number - 1).get()
-        return ch.url if ch is not None else None
-
     @classmethod
-    def create(cls, title, url, number, name):
-        obj = cls(title=title.key, url=url, number=number, name=name)
+    def create(cls, url, name, pages, prev, next):
+        obj = cls(url=url, name=name, pages=pages,
+                  prev_chapter_url=prev, next_chapter_url=next)
+        obj.put()
         return obj
 
     @classmethod
     def get_by_url(cls, url):
         return cls.query(cls.url == url).get()
-
-    @classmethod
-    def get_by_title(cls, title, max=None):
-        return cls.query(cls.title == title.key).order(-cls.number).fetch(max)
 
 
 # Email is stored as id to ensure uniqueness
