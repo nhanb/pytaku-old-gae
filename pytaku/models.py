@@ -47,14 +47,11 @@ class Chapter(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     next_chapter_url = ndb.StringProperty()
     prev_chapter_url = ndb.StringProperty()
-
-    def fill_pages(self, pages):
-        self.pages = pages
-        self.put()
+    title_url = ndb.StringProperty()
 
     @classmethod
-    def create(cls, url, name, pages, prev, next):
-        obj = cls(url=url, name=name, pages=pages,
+    def create(cls, url, name, pages, title_url, prev, next):
+        obj = cls(url=url, name=name, pages=pages, title_url=title_url,
                   prev_chapter_url=prev, next_chapter_url=next)
         obj.put()
         return obj

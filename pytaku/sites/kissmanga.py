@@ -73,10 +73,12 @@ class Kissmanga(Site):
         pages = self._chapter_pages(html)
         soup = BeautifulSoup(html)
         name = self._chapter_name(soup)
+        title_url = self._chapter_title_url(soup)
         prev, next = self._chapter_prev_next(soup)
         return {
             'name': name,
             'pages': pages,
+            'title_url': title_url,
             'next_chapter_url': next,
             'prev_chapter_url': prev,
         }
@@ -104,6 +106,10 @@ class Kissmanga(Site):
             filename = re.match(name_pat, url).group(1)
             pages.append({'filename': filename, 'url': url})
         return pages
+
+    def _chapter_title_url(self, soup):
+        a_tag = soup.find('div', id='navsubbar').find('p').find('a')
+        return a_tag['href']
 
     def fetch_manga_seed_page(self, url):
         header = {'Cookie': 'vns_Adult=yes'}

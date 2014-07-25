@@ -145,6 +145,7 @@ class ChapterHandler(webapp2.RequestHandler):
             page_html = site.fetch_chapter_seed_page(url)
             info = site.chapter_info(page_html)
             chapter = Chapter.create(url, info['name'], info['pages'],
+                                     info['title_url'],
                                      info['prev_chapter_url'],
                                      info['next_chapter_url'])
             chapter.put()
@@ -153,6 +154,7 @@ class ChapterHandler(webapp2.RequestHandler):
             'name': chapter.name,
             'url': chapter.url,
             'pages': [p['url'] for p in chapter.pages],
+            'title_url': chapter.title_url,
             'next_chapter_url': chapter.next_chapter_url,
             'prev_chapter_url': chapter.prev_chapter_url,
         }
