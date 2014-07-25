@@ -91,9 +91,38 @@ class Batoto(Site):
         except:
             return ([], [])
 
-    def chapter_pages(self, html):
+    def chapter_info(self, html):
         soup = BeautifulSoup(html)
+        pages = self._chapter_pages(soup, html)
+        name = self._chapter_name(soup)
+        title_url = self._chapter_title_url(soup)
+        prev, next = self._chapter_prev_next(soup)
+        return {
+            'name': name,
+            'pages': pages,
+            'title_url': title_url,
+            'next_chapter_url': next,
+            'prev_chapter_url': prev,
+        }
 
+    def _chapter_prev_next(self, soup):
+        next = soup.find('img', title='Next Page')
+        if next is not None:
+            next = next.parent['href']
+        prev = soup.find('img', title='Previous Page')
+        if prev is not None:
+            prev = prev.parent['href']
+        return prev, next
+
+    def _chapter_name(self, soup):
+        select = soup.find('select', attrs={'name': 'chapter_select'})
+        return select.find('option', selected=True).text.strip()
+
+    def _chapter_title_url(self, soup):
+        a_tag = soup.find('div', class_='moderation_bar').find('a')
+        return a_tag['href']
+
+    def _chapter_pages(self, soup, html):
         # For webtoons, all pages are shown in a single page.
         # When that's the case, there's this element that asks if you want to
         # view page-by-page instead. Let's use this element to check if we're

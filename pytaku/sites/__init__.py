@@ -27,7 +27,7 @@ from batoto import Batoto
 
 available_sites = [
     Kissmanga(),
-    #Batoto(),
+    Batoto(),
 ]
 
 
