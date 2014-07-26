@@ -2,7 +2,7 @@
 var RouteMixin = require('../mixins/route.jsx');
 var TitleInfo = require('../shared_components/title_info.jsx');
 
-var Title = React.createClass({
+module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
         return 'Title Info';
