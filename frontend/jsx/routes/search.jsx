@@ -122,11 +122,9 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (this.props.query) {
-            var searching = false;
-            if (nextProps.query) {
-                this.search(nextProps.query);
-            }
+        var searching = false;
+        if (nextProps.query) {
+            this.search(nextProps.query);
         }
     },
 
