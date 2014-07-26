@@ -3,48 +3,6 @@ var RouteMixin = require('../mixins/route.jsx');
 var TitleInfo = require('../shared_components/title_info.jsx');
 var store = require('../store.js');
 
-var ResultTitle = React.createClass({
-    getInitialState: function() {
-        return {doPopulate: false};
-    },
-
-    populateInfo: function() {
-        this.setState({doPopulate: true});
-    },
-
-    render: function() {
-        var item = this.props.item;
-        var tagId = 'collapse' + this.props.id;
-        var href = '#' + tagId;
-        var titleInfo;
-
-        titleInfo = <TitleInfo url={this.props.item.url}
-            ajax={this.props.ajax}
-            loggedIn={this.setState.bind(this)}
-            doPopulate={this.state.doPopulate} />;
-
-        return (
-            <div className="panel panel-default">
-                <div className="panel-heading clickable"
-                    data-toggle="collapse" data-target={href}
-                    data-parent="#accordion" onClick={this.populateInfo}>
-                    <h4 className="panel-title">
-                        <a>{item.name}</a>
-                        <span className="badge pull-right">{item.site}</span>
-                    </h4>
-                </div>
-                <div id={tagId} className="panel-collapse collapse">
-                    <div className="panel-body">
-                        {titleInfo}
-                    </div>
-                </div>
-            </div>
-        );
-    },
-
-
-});
-
 var TitleList = React.createClass({
     css: {
         maxWidth: '800px',
@@ -55,14 +13,17 @@ var TitleList = React.createClass({
         // Assign unique key to make sure outdated Title components are
         // destroyed instead of reused - http://fb.me/react-warning-keys
         var key = item.url;
-        return <ResultTitle item={item} id={id} key={key}
-            ajax={this.props.ajax}
-            loggedIn={this.props.loggedIn} />;
+        var href = '/#/title/' + encodeURIComponent(item.url);
+        return (
+            <a className="list-group-item" key={key} href={href}>
+                {item.name}
+            </a>
+        );
     },
 
     render: function() {
         return (
-            <div className="panel-group" id="accordion" style={this.css}>
+            <div className="list-group" style={this.css}>
                 {this.props.items.map(this.createTitle)}
             </div>
         );
