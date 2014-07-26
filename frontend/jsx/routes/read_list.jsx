@@ -22,10 +22,10 @@ var ReadListItem = React.createClass({
         this.props.ajax({
             url: url,
             success: function(data) {
-                self.setState({
-                    chapters: data.chapters,
-                    loading: false
-                });
+                self.setState({chapters: data.chapters});
+            },
+            complete: function(data) {
+                self.setState({loading: false});
             }
         });
     },
