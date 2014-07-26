@@ -123,6 +123,7 @@ var PytakuApp = React.createClass({
         return function(email, token) {
             localStorage.setItem('email', email);
             localStorage.setItem('token', token);
+            sessionStorage.clear();
             self.setState({
                 loggedIn: true,
                 email: email,
@@ -139,6 +140,7 @@ var PytakuApp = React.createClass({
             });
             localStorage.removeItem('email');
             localStorage.removeItem('token');
+            sessionStorage.clear();
             self.setState({loggedIn: false});
         };
     },
