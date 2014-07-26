@@ -4,10 +4,6 @@ var store = require('../store.js');
 
 module.exports = React.createClass({
 
-    getDefaultProps: function() {
-        return {doPopulate: true};
-    },
-
     getInitialState: function() {
         return {
             populating: false
@@ -15,15 +11,14 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (nextProps.doPopulate && !this.state.populating &&
-            !this.state.populated) {
+        if ((!this.state.populating && !this.state.populated) ||
+           this.props.loggedIn !== nextProps.loggedIn) {
             this.populateInfo();
         }
     },
 
     componentDidMount: function() {
-        if (this.props.doPopulate && !this.state.populating &&
-            !this.state.populated) {
+        if (!this.state.populating && !this.state.populated) {
             this.populateInfo();
         }
     },
