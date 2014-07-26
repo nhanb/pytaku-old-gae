@@ -22,6 +22,8 @@ var notify = require('gulp-notify');
 var bower = require('bower');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 
 var target = 'DEV';
 var PRODUCTION = 'PROD';
@@ -89,18 +91,12 @@ gulp.task('lib', function() {
 
 // Compile application jsx
 gulp.task('jsx', function() {
-    gulp.src([
-        'frontend/jsx/mixins/*.jsx',
-        'frontend/jsx/shared_components/*.jsx',
-        'frontend/jsx/routes/*.jsx',
-        'frontend/jsx/navbar.jsx',
-        'frontend/jsx/scroll_to_top.jsx',
-        'frontend/jsx/app.jsx'
-    ])
-    .pipe(react())
+    browserify([
+        './frontend/jsx/app.jsx'
+    ]).bundle()
+    .pipe(source('main.js'))
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
     .pipe(gulpif(target === PRODUCTION, uglify()))
-    .pipe(concat('main.js'))
     .pipe(gulp.dest('frontend-dist/static/js'));
 });
 

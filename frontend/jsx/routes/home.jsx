@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
-var Home = React.createClass({
+var RouteMixin = require('../mixins/route.jsx');
+
+module.exports = React.createClass({
     mixins: [RouteMixin],
     render: function() {
         return (

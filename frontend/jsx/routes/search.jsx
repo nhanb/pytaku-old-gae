@@ -1,4 +1,6 @@
 /** @jsx React.DOM */
+var RouteMixin = require('../mixins/route.jsx');
+var TitleInfo = require('../shared_components/title_info.jsx');
 
 var ResultTitle = React.createClass({
     getInitialState: function() {
@@ -93,7 +95,7 @@ var SearchButton = React.createClass({
     }
 });
 
-var Search = React.createClass({
+module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
         var query = this.props.query;

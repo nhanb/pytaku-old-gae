@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var Loading = React.createClass({
+module.exports = React.createClass({
     css: {
         'text-align': 'center',
         'margin-top': '30px'

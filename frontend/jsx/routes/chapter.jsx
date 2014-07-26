@@ -1,5 +1,8 @@
 /** @jsx React.DOM */
-var Chapter = React.createClass({
+var RouteMixin = require('../mixins/route.jsx');
+var Loading = require('../shared_components/loading.jsx');
+
+module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
         return this.state.name;

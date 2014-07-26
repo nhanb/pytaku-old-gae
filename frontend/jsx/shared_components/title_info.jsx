@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
-var TitleInfo = React.createClass({
+var Loading = require('../shared_components/loading.jsx');
+
+module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {doPopulate: true};

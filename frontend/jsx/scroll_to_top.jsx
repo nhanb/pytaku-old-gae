@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var ScrollToTopBtn = React.createClass({
+module.exports = React.createClass({
     css: {
         position: 'fixed',
         bottom: '10px',

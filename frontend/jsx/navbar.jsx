@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var Navbar = React.createClass({
+module.exports = React.createClass({
 
     render: function() {
         var right_navs;

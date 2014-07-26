@@ -1,4 +1,6 @@
 /** @jsx React.DOM */
+var RouteMixin = require('../mixins/route.jsx');
+var Loading = require('../shared_components/loading.jsx');
 
 // Each item represents a title, displaying its name and latest chapters
 var ReadListItem = React.createClass({
@@ -99,7 +101,7 @@ var ReadListItem = React.createClass({
     }
 });
 
-var ReadList = React.createClass({
+module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: 'My manga read list',
 

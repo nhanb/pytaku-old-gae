@@ -1,4 +1,13 @@
 /** @jsx React.DOM */
+var Chapter = require('./routes/chapter.jsx');
+var Home = require('./routes/home.jsx');
+var Login = require('./routes/login.jsx');
+var ReadList = require('./routes/read_list.jsx');
+var Register = require('./routes/register.jsx');
+var Search = require('./routes/search.jsx');
+var Title = require('./routes/title.jsx');
+var Navbar = require('./navbar.jsx');
+var ScrollToTopBtn = require('./scroll_to_top.jsx');
 
 var app = {
     HOME: 'home',

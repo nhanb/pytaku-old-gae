@@ -5,7 +5,7 @@
  * PytakuApp go here
  */
 
-var RequireLoginMixin = {
+exports.RequireLoginMixin = {
     componentDidMount: function() {
         if (this.props.loggedIn === false) {
             setTimeout(function() {
@@ -22,7 +22,7 @@ var RequireLoginMixin = {
     },
 };
 
-var HideWhenLoggedInMixin = {
+exports.HideWhenLoggedInMixin = {
     componentWillReceiveProps: function(nextProps) {
         this.hideWhenLoggedIn(nextProps.loggedIn);
     },

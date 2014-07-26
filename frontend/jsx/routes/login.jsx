@@ -1,5 +1,10 @@
 /** @jsx React.DOM */
-var Login = React.createClass({
+var RouteMixin = require('../mixins/route.jsx');
+var auth = require('../mixins/auth.jsx');
+var HideWhenLoggedInMixin = auth.HideWhenLoggedInMixin;
+var TextInput = require('../shared_components/text_input.jsx');
+
+module.exports = React.createClass({
     mixins: [RouteMixin, HideWhenLoggedInMixin],
     pageTitle: 'Login',
 
