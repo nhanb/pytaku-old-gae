@@ -148,7 +148,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className='title-container'>
+            <div className='title-container container'>
                 {body}
             </div>
         );
