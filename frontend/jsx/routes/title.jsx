@@ -5,13 +5,14 @@ var TitleInfo = require('../shared_components/title_info.jsx');
 module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
-        return 'Title Info';
+        return this.refs.titleInfo.state.info.name; // yikes!
     },
 
     render: function() {
+        var rawUrl = decodeURIComponent(this.props.url);
         return (
-            <TitleInfo loggedIn={this.props.loggedIn}
-                ajax={this.props.ajax} url={decodeURIComponent(this.props.url)} />
+            <TitleInfo ref="titleInfo" loggedIn={this.props.loggedIn}
+                ajax={this.props.ajax} url={rawUrl} />
         );
     }
 });
