@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 var Loading = require('../shared_components/loading.jsx');
+var store = require('../store.js');
 
 module.exports = React.createClass({
 
@@ -30,6 +31,16 @@ module.exports = React.createClass({
     populateInfo: function() {
         this.setState({populating: true});
 
+        var cachedData = store.get('title_' + this.props.url);
+        if (cachedData !== null) {
+            this.setState({
+                info: cachedData,
+                populated: true,
+                populating: false
+            });
+            return;
+        }
+
         url = '/api/title?url=' + encodeURIComponent(this.props.url);
         url += '&chapter_limit=-1';
 
@@ -40,6 +51,7 @@ module.exports = React.createClass({
             method: 'GET',
             success: function(data) {
                 data.url = self.props.url;
+                store.set('title_' + self.props.url, data);
                 self.setState({
                     info: data,
                     populated: true
