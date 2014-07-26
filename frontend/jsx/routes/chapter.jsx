@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
+var store = require('../store.js');
 
 module.exports = React.createClass({
     mixins: [RouteMixin],
@@ -34,8 +35,11 @@ module.exports = React.createClass({
         this.fetchPages(nextProps.url);
     },
 
-    getInitialState: function() {
+    componentDidMount: function() {
         this.fetchPages(this.props.url);
+    },
+
+    getInitialState: function() {
         return {
             pageUrls: [],
             name: '',
@@ -50,32 +54,45 @@ module.exports = React.createClass({
             fetching: true,
             pageUrls: [], // So that old pages disappear while fetching new
         });
+
+        cachedData = store.get('chapter_' + url);
+        if (cachedData !== null) {
+            this.updateChapterData(cachedData);
+            return;
+        }
+
         var self = this;
         $.ajax({
             url: '/api/chapter?url=' + url,
             dataType: 'json',
             method: 'GET',
             success: function(data) {
-                var next_url = data.next_chapter_url;
-                var prev_url = data.prev_chapter_url;
-                if (next_url !== null) {
-                    next_url = '/#/chapter/' + encodeURIComponent(next_url);
-                }
-                if (prev_url !== null) {
-                    prev_url = '/#/chapter/' + encodeURIComponent(prev_url);
-                }
-                self.setState({
-                    pageUrls: data.pages,
-                    name: data.name,
-                    next_url: next_url,
-                    prev_url: prev_url,
-                });
+                store.set('chapter_' + url, data);
+                self.updateChapterData(data);
             },
-            complete: function() {
+            error: function() {
                 self.setState({fetching: false});
             }
         });
     },
+
+    updateChapterData: function(data) {
+        var next_url = data.next_chapter_url;
+        var prev_url = data.prev_chapter_url;
+        if (next_url !== null) {
+            next_url = '/#/chapter/' + encodeURIComponent(next_url);
+        }
+        if (prev_url !== null) {
+            prev_url = '/#/chapter/' + encodeURIComponent(prev_url);
+        }
+        this.setState({
+            pageUrls: data.pages,
+            name: data.name,
+            next_url: next_url,
+            prev_url: prev_url,
+            fetching: false,
+        });
+    }
 
 });
 
