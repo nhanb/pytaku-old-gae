@@ -24,6 +24,7 @@ var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
 
 var target = 'DEV';
 var PRODUCTION = 'PROD';
@@ -96,7 +97,7 @@ gulp.task('jsx', function() {
     ]).bundle()
     .pipe(source('main.js'))
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
-    .pipe(gulpif(target === PRODUCTION, uglify()))
+    .pipe(gulpif(target === PRODUCTION, streamify(uglify())))
     .pipe(gulp.dest('frontend-dist/static/js'));
 });
 
