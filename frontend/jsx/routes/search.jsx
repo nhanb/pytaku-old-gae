@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var TitleInfo = require('../shared_components/title_info.jsx');
+var store = require('../store.js');
 
 var ResultTitle = React.createClass({
     getInitialState: function() {
@@ -107,21 +108,25 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var searching = false;
-        if (this.props.query) {
-            this.search(this.props.query);
-            searching = true;
-        }
         return {
-            searching: searching,
+            searching: false,
             items: []
         };
     },
 
+    componentDidMount: function() {
+        if (this.props.query) {
+            searching = true;
+            this.search(this.props.query);
+        }
+    },
+
     componentWillReceiveProps: function(nextProps) {
-        var searching = false;
-        if (nextProps.query) {
-            this.search(nextProps.query);
+        if (this.props.query) {
+            var searching = false;
+            if (nextProps.query) {
+                this.search(nextProps.query);
+            }
         }
     },
 
@@ -136,15 +141,26 @@ module.exports = React.createClass({
             (this.state && this.state.searching)) {
             return false;
         }
+        this.setState({searching: true});
         query = query.trim();
 
-        this.setState({searching: true});
+        var cachedData = store.get('search_' + query);
+        if (cachedData !== null) {
+            console.log(cachedData);
+            this.setState({
+                items: cachedData,
+                searching: false
+            });
+            return;
+        }
+
         var self = this;
         $.ajax({
             url: '/api/search?keyword=' + encodeURIComponent(query),
             dataType: 'json',
             method: 'GET',
             success: function(data) {
+                store.set('search_' + query, data);
                 self.setState({items: data});
             },
             complete: function() {
