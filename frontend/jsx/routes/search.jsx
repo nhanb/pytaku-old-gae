@@ -106,7 +106,6 @@ module.exports = React.createClass({
 
         var cachedData = store.get('search_' + query);
         if (cachedData !== null) {
-            console.log(cachedData);
             this.setState({
                 items: cachedData,
                 searching: false
