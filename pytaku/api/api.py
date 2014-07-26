@@ -201,3 +201,39 @@ class ReadListHandler(webapp2.RequestHandler):
             if not self.user.remove_from_read_list(title):
                 raise PyError({'msg': 'title_already_in_read_list'})
             return {}
+
+
+class BookmarkHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @auth()
+    def get(self):
+        chapters = [b.get() for b in self.user.bookmarks]
+        return [{
+            'title_url': chapter.title_url,
+            'name': chapter.name,
+            'url': chapter.url,
+        } for chapter in chapters]
+
+    @wrap_json
+    @unpack_post(url=['ustring'], action=['ustring'])
+    @auth()
+    def post(self):
+        "Add or remove chapter from provided URL to bookmark list"
+
+        if self.data['action'] not in ('add', 'remove'):
+            raise PyError({'msg': 'invalid_action'})
+
+        chapter = Chapter.get_by_url(self.data['url'])
+        if chapter is None:
+            raise PyError({'msg': 'chapter_not_created'})
+
+        if self.data['action'] == 'add':
+            if not self.user.add_to_bookmarks(chapter):
+                raise PyError({'msg': 'chapter_already_in_bookmarks'})
+            return {}
+
+        else:
+            if not self.user.remove_from_read_list(chapter):
+                raise PyError({'msg': 'chapter_not_in_bookmarks'})
+            return {}

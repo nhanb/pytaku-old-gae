@@ -67,6 +67,7 @@ class User(ndb.Model):
     api_token = ndb.StringProperty(default=None)
     last_login = ndb.DateTimeProperty(auto_now_add=True)
     read_list = ndb.KeyProperty(kind=Title, repeated=True)
+    bookmarks = ndb.KeyProperty(kind=Chapter, repeated=True)
 
     def verify_password(self, password):
         return pbkdf2_sha512.verify(password, self.password_hash)
@@ -78,19 +79,31 @@ class User(ndb.Model):
         self.api_token = None
         self.put()
 
-    def add_to_read_list(self, title):
-        if title.key not in self.read_list:
-            self.read_list.append(title.key)
+    def _add_to_list(self, record, list_name):
+        if record.key not in getattr(self, list_name):
+            getattr(self, list_name).append(record.key)
             self.put()
             return True
         return False
 
-    def remove_from_read_list(self, title):
-        if title.key in self.read_list:
-            self.read_list.remove(title.key)
+    def _remove_from_list(self, record, list_name):
+        if record.key in getattr(self, list_name):
+            getattr(self, list_name).remove(record.key)
             self.put()
             return True
         return False
+
+    def add_to_read_list(self, title):
+        return self._add_to_list(title, 'read_list')
+
+    def remove_from_read_list(self, title):
+        return self._remove_from_list(title, 'read_list')
+
+    def add_to_bookmarks(self, chapter):
+        return self._add_to_list(chapter, 'bookmarks')
+
+    def remove_from_bookmarks(self, chapter):
+        return self._remove_from_list(chapter, 'bookmarks')
 
     @staticmethod
     def hash_password(password):
