@@ -17,6 +17,7 @@ var TitleList = React.createClass({
         return (
             <a className="list-group-item" key={key} href={href}>
                 {item.name}
+                <span className="badge pull-right">{item.site}</span>
             </a>
         );
     },
