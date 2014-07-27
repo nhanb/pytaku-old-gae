@@ -25,8 +25,9 @@ html {
     cursor: pointer;
 }
 
-.title-container {
-    max-width: 700px;
+.title-container,
+.bookmarks-container {
+    max-width: 900px;
     margin: auto;
 }
 
@@ -60,4 +61,8 @@ a.list-group-item:visited:hover,
 a.list-group-item:focus {
   color: #8a6d3b;
   background-color: #faf2cc;
+}
+
+.clearfix {
+    clear: both;
 }

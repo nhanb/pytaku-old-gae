@@ -3,6 +3,7 @@ var Chapter = require('./routes/chapter.jsx');
 var Home = require('./routes/home.jsx');
 var Login = require('./routes/login.jsx');
 var ReadList = require('./routes/read_list.jsx');
+var Bookmarks = require('./routes/bookmarks.jsx');
 var Register = require('./routes/register.jsx');
 var Search = require('./routes/search.jsx');
 var Title = require('./routes/title.jsx');
@@ -17,6 +18,7 @@ var app = {
     TITLE: 'title',
     CHAPTER: 'chapter',
     READLIST: 'readlist',
+    BOOKMARKS: 'bookmarks',
 };
 
 var PytakuApp = React.createClass({
@@ -28,6 +30,7 @@ var PytakuApp = React.createClass({
             '/register': setState.bind(this, {route: app.REGISTER}),
             '/login': setState.bind(this, {route: app.LOGIN}),
             '/readlist': setState.bind(this, {route: app.READLIST}),
+            '/bookmarks': setState.bind(this, {route: app.BOOKMARKS}),
             '/search': setState.bind(this, {route: app.SEARCH}),
 
             '/search/(.+)': (function() {
@@ -99,6 +102,10 @@ var PytakuApp = React.createClass({
                 break;
             case app.READLIST:
                 routeComponent = <ReadList loggedIn={this.state.loggedIn}
+                    ajax={this.ajax} />;
+                break;
+            case app.BOOKMARKS:
+                routeComponent = <Bookmarks loggedIn={this.state.loggedIn}
                     ajax={this.ajax} />;
                 break;
             default:

@@ -40,7 +40,8 @@ module.exports = React.createClass({
     <div className="navbar-collapse collapse">
       <ul className="nav navbar-nav">
         <li><a href="#/search"><i className="fa fa-search fa-lg"></i> Search titles</a></li>
-        <li><a href="#/readlist"><i className="fa fa-star fa-lg"></i> My read list</a></li>
+        <li><a href="#/readlist"><i className="fa fa-star fa-lg"></i> Read list</a></li>
+        <li><a href="#/bookmarks"><i className="fa fa-bookmark fa-lg"></i> Bookmarks</a></li>
       </ul>
       {right_navs}
     </div>
