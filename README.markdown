@@ -15,9 +15,8 @@ Pytaku currently gets data from [batoto][1] and [kissmanga][2]. Manga info is sa
 database after first view, so naturally popular manga titles will be blazing fast because somebody
 else has probably triggered the first view before you :)
 
-There's also a backup site: https://pytaku2.appspot.com - Note that it uses a completely separate
-database so your data from the main site will not be there, and it will most likely be a few
-commits behind the main site. Use it when I've somehow messed up the main one :)
+The latest development version is deployed at https://pytaku-dev.appspot.com. Note that I might
+regularly break stuff there so don't use it if you want stability.
 
 # How to develop
 
