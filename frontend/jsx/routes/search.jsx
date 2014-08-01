@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
-var TitleInfo = require('../shared_components/title_info.jsx');
 var store = require('../store.js');
 
 var TitleList = React.createClass({
