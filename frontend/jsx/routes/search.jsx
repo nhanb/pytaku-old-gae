@@ -92,11 +92,13 @@ module.exports = React.createClass({
 
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
-        window.location.href = '/#/search/' + query;
+        window.location.href = '/#/search/' + encodeURIComponent(query);
         return false; // So that browser won't submit an old-fashioned POST
     },
 
     search: function(query) {
+        this.refs.queryInput.setState({value: query});
+
         if (!query || query.trim().length < 2 ||
             (this.state && this.state.searching)) {
             return false;

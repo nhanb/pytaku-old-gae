@@ -37,7 +37,7 @@ var PytakuApp = React.createClass({
                 return function(query) {
                     self.setState({
                         route: app.SEARCH,
-                        query: query
+                        query: decodeURIComponent(query)
                     });
                 };
             })(),
