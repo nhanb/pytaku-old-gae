@@ -3,6 +3,84 @@ var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var store = require('../store.js');
 
+var BookmarkButton = React.createClass({
+    getInitialState: function() {
+        return {processing: false};
+    },
+
+    render: function() {
+        var info = this.props.info;
+        var bookmarkBtn = <span></span>;
+
+        if (info.hasOwnProperty('is_bookmarked')) {
+
+            if (this.state && this.state.processing === true) {
+                bookmarkBtn = (
+                    <button className="btn btn-danger" disabled="disabled">
+                        <i className='fa fa-lg fa-spinner fa-spin'></i> Processing...
+                    </button>
+                );
+
+            } else if (info.is_bookmarked) {
+                bookmarkBtn = (
+                    <button className="btn btn-danger" onClick={this.removeBookmark}>
+                        <i className='fa fa-lg fa-ban'></i> Unbookmark
+                    </button>
+                );
+
+            } else {
+                bookmarkBtn = (
+                    <button className="btn btn-success" onClick={this.addBookmark}>
+                        <i className='fa fa-bookmark'></i> Bookmark
+                    </button>
+                );
+            }
+        }
+        return bookmarkBtn;
+    },
+
+    addBookmark: function() {
+        this.bookmark('add');
+    },
+
+    removeBookmark: function() {
+        this.bookmark('remove');
+    },
+
+    bookmark: function(action) {
+        this.setState({
+            processing: true
+        });
+        var self = this;
+        this.props.ajax({
+            url: '/api/bookmarks',
+            method: 'POST',
+            data: JSON.stringify({
+                url: self.props.info.url,
+                action: action
+            }),
+
+            success: function() {
+                info = self.props.info;
+                if (action == 'add') {
+                    info.is_bookmarked = true;
+                } else {
+                    info.is_bookmarked = false;
+                }
+                var key = 'chapter_' + info.url;
+                store.set('chapter_' + info.url, info);
+                self.props.setState({info: info});
+            },
+
+            complete: function() {
+                self.setState({
+                    processing: false
+                });
+            }
+        });
+    },
+});
+
 module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
@@ -119,80 +197,13 @@ var ActionBar = React.createClass({
             );
         }
 
-        var bookmarkBtn = this.renderBookmarkBtn();
+        var bookmarkBtn = <BookmarkButton info={info} ajax={this.props.ajax}
+            setState={this.props.setState} />;
 
         return (
             <div className="chapter-navs clearfix">
                 {prevBtn} {bookmarkBtn} {nextBtn}
             </div>
         );
-    },
-
-    renderBookmarkBtn: function() {
-        var info = this.props.info;
-        var bookmarkBtn = '';
-        if (info.hasOwnProperty('is_bookmarked')) {
-            if (this.state && this.state.processingBookmark === true) {
-                bookmarkBtn = (
-                    <button className="btn btn-default">
-                        <i className='fa fa-lg fa-spinner fa-spin'></i> Processing...
-                    </button>
-                );
-            } else if (info.is_bookmarked) {
-                bookmarkBtn = (
-                    <button className="btn btn-danger" onClick={this.removeBookmark}>
-                        <i className='fa fa-lg fa-ban'></i> Unbookmark
-                    </button>
-                );
-            } else {
-                bookmarkBtn = (
-                    <button className="btn btn-success" onClick={this.addBookmark}>
-                        <i className='fa fa-bookmark'></i> Bookmark
-                    </button>
-                );
-            }
-        }
-        return bookmarkBtn;
-    },
-
-    addBookmark: function() {
-        this.bookmark('add');
-    },
-
-    removeBookmark: function() {
-        this.bookmark('remove');
-    },
-
-    bookmark: function(action) {
-        this.setState({
-            processingBookmark: true
-        });
-        var self = this;
-        this.props.ajax({
-            url: '/api/bookmarks',
-            method: 'POST',
-            data: JSON.stringify({
-                url: self.props.info.url,
-                action: action
-            }),
-
-            success: function() {
-                info = self.props.info;
-                if (action == 'add') {
-                    info.is_bookmarked = true;
-                } else {
-                    info.is_bookmarked = false;
-                }
-                var key = 'chapter_' + info.url;
-                store.set('chapter_' + info.url, info);
-                self.props.setState({info: info});
-            },
-
-            complete: function() {
-                self.setState({
-                    processingBookmark: false
-                });
-            }
-        });
     },
 });
