@@ -9,7 +9,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var rawUrl = decodeURIComponent(this.props.url);
+        var rawUrl = this.props.url;
         return (
             <TitleInfo ref="titleInfo" loggedIn={this.props.loggedIn}
                 ajax={this.props.ajax} url={rawUrl} />

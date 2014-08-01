@@ -43,19 +43,19 @@ var PytakuApp = React.createClass({
             })(),
 
             '/title/(.+)': (function() {
-                return function(query) {
+                return function(url) {
                     self.setState({
                         route: app.TITLE,
-                        url: query
+                        url: decodeURIComponent(url)
                     });
                 };
             })(),
 
             '/chapter/(.+)': (function() {
-                return function(query) {
+                return function(url) {
                     self.setState({
                         route: app.CHAPTER,
-                        url: query
+                        url: decodeURIComponent(url)
                     });
                 };
             })(),

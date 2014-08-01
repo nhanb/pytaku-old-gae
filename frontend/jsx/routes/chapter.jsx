@@ -61,7 +61,7 @@ module.exports = React.createClass({
         newState.fetching = true;
         this.setState(newState);
 
-        cachedData = store.get('chapter_' + decodeURIComponent(url));
+        cachedData = store.get('chapter_' + url);
         if (cachedData !== null) {
             this.updateChapterData(cachedData);
             return;
