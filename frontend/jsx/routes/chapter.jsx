@@ -112,7 +112,7 @@ var ActionBar = React.createClass({
         if (next !== null) {
             next = '/#/chapter/' + encodeURIComponent(next);
             nextBtn =(
-                <a href={prev} className="btn btn-success pull-right">
+                <a href={next} className="btn btn-success pull-right">
                     Next <i className="fa fa-lg fa-angle-double-right"></i>
                 </a>
             );
