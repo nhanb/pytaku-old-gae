@@ -69,7 +69,7 @@ module.exports = React.createClass({
 
         var self = this;
         this.props.ajax({
-            url: '/api/chapter?url=' + url,
+            url: '/api/chapter?url=' + encodeURIComponent(url),
             dataType: 'json',
             method: 'GET',
             success: function(data) {
