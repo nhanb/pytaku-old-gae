@@ -161,10 +161,7 @@ var ActionBar = React.createClass({
                 info = self.props.info;
                 info.is_bookmarked = true;
                 var key = 'chapter_' + info.url;
-                console.log(key);
-                console.log(store.get(key));
                 store.set('chapter_' + info.url, info);
-                console.log(store.get(key));
                 self.props.setState({info: info});
             }
         });
