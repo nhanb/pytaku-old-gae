@@ -241,6 +241,6 @@ class BookmarkHandler(webapp2.RequestHandler):
             return {}
 
         else:
-            if not self.user.remove_from_read_list(chapter):
+            if not self.user.remove_from_bookmarks(chapter):
                 raise PyError({'msg': 'chapter_not_in_bookmarks'})
             return {}
