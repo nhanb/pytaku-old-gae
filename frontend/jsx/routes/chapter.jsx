@@ -52,6 +52,7 @@ module.exports = React.createClass({
                 prev_chapter_url: null,
             },
             fetching: true,
+            processingBookmark: false,
         };
     },
 
@@ -131,10 +132,16 @@ var ActionBar = React.createClass({
         var info = this.props.info;
         var bookmarkBtn = '';
         if (info.hasOwnProperty('is_bookmarked')) {
-            if (info.is_bookmarked) {
+            if (this.state && this.state.processingBookmark === true) {
                 bookmarkBtn = (
-                    <button className="btn btn-success" disabled="disabled">
-                        <i className='fa fa-lg fa-check-circle'></i> Bookmarked
+                    <button className="btn btn-default">
+                        <i className='fa fa-lg fa-spinner fa-spin'></i> Processing...
+                    </button>
+                );
+            } else if (info.is_bookmarked) {
+                bookmarkBtn = (
+                    <button className="btn btn-danger" onClick={this.removeBookmark}>
+                        <i className='fa fa-lg fa-ban'></i> Unbookmark
                     </button>
                 );
             } else {
@@ -149,20 +156,42 @@ var ActionBar = React.createClass({
     },
 
     addBookmark: function() {
+        this.bookmark('add');
+    },
+
+    removeBookmark: function() {
+        this.bookmark('remove');
+    },
+
+    bookmark: function(action) {
+        this.setState({
+            processingBookmark: true
+        });
         var self = this;
         this.props.ajax({
             url: '/api/bookmarks',
             method: 'POST',
             data: JSON.stringify({
                 url: self.props.info.url,
-                action: 'add'
+                action: action
             }),
+
             success: function() {
                 info = self.props.info;
-                info.is_bookmarked = true;
+                if (action == 'add') {
+                    info.is_bookmarked = true;
+                } else {
+                    info.is_bookmarked = false;
+                }
                 var key = 'chapter_' + info.url;
                 store.set('chapter_' + info.url, info);
                 self.props.setState({info: info});
+            },
+
+            complete: function() {
+                self.setState({
+                    processingBookmark: false
+                });
             }
         });
     },
