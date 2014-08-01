@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
+var store = require('../store.js');
 
 // Each item represents a title, displaying its name and latest chapters
 var ReadListItem = React.createClass({
@@ -95,6 +96,11 @@ var ReadListItem = React.createClass({
                 action: 'remove'
             }),
             success: function() {
+                var cachedData = store.get('title_' + self.props.url);
+                if (cachedData !== null) {
+                    cachedData.is_in_read_list = false;
+                    store.set('title_' + self.props.url, cachedData);
+                }
                 self.setState({removed: true});
             }
         });

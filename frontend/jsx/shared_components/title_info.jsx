@@ -101,6 +101,7 @@ module.exports = React.createClass({
                 info = self.state.info;
                 info.is_in_read_list = true;
                 self.setState({info: info});
+                store.set('title_' + self.props.url, info);
             }
         });
     },
