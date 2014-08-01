@@ -131,6 +131,7 @@ class SearchHandler(webapp2.RequestHandler):
 class ChapterHandler(webapp2.RequestHandler):
 
     @wrap_json
+    @auth(required=False)
     @unpack_get(url=['ustring', 'urlencoded'])
     def get(self):
         url = self.data['url']
@@ -150,7 +151,7 @@ class ChapterHandler(webapp2.RequestHandler):
                                      info['next_chapter_url'])
             chapter.put()
 
-        return {
+        resp = {
             'name': chapter.name,
             'url': chapter.url,
             'pages': [p['url'] for p in chapter.pages],
@@ -158,6 +159,12 @@ class ChapterHandler(webapp2.RequestHandler):
             'next_chapter_url': chapter.next_chapter_url,
             'prev_chapter_url': chapter.prev_chapter_url,
         }
+
+        if hasattr(self, 'user'):
+            user = self.user
+            resp['is_bookmarked'] = chapter.is_bookmarked(user)
+
+        return resp
 
 
 class TestTokenHandler(webapp2.RequestHandler):

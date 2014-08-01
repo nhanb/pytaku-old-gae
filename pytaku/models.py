@@ -49,6 +49,9 @@ class Chapter(ndb.Model):
     prev_chapter_url = ndb.StringProperty()
     title_url = ndb.StringProperty()
 
+    def is_bookmarked(self, user):
+        return self.key in user.bookmarks
+
     @classmethod
     def create(cls, url, name, pages, title_url, prev, next):
         obj = cls(url=url, name=name, pages=pages, title_url=title_url,

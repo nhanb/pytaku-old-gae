@@ -73,7 +73,7 @@ module.exports = React.createClass({
                 </div>
             );
 
-        // No error but user has nothing in read list yet
+        // No error but user has nothing in bookmark list yet
         } else if (this.state.chapters.length === 0) {
             content = (
                 <div className="alert alert-warning" role="alert">

@@ -6,27 +6,31 @@ var store = require('../store.js');
 module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
-        return this.state.name;
+        return this.state.info.name;
     },
+
     render: function() {
-        var pages = this.state.pageUrls.map(function(url) {
+        var info = this.state.info;
+        var name = info.name;
+        var next = info.next_chapter_url;
+        var prev = info.prev_chapter_url;
+        var fetching = this.state.fetching;
+
+        var pages = info.pages.map(function(url) {
             return (
                 <img className="page-img" key={url} src={url} />
             );
         });
 
-        var name = this.state.name;
-        var fetching = this.state.fetching;
-        var next = this.state.next_url;
-        var prev = this.state.prev_url;
+        var setState = this.setState.bind(this);
 
         return (
             <div className="chapter-container">
                 <h2 className="chapter-name">{name}</h2>
-                <ChapterNavs prev={prev} next={next} />
+                <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
                 <Loading loading={fetching} />
                 {pages}
-                <ChapterNavs prev={prev} next={next} />
+                <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
             </div>
         );
     },
@@ -41,28 +45,30 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            pageUrls: [],
-            name: '',
-            next_url: null,
-            prev_url: null,
+            info: {
+                pages: [],
+                name: '',
+                next_chapter_url: null,
+                prev_chapter_url: null,
+            },
             fetching: true,
         };
     },
 
     fetchPages: function(url) {
-        this.setState({
-            fetching: true,
-            pageUrls: [], // So that old pages disappear while fetching new
-        });
+        var newState = this.state;
+        newState.info.pages = [];
+        newState.fetching = true;
+        this.setState(newState);
 
-        cachedData = store.get('chapter_' + url);
+        cachedData = store.get('chapter_' + decodeURIComponent(url));
         if (cachedData !== null) {
             this.updateChapterData(cachedData);
             return;
         }
 
         var self = this;
-        $.ajax({
+        this.props.ajax({
             url: '/api/chapter?url=' + url,
             dataType: 'json',
             method: 'GET',
@@ -77,50 +83,90 @@ module.exports = React.createClass({
     },
 
     updateChapterData: function(data) {
-        var next_url = data.next_chapter_url;
-        var prev_url = data.prev_chapter_url;
-        if (next_url !== null) {
-            next_url = '/#/chapter/' + encodeURIComponent(next_url);
-        }
-        if (prev_url !== null) {
-            prev_url = '/#/chapter/' + encodeURIComponent(prev_url);
-        }
         this.setState({
-            pageUrls: data.pages,
-            name: data.name,
-            next_url: next_url,
-            prev_url: prev_url,
+            info: data,
             fetching: false,
         });
     }
 
 });
 
-var ChapterNavs = React.createClass({
+var ActionBar = React.createClass({
     render: function() {
         var prevBtn = '';
         var nextBtn = '';
 
-        if (this.props.prev !== null) {
+        var info = this.props.info;
+        var prev = info.prev_chapter_url;
+        var next = info.next_chapter_url;
+
+        if (prev !== null) {
+            prev = '/#/chapter/' + encodeURIComponent(prev);
             prevBtn =(
-                <a href={this.props.prev} className="btn btn-success pull-left">
+                <a href={prev} className="btn btn-success pull-left">
                     <i className="fa fa-lg fa-angle-double-left"></i> Prev
                 </a>
             );
         }
 
-        if (this.props.next !== null) {
+        if (next !== null) {
+            next = '/#/chapter/' + encodeURIComponent(next);
             nextBtn =(
-                <a href={this.props.next} className="btn btn-success pull-right">
+                <a href={prev} className="btn btn-success pull-right">
                     Next <i className="fa fa-lg fa-angle-double-right"></i>
                 </a>
             );
         }
 
+        var bookmarkBtn = this.renderBookmarkBtn();
+
         return (
             <div className="chapter-navs clearfix">
-                {prevBtn}{nextBtn}
+                {prevBtn} {bookmarkBtn} {nextBtn}
             </div>
         );
-    }
+    },
+
+    renderBookmarkBtn: function() {
+        var info = this.props.info;
+        var bookmarkBtn = '';
+        if (info.hasOwnProperty('is_bookmarked')) {
+            if (info.is_bookmarked) {
+                bookmarkBtn = (
+                    <button className="btn btn-success" disabled="disabled">
+                        <i className='fa fa-lg fa-check-circle'></i> Bookmarked
+                    </button>
+                );
+            } else {
+                bookmarkBtn = (
+                    <button className="btn btn-success" onClick={this.addBookmark}>
+                        <i className='fa fa-bookmark'></i> Bookmark
+                    </button>
+                );
+            }
+        }
+        return bookmarkBtn;
+    },
+
+    addBookmark: function() {
+        var self = this;
+        this.props.ajax({
+            url: '/api/bookmarks',
+            method: 'POST',
+            data: JSON.stringify({
+                url: self.props.info.url,
+                action: 'add'
+            }),
+            success: function() {
+                info = self.props.info;
+                info.is_bookmarked = true;
+                var key = 'chapter_' + info.url;
+                console.log(key);
+                console.log(store.get(key));
+                store.set('chapter_' + info.url, info);
+                console.log(store.get(key));
+                self.props.setState({info: info});
+            }
+        });
+    },
 });
