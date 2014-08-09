@@ -152,9 +152,5 @@ class Batoto(Site):
         for page_html in pages_htmls:
             soup = BeautifulSoup(page_html)
             img_url = soup.find('img', id='comic_page')['src']
-            filename = img_url.split('/')[-1]
-            returns.append({
-                'filename': filename,
-                'url': img_url
-            })
+            returns.append(img_url)
         return returns

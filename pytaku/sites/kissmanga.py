@@ -98,14 +98,7 @@ class Kissmanga(Site):
 
     def _chapter_pages(self, html):
         pat = re.compile('lstImages\.push\("(.+?)"\);')
-        matches = pat.findall(html)
-        pages = []
-        # file names can be: 01, 001, 01-02 (dot whatever)
-        name_pat = '.*([0-9-]{2,}\.[a-zA-Z]+)\?.*'
-        for url in matches:
-            filename = re.match(name_pat, url).group(1)
-            pages.append({'filename': filename, 'url': url})
-        return pages
+        return pat.findall(html)
 
     def _chapter_title_url(self, soup):
         a_tag = soup.find('div', id='navsubbar').find('p').find('a')

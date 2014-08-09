@@ -154,7 +154,7 @@ class ChapterHandler(webapp2.RequestHandler):
         resp = {
             'name': chapter.name,
             'url': chapter.url,
-            'pages': [p['url'] for p in chapter.pages],
+            'pages': chapter.pages,
             'title_url': chapter.title_url,
             'next_chapter_url': chapter.next_chapter_url,
             'prev_chapter_url': chapter.prev_chapter_url,
