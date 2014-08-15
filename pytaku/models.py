@@ -19,11 +19,29 @@ class Title(ndb.Model):
         # fresh == updated no longer than 1 day ago
         return (datetime.now() - self.last_update).days <= 1
 
-    def update(self, site, name, thumb_url, chapters):
+    def update(self, site, name, thumb_url, new_chapters):
         self.site = site
         self.name = name
         self.thumb_url = thumb_url
-        self.chapters = chapters
+
+        # Update next_chapter_url for the chapter that was previously the
+        # latest but not anymore
+        new_chapters_num = len(new_chapters) - len(self.chapters)
+        if new_chapters_num > 0:
+            # latest chapter comes first
+            # => if there's 1 new chapter, that chapter will be the first in
+            # chapter list (index 0), making the latest existing chapter in
+            # database the second (index 1). In this case, it can be
+            # generalized as self.chapters[new_chapters_num]
+            chapter_url = self.chapters[new_chapters_num]['url']
+            chap = Chapter.get_by_url(chapter_url)
+            if chap is not None:
+                i = new_chapters_num - 1
+                chap.next_chapter_url = new_chapters[i]['url']
+                chap.put()
+
+        self.chapters = new_chapters
+
         self.last_updated = datetime.now()  # "refresh" this title
         self.put()
         return self
