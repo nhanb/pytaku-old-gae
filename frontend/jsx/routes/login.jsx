@@ -12,6 +12,7 @@ module.exports = React.createClass({
         return {
             msg: '',
             msgType: 'info',
+            submitting: false
         };
     },
 
@@ -24,7 +25,8 @@ module.exports = React.createClass({
         }
 
         this.setState({
-            msg: ''
+            msg: '',
+            submitting: true
         });
         var data = JSON.stringify({
             email: email,
@@ -48,6 +50,11 @@ module.exports = React.createClass({
                     msgType: 'danger',
                     msg: data.responseJSON.msg
                 });
+            },
+            complete: function() {
+                self.setState({
+                    submitting: false
+                });
             }
         });
 
@@ -62,6 +69,8 @@ module.exports = React.createClass({
                 <p className={msgClass} role='alert'>{this.state.msg}</p>
             ;
         }
+
+        var submitBtn = this.renderSubmitBtn(this.state.submitting);
         return (
             <form onSubmit={this.handleSubmit}
                 className="form-horizontal" role="form">
@@ -70,9 +79,7 @@ module.exports = React.createClass({
 
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-10">
-                        <button type="submit" className="btn btn-primary">
-                            Login
-                        </button>
+                        {submitBtn}
                     </div>
                 </div>
 
@@ -84,5 +91,21 @@ module.exports = React.createClass({
             </form>
         );
     },
+
+    renderSubmitBtn: function(submitting) {
+        if (!submitting) {
+            return (
+                <button type="submit" className="btn btn-primary">
+                    Login
+                </button>
+            );
+        } else {
+            return (
+                <button type="submit" className="btn btn-primary" disabled="disabled">
+                    <i className="fa fa-spin fa-spinner"></i> Logging in...
+                </button>
+            );
+        }
+    }
 
 });
