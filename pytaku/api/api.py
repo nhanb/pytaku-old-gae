@@ -3,7 +3,6 @@ from pytaku.models import User, createUser, Chapter, Title
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
-from google.appengine.ext import ndb
 
 
 class LoginHandler(webapp2.RequestHandler):
