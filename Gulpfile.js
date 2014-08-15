@@ -60,14 +60,13 @@ gulp.task('csslib', function() {
     if (target === PRODUCTION) {
         files = [
             'bower_components/normalize-css/normalize.css',
-            // Bootstrap min requires including source map. Screw it!
-            'bower_components/bootstrap/dist/css/bootstrap.css',
+            'frontend/css/vendor/bootstrap-darkly.css',
             'bower_components/fontawesome/css/font-awesome.min.css',
         ];
     } else {
         files = [
             'bower_components/normalize-css/normalize.css',
-            'bower_components/bootstrap/dist/css/bootstrap.css',
+            'frontend/css/vendor/bootstrap-darkly.css',
             'bower_components/fontawesome/css/font-awesome.css',
         ];
     }
@@ -103,7 +102,7 @@ gulp.task('jsx', function() {
 
 // Application css
 gulp.task('css', function() {
-    gulp.src('frontend/css/**/*.css')
+    gulp.src('frontend/css/style.css')
     .pipe(gulpif(target === PRODUCTION, minifycss()))
     .pipe(concat('main.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));

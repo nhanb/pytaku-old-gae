@@ -50,19 +50,16 @@ button#logout {
     text-align: center;
 }
 
-.list-group-item:visited {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-}
-a.list-group-item:visited {
-  color: #8a6d3b;
-}
+a.list-group-item:visited,
 a.list-group-item:visited:hover,
 a.list-group-item:focus {
-  color: #8a6d3b;
-  background-color: #faf2cc;
+  color: #74968d;
 }
 
 .clearfix {
     clear: both;
+}
+
+.navbar-default .navbar-text {
+    color: white;
 }
