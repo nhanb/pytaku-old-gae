@@ -34,7 +34,7 @@ module.exports = React.createClass({
         });
         var self = this;
         $.ajax({
-            url: '/api/auth',
+            url: '/api/login',
             dataType: 'json',
             method: 'POST',
             data: data,

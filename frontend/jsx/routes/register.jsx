@@ -34,7 +34,7 @@ module.exports = React.createClass({
         });
         var self = this;
         $.ajax({
-            url: '/api/user',
+            url: '/api/register',
             dataType: 'json',
             method: 'POST',
             data: data,

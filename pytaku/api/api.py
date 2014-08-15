@@ -28,7 +28,7 @@ class LogoutHandler(webapp2.RequestHandler):
         return {}
 
 
-class UserHandler(webapp2.RequestHandler):
+class RegisterHandler(webapp2.RequestHandler):
 
     @wrap_json
     @unpack_post(email=['ustring', 'email'], password=['ustring'])
