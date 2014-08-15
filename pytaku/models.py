@@ -16,8 +16,8 @@ class Title(ndb.Model):
         return self.key in user.read_list
 
     def is_fresh(self):
-        # fresh == updated less than an hour ago
-        return (datetime.now() - self.last_update).seconds < 3600
+        # fresh == updated no longer than 1 day ago
+        return (datetime.now() - self.last_update).days <= 1
 
     def update(self, site, name, thumb_url, chapters):
         self.site = site
