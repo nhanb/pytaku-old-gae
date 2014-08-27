@@ -174,15 +174,17 @@ var ActionBar = React.createClass({
     render: function() {
         var prevBtn = '';
         var nextBtn = '';
+        var titleBtn = '';
 
         var info = this.props.info;
         var prev = info.prev_chapter_url;
         var next = info.next_chapter_url;
+        var title = info.title_url;
 
         if (prev !== null) {
             prev = '/#/chapter/' + encodeURIComponent(prev);
             prevBtn =(
-                <a href={prev} className="btn btn-success pull-left">
+                <a href={prev} className="btn btn-primary">
                     <i className="fa fa-lg fa-angle-double-left"></i> Prev
                 </a>
             );
@@ -191,18 +193,26 @@ var ActionBar = React.createClass({
         if (next !== null) {
             next = '/#/chapter/' + encodeURIComponent(next);
             nextBtn =(
-                <a href={next} className="btn btn-success pull-right">
+                <a href={next} className="btn btn-primary">
                     Next <i className="fa fa-lg fa-angle-double-right"></i>
                 </a>
             );
         }
 
+        title = '/#/title/' + encodeURIComponent(title);
+        titleBtn =(
+            <a href={title} className="btn btn-info">
+                <i className="fa fa-lg fa-angle-double-up"></i> Chapter list
+            </a>
+        );
+
         var bookmarkBtn = <BookmarkButton info={info} ajax={this.props.ajax}
             setState={this.props.setState} />;
 
+
         return (
-            <div className="chapter-navs clearfix">
-                {prevBtn} {bookmarkBtn} {nextBtn}
+            <div className="chapter-navs  btn-group">
+                {prevBtn} {titleBtn} {bookmarkBtn} {nextBtn}
             </div>
         );
     },
