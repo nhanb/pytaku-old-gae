@@ -13,7 +13,7 @@ class Title(ndb.Model):
     chapters = ndb.JsonProperty()  # [{'name': 'Ch.101', 'url': 'http...'}]
 
     def is_in_read_list(self, user):
-        return self.key in user.read_list
+        return self.url in user.read_list
 
     def is_fresh(self):
         # fresh == updated no longer than 1 day ago
@@ -68,7 +68,7 @@ class Chapter(ndb.Model):
     title_url = ndb.StringProperty()
 
     def is_bookmarked(self, user):
-        return self.key in user.bookmarks
+        return self.url in user.bookmarks
 
     @classmethod
     def create(cls, url, name, pages, title_url, prev, next):
@@ -87,8 +87,8 @@ class User(ndb.Model):
     password_hash = ndb.StringProperty()
     api_token = ndb.StringProperty(default=None)
     last_login = ndb.DateTimeProperty(auto_now_add=True)
-    read_list = ndb.KeyProperty(kind=Title, repeated=True)
-    bookmarks = ndb.KeyProperty(kind=Chapter, repeated=True)
+    read_list = ndb.StringProperty(repeated=True)
+    bookmarks = ndb.StringProperty(repeated=True)
 
     def verify_password(self, password):
         return pbkdf2_sha512.verify(password, self.password_hash)
@@ -101,15 +101,15 @@ class User(ndb.Model):
         self.put()
 
     def _add_to_list(self, record, list_name):
-        if record.key not in getattr(self, list_name):
-            getattr(self, list_name).append(record.key)
+        if record.url not in getattr(self, list_name):
+            getattr(self, list_name).append(record.url)
             self.put()
             return True
         return False
 
     def _remove_from_list(self, record, list_name):
-        if record.key in getattr(self, list_name):
-            getattr(self, list_name).remove(record.key)
+        if record.url in getattr(self, list_name):
+            getattr(self, list_name).remove(record.url)
             self.put()
             return True
         return False

@@ -178,7 +178,7 @@ class ReadListHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        titles = [title_key.get() for title_key in self.user.read_list]
+        titles = [Title.get_by_url(url) for url in self.user.read_list]
         return [{
             'site': title.site,
             'name': title.name,
@@ -214,7 +214,7 @@ class BookmarkHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        chapters = [b.get() for b in self.user.bookmarks]
+        chapters = [Chapter.get_by_url(url) for url in self.user.bookmarks]
         return [{
             'title_url': chapter.title_url,
             'name': chapter.name,
