@@ -28,13 +28,11 @@ class Title(ndb.Model):
         # latest but not anymore
         new_chapters_num = len(new_chapters) - len(self.chapters)
         if new_chapters_num > 0:
-            # latest chapter comes first
-            # => if there's 1 new chapter, that chapter will be the first in
-            # chapter list (index 0), making the latest existing chapter in
-            # database the second (index 1). In this case, it can be
-            # generalized as self.chapters[new_chapters_num]
-            chapter_url = self.chapters[new_chapters_num]['url']
+
+            # previously latest chapter that needs updating:
+            chapter_url = self.chapters[0]['url']
             chap = Chapter.get_by_url(chapter_url)
+
             if chap is not None:
                 i = new_chapters_num - 1
                 chap.next_chapter_url = new_chapters[i]['url']
