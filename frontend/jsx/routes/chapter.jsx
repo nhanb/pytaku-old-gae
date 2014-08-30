@@ -94,9 +94,9 @@ module.exports = React.createClass({
         var prev = info.prev_chapter_url;
         var fetching = this.state.fetching;
 
-        var pages = info.pages.map(function(url) {
+        var pages = info.pages.map(function(url, index) {
             return (
-                <img className="page-img" key={url} src={url} />
+                <img className="page-img" key={url + index} src={url} />
             );
         });
 
