@@ -69,7 +69,7 @@ var PytakuApp = React.createClass({
         var loggedIn = (typeof(email) === 'string' &&
                         typeof(token) === 'string');
         if (loggedIn === true) {
-            this.validateCredentialsFunc()();
+            this.validateCredentials();
         }
         return {
             route: app.HOME,
@@ -153,17 +153,15 @@ var PytakuApp = React.createClass({
         };
     },
 
-    validateCredentialsFunc: function() {
+    validateCredentials: function() {
         var self = this;
-        return function(email, token) {
-            self.authedAjax({
-                url: '/api/test-token',
-                error: function() {
-                    localStorage.removeItem('token');
-                    self.setState({loggedIn: false});
-                }
-            });
-        };
+        self.authedAjax({
+            url: '/api/test-token',
+            error: function() {
+                localStorage.removeItem('token');
+                self.setState({loggedIn: false});
+            }
+        });
     },
 
     authedAjax: function(options) {
