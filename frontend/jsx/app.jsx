@@ -68,8 +68,24 @@ var PytakuApp = React.createClass({
         var token = localStorage.getItem('token');
         var loggedIn = (typeof(email) === 'string' &&
                         typeof(token) === 'string');
+
         if (loggedIn === true) {
-            this.validateCredentials();
+            var self = this;
+
+            // Check if credentials stored on client are still valid
+            self.authedAjax({
+                url: '/api/test-token',
+                success: function() {
+                    if (window.location.hash === '#/') {
+                        // TODO: make default route configurable per user
+                        window.location.href = '/#/readlist';
+                    }
+                },
+                error: function() {
+                    localStorage.removeItem('token');
+                    self.setState({loggedIn: false});
+                },
+            });
         }
         return {
             route: app.HOME,
@@ -151,17 +167,6 @@ var PytakuApp = React.createClass({
             sessionStorage.clear();
             self.setState({loggedIn: false});
         };
-    },
-
-    validateCredentials: function() {
-        var self = this;
-        self.authedAjax({
-            url: '/api/test-token',
-            error: function() {
-                localStorage.removeItem('token');
-                self.setState({loggedIn: false});
-            }
-        });
     },
 
     authedAjax: function(options) {
