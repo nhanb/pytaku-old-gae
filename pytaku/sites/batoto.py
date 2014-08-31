@@ -106,10 +106,10 @@ class Batoto(Site):
         }
 
     def _chapter_prev_next(self, soup):
-        next = soup.find('img', title='Next Page')
+        next = soup.find('img', title='Next Chapter')
         if next is not None:
             next = next.parent['href']
-        prev = soup.find('img', title='Previous Page')
+        prev = soup.find('img', title='Previous Chapter')
         if prev is not None:
             prev = prev.parent['href']
         return prev, next
