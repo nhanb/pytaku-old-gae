@@ -9,17 +9,17 @@ from bs4 import BeautifulSoup
 # manga page image url
 def _page_img_tag(tag):
     if tag.name == 'img' and 'src' in tag.attrs:
-        _page_url_pat = re.compile('^http://img.batoto.net/comics/\d{4}.*$')
+        _page_url_pat = re.compile('^http://img.bato.to/comics/\d{4}.*$')
         return bool(_page_url_pat.match(tag.attrs['src']))
     return False
 
 
 class Batoto(Site):
 
-    netloc = 'www.batoto.net'
+    netloc = 'bato.to'
 
     def search_titles(self, keyword):
-        url = 'http://www.batoto.net/search?'
+        url = 'http://bato.to/search?'
         params = {
             'name_cond': 'c',  # "name contains keyword"
             'name': keyword
