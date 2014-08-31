@@ -6,14 +6,15 @@ export PYTHONPATH="$PYTHONPATH:$GAE_PATH:`pwd`"
 
 # Build frontend assets + deploy to google app engine
 function deploy {
-    if [[ $1 == "prod" ]]; then
-        echo 'Deploying to production server: pytaku.appspot.com...'
-        gulp deploy && python $GAE_PATH/appcfg.py --oauth2 update .
+    if [[ -z "$1" ]]; then
+        project='pytaku-dev'
     else
-        echo 'Deploying to dev server: pytaku-dev.appspot.com...'
-        gulp deploy && python $GAE_PATH/appcfg.py \
-            --oauth2 \
-            --application='pytaku-dev' \
-            update .
+        project=$1
     fi
+
+    echo "Deploying to ${project}.appspot.com..."
+    gulp deploy && python $GAE_PATH/appcfg.py \
+        --oauth2 \
+        --application="$project" \
+        update .
 }
