@@ -32,57 +32,56 @@ var ReadListItem = React.createClass({
     },
 
     render: function() {
-        if (this.state.removed === true) {
-            return <tbody></tbody>;
+        if (this.state.removed) {
+            return <span></span>;
         }
-
         var returnVal;
         var chapters = this.state.chapters;
         var latestChapters = '';
-        var nameRowSpan = 1;
 
-        var removeBtn = <button onClick={this.remove}
-            className="btn btn-danger">remove</button>;
+        var removeBtnCss = {
+            'width': '100%',
+            'margin-bottom': '15px',
+        };
+        var removeBtn = <button onClick={this.remove} style={removeBtnCss}
+            className="btn btn-sm btn-danger">remove</button>;
 
         var titleHref = '/#/title/' + encodeURIComponent(this.props.url);
         var titleA = <a href={titleHref}>{this.props.name}</a>;
 
+
+        var latest = chapters.slice(0, this.props.chapter_num);
+        nameRowSpan = latest.length;
+
+        var chapterArray;
         if (!this.state.loading) {
-
-            var latest = chapters.slice(0, this.props.chapter_num);
-            nameRowSpan = latest.length;
-
-            var chapterArray = latest.map(function(chapter) {
+            chapterArray = latest.map(function(chapter) {
                 var href = '/#/chapter/' + encodeURIComponent(chapter.url);
-                return <a href={href}>{chapter.name}</a>;
+                return (
+                    <a className="list-group-item" href={href}>
+                        {chapter.name}
+                    </a>
+                );
             });
-            var firstChapter = chapterArray.splice(0,1);
-
-            var remaining = chapterArray.map(function(chapter) {
-                return <tr><td>{chapter}</td></tr>;
-            });
-
-            returnVal =  (
-                <tbody>
-                    <tr key={this.props.url}>
-                        <td rowSpan={nameRowSpan}>{removeBtn} {titleA}</td>
-                        <td>{firstChapter}</td>
-                    </tr>
-                    {remaining}
-                </tbody>
-            );
-
         } else {
-            returnVal = (
-                <tbody>
-                    <tr key={this.props.url}>
-                        <td>{removeBtn} {titleA}</td>
-                        <td><i className="fa fa-lg fa-spinner fa-spin"></i></td>
-                    </tr>
-                </tbody>
-            );
+            chapterArray = <Loading />;
         }
 
+        returnVal = (
+            <div className="row">
+
+                <div className="col-md-2">
+                    <a className="thumbnail" href={titleHref}>
+                        <img src={this.props.thumb} alt="thumbnail" />
+                    </a>
+                        {removeBtn}
+                </div>
+
+                <div className="list-group col-md-10">
+                    {chapterArray}
+                </div>
+            </div>
+        );
         return returnVal;
     },
 
@@ -175,22 +174,11 @@ module.exports = React.createClass({
         // Everything worked! Let's render some useful data:
         } else {
             var self = this;
-            var table_body = this.state.titles.map(function(title) {
+            content = this.state.titles.map(function(title) {
                 return <ReadListItem url={title.url} name={title.name}
-                    ajax={self.props.ajax} key={title.url} chapter_num="5" />;
+                    thumb={title.thumb_url}
+                    ajax={self.props.ajax} key={title.url} chapter_num="6" />;
             });
-
-            content = (
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Latest chapters</th>
-                        </tr>
-                    </thead>
-                    {table_body}
-                </table>
-            );
         }
 
         return (

@@ -183,6 +183,7 @@ class ReadListHandler(webapp2.RequestHandler):
             'site': title.site,
             'name': title.name,
             'url': title.url,
+            'thumb_url': title.thumb_url,
         } for title in titles]
 
     @wrap_json
