@@ -25,7 +25,6 @@ html {
     cursor: pointer;
 }
 
-.title-container,
 .bookmarks-container {
     max-width: 900px;
     margin: auto;
