@@ -35,16 +35,21 @@ class Kissmanga(Site):
     # - chapters [{name, url}, {}, ...] - latest first
     # - thumbnailUrl "url"
     # - tags [tag1, tag2, ...]
+    # - status "ongoing"/"completed"
     def title_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
         thumbnailUrl = self._thumbnail_url(soup)
         tags = self._tags(soup)
         name = self._name(soup)
-        return {'chapters': chapters,
-                'thumbnailUrl': thumbnailUrl,
-                'tags': tags,
-                'name': name}
+        status = self._status(soup)
+        return {
+            'chapters': chapters,
+            'thumbnailUrl': thumbnailUrl,
+            'tags': tags,
+            'name': name,
+            'status': status
+        }
 
     def _chapters(self, soup):
         table = soup.find('table', class_='listing')
@@ -64,11 +69,16 @@ class Kissmanga(Site):
         # => must remove the ' manga' part
         return soup.find('link', {'rel': 'alternate'})['title'][:-6]
 
+    def _status(self, soup):
+        status_span = soup.find('span', {'class': 'info'}, text='Status:')
+        return status_span.next_sibling.strip().lower()
+
     # Chapter data
     # - name "Naruto Ch.101"
     # - pages [{filename, url}, {}, ...] - in ascending order
     # - prev_chapter_url
     # - next_chapter_url
+    # - title_url
     def chapter_info(self, html):
         pages = self._chapter_pages(html)
         soup = BeautifulSoup(html)
