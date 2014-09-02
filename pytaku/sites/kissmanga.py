@@ -81,7 +81,6 @@ class Kissmanga(Site):
         desc_span = soup.find('span', {'class': 'info'}, text='Summary:')
         p_tags = desc_span.next_siblings
         desc = [s.text for s in p_tags if type(s) == bs4.element.Tag]
-        print '>>', desc
         return desc
 
     # Chapter data

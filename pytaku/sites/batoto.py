@@ -54,13 +54,14 @@ class Batoto(Site):
         thumbnailUrl, tags = self._thumbnail_url_and_tags(soup)
         name = self._name(soup)
         status = self._status(soup)
+        description = self._description(soup)
         return {
             'chapters': chapters,
             'thumbnailUrl': thumbnailUrl,
             'name': name,
             'tags': tags,
             'status': status,
-            'description': [],
+            'description': description,
         }
 
     def _name(self, soup):
@@ -105,6 +106,19 @@ class Batoto(Site):
             if type(s) == bs4.element.Tag:
                 return s.text.strip().lower()
         return 'unknown'
+
+    def _description(self, soup):
+        siblings = soup.find('td', text='Description:').next_siblings
+        for s in siblings:
+            if type(s) == bs4.element.Tag:
+                # Batoto stuffs the whole description inside 1 single <p> tag,
+                # using <br/> for line breaks. BeautifulSoup's get_text()
+                # ignores those br tags by default, but get_text('separator')
+                # replaces them with the provided separator, so we can split
+                # the result using that same separator and have a proper list
+                # of paragraphs.  Neat eh?
+                return s.get_text('|||').split('|||')
+        return ['unknown']
 
     def chapter_info(self, html):
         soup = BeautifulSoup(html)
