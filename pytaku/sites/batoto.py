@@ -60,6 +60,7 @@ class Batoto(Site):
             'name': name,
             'tags': tags,
             'status': status,
+            'description': [],
         }
 
     def _name(self, soup):

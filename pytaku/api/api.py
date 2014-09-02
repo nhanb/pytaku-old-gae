@@ -74,6 +74,7 @@ class TitleHandler(webapp2.RequestHandler):
                              for c in chapters],
                 'tags': title_record.tags,
                 'status': title_record.status,
+                'description': title_record.description,
             }
             if hasattr(self, 'user'):
                 user = self.user
@@ -94,14 +95,16 @@ class TitleHandler(webapp2.RequestHandler):
                                         title['thumbnailUrl'],
                                         title['chapters'],
                                         title['status'],
-                                        title['tags'])
+                                        title['tags'],
+                                        title['description'])
         else:
             title_record.update(site.netloc,
                                 title['name'],
                                 title['thumbnailUrl'],
                                 title['chapters'],
                                 title['status'],
-                                title['tags'])
+                                title['tags'],
+                                title['description'])
 
         # If the provided chapter_limit is valid, return only that many
         # chapters in API response.
@@ -117,6 +120,7 @@ class TitleHandler(webapp2.RequestHandler):
             'chapters': chapters,
             'tags': title['tags'],
             'status': title['status'],
+            'description': title['description'],
         }
 
         if hasattr(self, 'user'):

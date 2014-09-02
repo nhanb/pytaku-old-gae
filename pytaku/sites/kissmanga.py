@@ -2,6 +2,7 @@ import urllib
 from google.appengine.api import urlfetch
 import re
 from bs4 import BeautifulSoup
+import bs4
 from pytaku.sites import Site
 
 
@@ -36,6 +37,7 @@ class Kissmanga(Site):
     # - thumbnailUrl "url"
     # - tags [tag1, tag2, ...]
     # - status "ongoing"/"completed"
+    # - description ["paragraph1", "paragraph2", ...]
     def title_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
@@ -43,12 +45,14 @@ class Kissmanga(Site):
         tags = self._tags(soup)
         name = self._name(soup)
         status = self._status(soup)
+        description = self._description(soup)
         return {
             'chapters': chapters,
             'thumbnailUrl': thumbnailUrl,
             'tags': tags,
             'name': name,
-            'status': status
+            'status': status,
+            'description': description,
         }
 
     def _chapters(self, soup):
@@ -72,6 +76,13 @@ class Kissmanga(Site):
     def _status(self, soup):
         status_span = soup.find('span', {'class': 'info'}, text='Status:')
         return status_span.next_sibling.strip().lower()
+
+    def _description(self, soup):
+        desc_span = soup.find('span', {'class': 'info'}, text='Summary:')
+        p_tags = desc_span.next_siblings
+        desc = [s.text for s in p_tags if type(s) == bs4.element.Tag]
+        print '>>', desc
+        return desc
 
     # Chapter data
     # - name "Naruto Ch.101"

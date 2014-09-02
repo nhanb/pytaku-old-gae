@@ -126,6 +126,9 @@ module.exports = React.createClass({
         } else if (this.state.populated) {
             var info = this.state.info;
             var tags = info.tags.join(', ');
+            var desc = info.description.map(function(paragraph) {
+                return <p>{paragraph}</p>;
+            });
             body = (
                 <div className="title-info">
                     <div className="row">
@@ -144,6 +147,7 @@ module.exports = React.createClass({
                                 <li><a href={info.url}>Original link</a></li>
                                 <li><strong>Status:</strong> {info.status}</li>
                                 <li><strong>Tags:</strong> {tags}</li>
+                                <li><strong>Description:</strong> {desc}</li>
                             </ul>
                         </div>
                     </div>
