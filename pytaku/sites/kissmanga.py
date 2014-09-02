@@ -62,7 +62,7 @@ class Kissmanga(Site):
 
     def _tags(self, soup):
         tags = soup.find('span', text='Genres:').find_next_siblings('a')
-        return [text.string.lower() for text in tags]
+        return [text.string.strip().lower() for text in tags]
 
     def _name(self, soup):
         # <link rel='alternate' title='Naruto manga' ...

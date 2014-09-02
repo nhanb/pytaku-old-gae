@@ -11,6 +11,8 @@ class Title(ndb.Model):
     thumb_url = ndb.StringProperty()
     last_update = ndb.DateTimeProperty(auto_now_add=True)
     chapters = ndb.JsonProperty()  # [{'name': 'Ch.101', 'url': 'http...'}]
+    tags = ndb.StringProperty(repeated=True)
+    status = ndb.StringProperty()  # ongoing/completed/unknown
 
     def is_in_read_list(self, user):
         return self.url in user.read_list
@@ -19,10 +21,12 @@ class Title(ndb.Model):
         # fresh == updated no longer than 1 day ago
         return (datetime.now() - self.last_update).days <= 1
 
-    def update(self, site, name, thumb_url, new_chapters):
+    def update(self, site, name, thumb_url, new_chapters, status, tags):
         self.site = site
         self.name = name
         self.thumb_url = thumb_url
+        self.status = status
+        self.tags = tags
 
         # Update next_chapter_url for the chapter that was previously the
         # latest but not anymore
@@ -45,9 +49,9 @@ class Title(ndb.Model):
         return self
 
     @classmethod
-    def create(cls, url, site, name, thumb_url, chapters):
+    def create(cls, url, site, name, thumb_url, chapters, status, tags):
         obj = cls(url=url, site=site, name=name, thumb_url=thumb_url,
-                  chapters=chapters)
+                  chapters=chapters, status=status, tags=tags)
         obj.put()
         return obj
 

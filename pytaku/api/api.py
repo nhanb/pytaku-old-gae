@@ -71,7 +71,9 @@ class TitleHandler(webapp2.RequestHandler):
                 'name': title_record.name,
                 'thumb_url': title_record.thumb_url,
                 'chapters': [{'name': c['name'], 'url': c['url']}
-                             for c in chapters]
+                             for c in chapters],
+                'tags': title_record.tags,
+                'status': title_record.status,
             }
             if hasattr(self, 'user'):
                 user = self.user
@@ -86,12 +88,20 @@ class TitleHandler(webapp2.RequestHandler):
 
         # Create new title if not in db yet
         if title_record is None:
-            title_record = Title.create(url, site.netloc, title['name'],
+            title_record = Title.create(url,
+                                        site.netloc,
+                                        title['name'],
                                         title['thumbnailUrl'],
-                                        title['chapters'])
+                                        title['chapters'],
+                                        title['status'],
+                                        title['tags'])
         else:
-            title_record.update(site.netloc, title['name'],
-                                title['thumbnailUrl'], title['chapters'])
+            title_record.update(site.netloc,
+                                title['name'],
+                                title['thumbnailUrl'],
+                                title['chapters'],
+                                title['status'],
+                                title['tags'])
 
         # If the provided chapter_limit is valid, return only that many
         # chapters in API response.
@@ -105,6 +115,8 @@ class TitleHandler(webapp2.RequestHandler):
             'name': title['name'],
             'thumb_url': title['thumbnailUrl'],
             'chapters': chapters,
+            'tags': title['tags'],
+            'status': title['status'],
         }
 
         if hasattr(self, 'user'):

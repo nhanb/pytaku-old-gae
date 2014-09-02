@@ -3,6 +3,7 @@ import re
 from google.appengine.api import urlfetch
 from pytaku.sites import Site
 from pytaku.api.exceptions import PyError
+import bs4
 from bs4 import BeautifulSoup
 
 
@@ -52,10 +53,14 @@ class Batoto(Site):
         chapters = self._chapters(soup)
         thumbnailUrl, tags = self._thumbnail_url_and_tags(soup)
         name = self._name(soup)
-        return {'chapters': chapters,
-                'thumbnailUrl': thumbnailUrl,
-                'name': name,
-                'tags': tags}
+        status = self._status(soup)
+        return {
+            'chapters': chapters,
+            'thumbnailUrl': thumbnailUrl,
+            'name': name,
+            'tags': tags,
+            'status': status,
+        }
 
     def _name(self, soup):
         return soup.find('h1', class_='ipsType_pagetitle').contents[0].strip()
@@ -86,11 +91,19 @@ class Batoto(Site):
 
             # This cell stores <a> that store tags
             tags_cell = box.find('td', text='Genres:').find_next_sibling('td')
-            tags = [a.find('span').contents[1].lower() for a in tags_cell]
+            tags = [a.find('span').contents[1].strip().lower()
+                    for a in tags_cell]
 
             return (thumb, tags)
         except:
             return ([], [])
+
+    def _status(self, soup):
+        siblings = soup.find('td', text='Status:').next_siblings
+        for s in siblings:
+            if type(s) == bs4.element.Tag:
+                return s.text.strip().lower()
+        return 'unknown'
 
     def chapter_info(self, html):
         soup = BeautifulSoup(html)
