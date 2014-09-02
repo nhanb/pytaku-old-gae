@@ -133,13 +133,13 @@ module.exports = React.createClass({
                 <div className="title-info">
                     <div className="row">
 
-                        <div className="col-md-4">
+                        <div className="col-md-3">
                             <a className="thumbnail">
                                 <img src={info.thumb_url} alt="thumbnail" />
                             </a>
                         </div>
 
-                        <div className="col-md-8">
+                        <div className="col-md-9">
                             <h2 className="title-name">
                                 {info.name} {this.renderReadListBtn()}
                             </h2>
