@@ -125,8 +125,7 @@ module.exports = React.createClass({
 
         } else if (this.state.populated) {
             var info = this.state.info;
-            var permalink = '/#/title/' + encodeURIComponent(info.url);
-
+            var tags = info.tags.join(', ');
             body = (
                 <div className="title-info">
                     <div className="row">
@@ -142,8 +141,9 @@ module.exports = React.createClass({
                                 {info.name} {this.renderReadListBtn()}
                             </h2>
                             <ul>
-                                <li><a href={permalink}>permanent link</a></li>
-                                <li><strong>more details to be implemented...</strong></li>
+                                <li><a href={info.url}>Original link</a></li>
+                                <li><strong>Status:</strong> {info.status}</li>
+                                <li><strong>Tags:</strong> {tags}</li>
                             </ul>
                         </div>
                     </div>
