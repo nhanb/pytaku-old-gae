@@ -2,6 +2,7 @@ import urllib
 import re
 from google.appengine.api import urlfetch
 from pytaku.sites import Site
+from pytaku.api.exceptions import PyError
 from bs4 import BeautifulSoup
 
 
@@ -144,9 +145,19 @@ class Batoto(Site):
         pages_htmls = [html]
         urls = urls[1:]
 
-        # TODO: async download while respecting server
+        rpcs = []
         for url in urls:
-            pages_htmls.append(self.get_html(url))
+            rpc = urlfetch.create_rpc()
+            urlfetch.make_fetch_call(rpc, url)
+            rpcs.append(rpc)
+
+        # Finish all RPCs
+        for rpc in rpcs:
+            result = rpc.get_result()
+            if result.status_code != 200:
+                # TODO: should retry instead of panicking
+                raise PyError(result.content)
+            pages_htmls.append(result.content)
 
         returns = []
         for page_html in pages_htmls:
