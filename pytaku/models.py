@@ -13,7 +13,7 @@ class Title(ndb.Model):
     chapters = ndb.JsonProperty()  # [{'name': 'Ch.101', 'url': 'http...'}]
     tags = ndb.StringProperty(repeated=True)
     status = ndb.StringProperty()  # ongoing/completed/unknown
-    description = ndb.StringProperty(repeated=True)
+    description = ndb.StringProperty(repeated=True, indexed=False)
 
     def is_in_read_list(self, user):
         return self.url in user.read_list
