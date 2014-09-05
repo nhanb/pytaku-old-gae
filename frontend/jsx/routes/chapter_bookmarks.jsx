@@ -12,7 +12,7 @@ var BookmarkedChapter = React.createClass({
         var chapter = this.props.chapter;
         var self = this;
         this.props.ajax({
-            url: '/api/bookmarks',
+            url: '/api/chapter-bookmark',
             method: 'POST',
             data: JSON.stringify({
                 url: chapter.url,
@@ -36,7 +36,7 @@ var BookmarkedChapter = React.createClass({
     render: function() {
         var chapter = this.props.chapter;
         var href = '/#/chapter/' + encodeURIComponent(chapter.url);
-        var titleHref = '/#/title/' + encodeURIComponent(chapter.title_url);
+        var seriesHref = '/#/series/' + encodeURIComponent(chapter.series_url);
 
         var removeBtn;
         if (this.state.removing === true) {
@@ -58,7 +58,7 @@ var BookmarkedChapter = React.createClass({
                 <a href={href}>{chapter.name}</a>
                 <div className="btn-group pull-right">
                     <a href={href} className="btn btn-default">View</a>
-                    <a href={titleHref} className="btn btn-default">Go to title</a>
+                    <a href={seriesHref} className="btn btn-default">Go to series</a>
                     {removeBtn}
                 </div>
                 <div className="clearfix"></div>
@@ -85,7 +85,7 @@ module.exports = React.createClass({
         var self = this;
         this.setState({loading: true});
         this.props.ajax({
-            url: '/api/bookmarks',
+            url: '/api/chapter-bookmark',
             success: function(data) {
                 self.setState({
                     chapters: data,

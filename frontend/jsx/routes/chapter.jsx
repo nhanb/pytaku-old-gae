@@ -53,7 +53,7 @@ var BookmarkButton = React.createClass({
         });
         var self = this;
         this.props.ajax({
-            url: '/api/bookmarks',
+            url: '/api/chapter-bookmark',
             method: 'POST',
             data: JSON.stringify({
                 url: self.props.info.url,

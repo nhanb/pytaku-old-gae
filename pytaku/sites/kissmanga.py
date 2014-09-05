@@ -12,7 +12,7 @@ class Kissmanga(Site):
 
     # Return a list of dictionaries that store at least name and url:
     # [ { 'name': 'Naruto', 'url': 'http://...' }, {...}, ... ]
-    def search_titles(self, keyword):
+    def search_series(self, keyword):
         url = 'http://kissmanga.com/Search/SearchSuggest'
         params = {
             'type': 'Manga',
@@ -24,7 +24,7 @@ class Kissmanga(Site):
         if resp.status_code != 200:
             return []  # TODO maybe show some meaningful error alert to user?
 
-        # Kissmanga returns manga titles and links in xml format
+        # Kissmanga returns manga series and links in xml format
         soup = BeautifulSoup(resp.content)
         atags = soup.find_all('a')
         return [{'name': a.string.strip(),
@@ -38,7 +38,7 @@ class Kissmanga(Site):
     # - tags [tag1, tag2, ...]
     # - status "ongoing"/"completed"
     # - description ["paragraph1", "paragraph2", ...]
-    def title_info(self, html):
+    def series_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
         thumbnailUrl = self._thumbnail_url(soup)
@@ -88,17 +88,17 @@ class Kissmanga(Site):
     # - pages [{filename, url}, {}, ...] - in ascending order
     # - prev_chapter_url
     # - next_chapter_url
-    # - title_url
+    # - series_url
     def chapter_info(self, html):
         pages = self._chapter_pages(html)
         soup = BeautifulSoup(html)
         name = self._chapter_name(soup)
-        title_url = self._chapter_title_url(soup)
+        series_url = self._chapter_series_url(soup)
         prev, next = self._chapter_prev_next(soup)
         return {
             'name': name,
             'pages': pages,
-            'title_url': title_url,
+            'series_url': series_url,
             'next_chapter_url': next,
             'prev_chapter_url': prev,
         }
@@ -120,7 +120,7 @@ class Kissmanga(Site):
         pat = re.compile('lstImages\.push\("(.+?)"\);')
         return pat.findall(html)
 
-    def _chapter_title_url(self, soup):
+    def _chapter_series_url(self, soup):
         a_tag = soup.find('div', id='navsubbar').find('p').find('a')
         return a_tag['href']
 

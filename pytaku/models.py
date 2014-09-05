@@ -4,7 +4,7 @@ from passlib.hash import pbkdf2_sha512
 from datetime import datetime
 
 
-class Title(ndb.Model):
+class Series(ndb.Model):
     url = ndb.StringProperty(indexed=True)
     name = ndb.StringProperty()
     site = ndb.StringProperty()
@@ -15,8 +15,8 @@ class Title(ndb.Model):
     status = ndb.StringProperty()  # ongoing/completed/unknown
     description = ndb.StringProperty(repeated=True, indexed=False)
 
-    def is_in_read_list(self, user):
-        return self.url in user.read_list
+    def is_bookmarked_by(self, user):
+        return self.url in user.bookmarked_series
 
     def is_fresh(self):
         # fresh == updated no longer than 1 day ago
@@ -46,7 +46,7 @@ class Title(ndb.Model):
 
         self.chapters = new_chapters
 
-        self.last_updated = datetime.now()  # "refresh" this title
+        self.last_updated = datetime.now()  # "refresh" this series
         self.put()
         return self
 
@@ -70,14 +70,14 @@ class Chapter(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     next_chapter_url = ndb.StringProperty()
     prev_chapter_url = ndb.StringProperty()
-    title_url = ndb.StringProperty()
+    series_url = ndb.StringProperty()
 
     def is_bookmarked(self, user):
-        return self.url in user.bookmarks
+        return self.url in user.bookmarked_chapters
 
     @classmethod
-    def create(cls, url, name, pages, title_url, prev, next):
-        obj = cls(url=url, name=name, pages=pages, title_url=title_url,
+    def create(cls, url, name, pages, series_url, prev, next):
+        obj = cls(url=url, name=name, pages=pages, series_url=series_url,
                   prev_chapter_url=prev, next_chapter_url=next)
         obj.put()
         return obj
@@ -92,8 +92,8 @@ class User(ndb.Model):
     password_hash = ndb.StringProperty()
     api_token = ndb.StringProperty(default=None)
     last_login = ndb.DateTimeProperty(auto_now_add=True)
-    read_list = ndb.StringProperty(repeated=True)
-    bookmarks = ndb.StringProperty(repeated=True)
+    bookmarked_series = ndb.StringProperty(repeated=True)
+    bookmarked_chapters = ndb.StringProperty(repeated=True)
 
     def verify_password(self, password):
         return pbkdf2_sha512.verify(password, self.password_hash)
@@ -105,31 +105,33 @@ class User(ndb.Model):
         self.api_token = None
         self.put()
 
-    def _add_to_list(self, record, list_name):
+    def _bookmark(self, record, name):
+        list_name = 'bookmarked_' + name
         if record.url not in getattr(self, list_name):
             getattr(self, list_name).append(record.url)
             self.put()
             return True
         return False
 
-    def _remove_from_list(self, record, list_name):
+    def _unbookmark(self, record, name):
+        list_name = 'bookmarked_' + name
         if record.url in getattr(self, list_name):
             getattr(self, list_name).remove(record.url)
             self.put()
             return True
         return False
 
-    def add_to_read_list(self, title):
-        return self._add_to_list(title, 'read_list')
+    def bookmark_series(self, series):
+        return self._bookmark(series, 'series')
 
-    def remove_from_read_list(self, title):
-        return self._remove_from_list(title, 'read_list')
+    def unbookmark_series(self, series):
+        return self._unbookmark(series, 'series')
 
-    def add_to_bookmarks(self, chapter):
-        return self._add_to_list(chapter, 'bookmarks')
+    def bookmark_chapter(self, chapter):
+        return self._bookmark(chapter, 'chapters')
 
-    def remove_from_bookmarks(self, chapter):
-        return self._remove_from_list(chapter, 'bookmarks')
+    def unbookmark_chapter(self, chapter):
+        return self._unbookmark(chapter, 'chapters')
 
     @staticmethod
     def hash_password(password):

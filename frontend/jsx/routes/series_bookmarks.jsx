@@ -3,8 +3,8 @@ var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var store = require('../store.js');
 
-// Each item represents a title, displaying its name and latest chapters
-var ReadListItem = React.createClass({
+// Each item represents a series, displaying its name and latest chapters
+var SeriesItem = React.createClass({
     getInitialState: function() {
         return {
             chapters: [],
@@ -16,7 +16,7 @@ var ReadListItem = React.createClass({
     componentDidMount: function() {
         this.setState({loading: true});
 
-        url = '/api/title?url=' + encodeURIComponent(this.props.url);
+        url = '/api/series?url=' + encodeURIComponent(this.props.url);
         url += '&chapter_limit=' + this.props.chapter_num;
 
         var self = this;
@@ -46,8 +46,7 @@ var ReadListItem = React.createClass({
         var removeBtn = <button onClick={this.remove} style={removeBtnCss}
             className="btn btn-sm btn-danger">remove</button>;
 
-        var titleHref = '/#/title/' + encodeURIComponent(this.props.url);
-        var titleA = <a href={titleHref}>{this.props.name}</a>;
+        var seriesHref = '/#/series/' + encodeURIComponent(this.props.url);
 
 
         var latest = chapters.slice(0, this.props.chapter_num);
@@ -71,7 +70,7 @@ var ReadListItem = React.createClass({
             <div className="row">
 
                 <div className="col-md-2">
-                    <a className="thumbnail" href={titleHref}>
+                    <a className="thumbnail" href={seriesHref}>
                         <img src={this.props.thumb} alt="thumbnail" />
                     </a>
                         {removeBtn}
@@ -88,17 +87,17 @@ var ReadListItem = React.createClass({
     remove: function() {
         var self = this;
         this.props.ajax({
-            url: '/api/read-list',
+            url: '/api/series-bookmark',
             method: 'POST',
             data: JSON.stringify({
                 url: this.props.url,
                 action: 'remove'
             }),
             success: function() {
-                var cachedData = store.get('title_' + self.props.url);
+                var cachedData = store.get('series_' + self.props.url);
                 if (cachedData !== null) {
-                    cachedData.is_in_read_list = false;
-                    store.set('title_' + self.props.url, cachedData);
+                    cachedData.is_bookmarked = false;
+                    store.set('series_' + self.props.url, cachedData);
                 }
                 self.setState({removed: true});
             }
@@ -108,11 +107,11 @@ var ReadListItem = React.createClass({
 
 module.exports = React.createClass({
     mixins: [RouteMixin],
-    pageTitle: 'My manga read list',
+    pageTitle: 'My series bookmarks',
 
     getInitialState: function() {
         return {
-            titles: [],
+            series_list: [],
             loading: false,
             errMsg: '',
         };
@@ -125,10 +124,10 @@ module.exports = React.createClass({
         var self = this;
         this.setState({loading: true});
         this.props.ajax({
-            url: '/api/read-list',
+            url: '/api/series-bookmark',
             success: function(data) {
                 self.setState({
-                    titles: data,
+                    series_list: data,
                 });
             },
             error: function(data) {
@@ -163,21 +162,21 @@ module.exports = React.createClass({
                 </div>
             );
 
-        // No error but user has nothing in read list yet
-        } else if (this.state.titles.length === 0) {
+        // No error but user hasn't bookmarked any series yet
+        } else if (this.state.series_list.length === 0) {
             content = (
                 <div className="alert alert-warning" role="alert">
-                    You have nothing in your read list yet :)
+                    You have not bookmarked any series yet :)
                 </div>
             );
 
         // Everything worked! Let's render some useful data:
         } else {
             var self = this;
-            content = this.state.titles.map(function(title) {
-                return <ReadListItem url={title.url} name={title.name}
-                    thumb={title.thumb_url}
-                    ajax={self.props.ajax} key={title.url} chapter_num="6" />;
+            content = this.state.series_list.map(function(series) {
+                return <SeriesItem url={series.url} name={series.name}
+                    thumb={series.thumb_url}
+                    ajax={self.props.ajax} key={series.url} chapter_num="6" />;
             });
         }
 

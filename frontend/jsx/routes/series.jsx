@@ -10,7 +10,7 @@ module.exports = React.createClass({
         if (info) {
             return info.name;
         }
-        return 'Loading title...';
+        return 'Loading series info...';
     },
 
 
@@ -37,7 +37,7 @@ module.exports = React.createClass({
     populateInfo: function() {
         this.setState({populating: true});
 
-        var cachedData = store.get('title_' + this.props.url);
+        var cachedData = store.get('series_' + this.props.url);
         if (cachedData !== null) {
             this.setState({
                 info: cachedData,
@@ -47,7 +47,7 @@ module.exports = React.createClass({
             return;
         }
 
-        url = '/api/title?url=' + encodeURIComponent(this.props.url);
+        url = '/api/series?url=' + encodeURIComponent(this.props.url);
         url += '&chapter_limit=-1';
 
         var self = this;
@@ -57,7 +57,7 @@ module.exports = React.createClass({
             method: 'GET',
             success: function(data) {
                 data.url = self.props.url;
-                store.set('title_' + self.props.url, data);
+                store.set('series_' + self.props.url, data);
                 self.setState({
                     info: data,
                     populated: true
@@ -78,31 +78,31 @@ module.exports = React.createClass({
         );
     },
 
-    renderReadListBtn: function() {
+    renderBookmarkBtn: function() {
         var info = this.state.info;
-        var readListBtn = '';
-        if (info.hasOwnProperty('is_in_read_list')) {
-            if (info.is_in_read_list) {
-                readListBtn = (
+        var bookmarkBtn = '';
+        if (info.hasOwnProperty('is_bookmarked')) {
+            if (info.is_bookmarked) {
+                bookmarkBtn = (
                     <button className="btn btn-success" disabled="disabled">
-                        <i className='fa fa-lg fa-check-circle'></i> In my read list
+                        <i className='fa fa-lg fa-check-circle'></i> Bookmarked
                     </button>
                 );
             } else {
-                readListBtn = (
-                    <button className="btn btn-success" onClick={this.addToReadList}>
-                        <i className='fa fa-star'></i> Add to read list
+                bookmarkBtn = (
+                    <button className="btn btn-success" onClick={this.bookmark}>
+                        <i className='fa fa-star'></i> Bookmark
                     </button>
                 );
             }
         }
-        return readListBtn;
+        return bookmarkBtn;
     },
 
-    addToReadList: function() {
+    bookmark: function() {
         var self = this;
         this.props.ajax({
-            url: '/api/read-list',
+            url: '/api/series-bookmark',
             method: 'POST',
             data: JSON.stringify({
                 url: self.state.info.url,
@@ -110,9 +110,9 @@ module.exports = React.createClass({
             }),
             success: function() {
                 info = self.state.info;
-                info.is_in_read_list = true;
+                info.is_bookmarked = true;
                 self.setState({info: info});
-                store.set('title_' + self.props.url, info);
+                store.set('series_' + self.props.url, info);
             }
         });
     },
@@ -130,7 +130,7 @@ module.exports = React.createClass({
                 return <p>{paragraph}</p>;
             });
             body = (
-                <div className="title-info">
+                <div className="series-info">
                     <div className="row">
 
                         <div className="col-md-3">
@@ -140,8 +140,8 @@ module.exports = React.createClass({
                         </div>
 
                         <div className="col-md-9">
-                            <h2 className="title-name">
-                                {info.name} {this.renderReadListBtn()}
+                            <h2 className="series-name">
+                                {info.name} {this.renderBookmarkBtn()}
                             </h2>
                             <ul>
                                 <li><a href={info.url}>Original link</a></li>
@@ -160,11 +160,11 @@ module.exports = React.createClass({
             );
 
         } else {
-            body = 'Title info not fetched. Try again.';
+            body = 'Series info not fetched. Try again.';
         }
 
         return (
-            <div className='title-container container'>
+            <div className='series-container container'>
                 {body}
             </div>
         );

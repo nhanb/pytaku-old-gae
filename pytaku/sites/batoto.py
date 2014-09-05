@@ -20,7 +20,7 @@ class Batoto(Site):
 
     netloc = 'bato.to'
 
-    def search_titles(self, keyword):
+    def search_series(self, keyword):
         url = 'http://bato.to/search?'
         params = {
             'name_cond': 'c',  # "name contains keyword"
@@ -36,19 +36,19 @@ class Batoto(Site):
         soup = BeautifulSoup(resp.content)
         table = soup.find('table', class_='chapters_list')
         strongs = table.find_all('strong')
-        titles = []
+        series_list = []
         for strong in strongs:
             a = strong.find('a')
             url = a['href']
             name = a.contents[1].strip()
-            titles.append({
+            series_list.append({
                 'url': url,
                 'name': name,
                 'site': 'batoto',
             })
-        return titles
+        return series_list
 
-    def title_info(self, html):
+    def series_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
         thumbnailUrl, tags = self._thumbnail_url_and_tags(soup)
@@ -124,12 +124,12 @@ class Batoto(Site):
         soup = BeautifulSoup(html)
         pages = self._chapter_pages(soup, html)
         name = self._chapter_name(soup)
-        title_url = self._chapter_title_url(soup)
+        series_url = self._chapter_series_url(soup)
         prev, next = self._chapter_prev_next(soup)
         return {
             'name': name,
             'pages': pages,
-            'title_url': title_url,
+            'series_url': series_url,
             'next_chapter_url': next,
             'prev_chapter_url': prev,
         }
@@ -147,7 +147,7 @@ class Batoto(Site):
         select = soup.find('select', attrs={'name': 'chapter_select'})
         return select.find('option', selected=True).text.strip()
 
-    def _chapter_title_url(self, soup):
+    def _chapter_series_url(self, soup):
         a_tag = soup.find('div', class_='moderation_bar').find('a')
         return a_tag['href']
 

@@ -2,17 +2,17 @@
 var RouteMixin = require('../mixins/route.jsx');
 var store = require('../store.js');
 
-var TitleList = React.createClass({
+var SeriesList = React.createClass({
     css: {
         maxWidth: '800px',
         margin: '10px auto'
     },
 
-    createTitle: function(item, id) {
-        // Assign unique key to make sure outdated Title components are
+    createSeries: function(item, id) {
+        // Assign unique key to make sure outdated Series components are
         // destroyed instead of reused - http://fb.me/react-warning-keys
         var key = item.url;
-        var href = '/#/title/' + encodeURIComponent(item.url);
+        var href = '/#/series/' + encodeURIComponent(item.url);
         return (
             <a className="list-group-item" key={key} href={href}>
                 {item.name}
@@ -24,7 +24,7 @@ var TitleList = React.createClass({
     render: function() {
         return (
             <div className="list-group" style={this.css}>
-                {this.props.items.map(this.createTitle)}
+                {this.props.items.map(this.createSeries)}
             </div>
         );
     }
@@ -62,9 +62,9 @@ module.exports = React.createClass({
     pageTitle: function() {
         var query = this.props.query;
         if (query) {
-            return query + ' - Manga title search';
+            return query + ' - Manga series search';
         } else {
-            return 'Search manga title';
+            return 'Search manga series';
         }
     },
 
@@ -143,7 +143,7 @@ module.exports = React.createClass({
                     <SearchButton searching={this.state.searching} />
                 </form>
 
-                <TitleList items={this.state.items}
+                <SeriesList items={this.state.items}
                     loggedIn={this.props.loggedIn}
                     ajax={this.props.ajax} />
             </div>);

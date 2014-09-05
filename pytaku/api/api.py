@@ -1,5 +1,5 @@
 import webapp2
-from pytaku.models import User, createUser, Chapter, Title
+from pytaku.models import User, createUser, Chapter, Series
 from pytaku import sites
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
@@ -44,7 +44,7 @@ class RegisterHandler(webapp2.RequestHandler):
         }
 
 
-class TitleHandler(webapp2.RequestHandler):
+class SeriesHandler(webapp2.RequestHandler):
 
     @wrap_json
     @auth(required=False)
@@ -57,74 +57,74 @@ class TitleHandler(webapp2.RequestHandler):
         if site is None:
             raise PyError({'msg': 'unsupported_url'})
 
-        # Check if title is already in db
-        title_record = Title.get_by_url(url)
+        # Check if series is already in db
+        series_record = Series.get_by_url(url)
 
-        # Skip reloading title info if updated recently
-        if title_record and title_record.is_fresh():
+        # Skip reloading series info if updated recently
+        if series_record and series_record.is_fresh():
             limit = self.data['chapter_limit']
             if limit < 1:
                 limit = None
-            chapters = title_record.chapters[:limit]
+            chapters = series_record.chapters[:limit]
             resp = {
                 'site': site.netloc,
-                'name': title_record.name,
-                'thumb_url': title_record.thumb_url,
+                'name': series_record.name,
+                'thumb_url': series_record.thumb_url,
                 'chapters': [{'name': c['name'], 'url': c['url']}
                              for c in chapters],
-                'tags': title_record.tags,
-                'status': title_record.status,
-                'description': title_record.description,
+                'tags': series_record.tags,
+                'status': series_record.status,
+                'description': series_record.description,
             }
             if hasattr(self, 'user'):
                 user = self.user
-                resp['is_in_read_list'] = title_record.is_in_read_list(user)
+                resp['is_bookmarked'] = series_record.is_bookmarked_by(user)
             return resp
 
-        # =============== Create/Update title record ====================
+        # =============== Create/Update series record ====================
 
-        # Fetch basic title info (name, thumburl, chapter list)
-        title_page = site.fetch_manga_seed_page(url)
-        title = site.title_info(title_page)
+        # Fetch basic series info (name, thumburl, chapter list)
+        series_page = site.fetch_manga_seed_page(url)
+        series = site.series_info(series_page)
 
-        # Create new title if not in db yet
-        if title_record is None:
-            title_record = Title.create(url,
-                                        site.netloc,
-                                        title['name'],
-                                        title['thumbnailUrl'],
-                                        title['chapters'],
-                                        title['status'],
-                                        title['tags'],
-                                        title['description'])
+        # Create new series if not in db yet
+        if series_record is None:
+            series_record = Series.create(url,
+                                          site.netloc,
+                                          series['name'],
+                                          series['thumbnailUrl'],
+                                          series['chapters'],
+                                          series['status'],
+                                          series['tags'],
+                                          series['description'])
         else:
-            title_record.update(site.netloc,
-                                title['name'],
-                                title['thumbnailUrl'],
-                                title['chapters'],
-                                title['status'],
-                                title['tags'],
-                                title['description'])
+            series_record.update(site.netloc,
+                                 series['name'],
+                                 series['thumbnailUrl'],
+                                 series['chapters'],
+                                 series['status'],
+                                 series['tags'],
+                                 series['description'])
 
         # If the provided chapter_limit is valid, return only that many
         # chapters in API response.
-        chapters = title['chapters']
+        chapters = series['chapters']
         chapter_limit = self.data['chapter_limit']
         if chapter_limit in range(len(chapters)):
             chapters = chapters[:chapter_limit]
 
         resp = {
             'site': site.netloc,
-            'name': title['name'],
-            'thumb_url': title['thumbnailUrl'],
+            'name': series['name'],
+            'thumb_url': series['thumbnailUrl'],
             'chapters': chapters,
-            'tags': title['tags'],
-            'status': title['status'],
-            'description': title['description'],
+            'tags': series['tags'],
+            'status': series['status'],
+            'description': series['description'],
         }
 
         if hasattr(self, 'user'):
-            resp['is_in_read_list'] = title_record.is_in_read_list(self.user)
+            resp['is_bookmarked'] = series_record.is_bookmarked_by(self.user)
 
         return resp
 
@@ -135,12 +135,12 @@ class SearchHandler(webapp2.RequestHandler):
     @unpack_get(keyword=['ustring'])
     def get(self):
         keyword = self.data['keyword']
-        titles = []
+        series = []
 
         for site in sites.available_sites:
-            titles.extend(site.search_titles(keyword))
+            series.extend(site.search_series(keyword))
 
-        return titles
+        return series
 
 
 class ChapterHandler(webapp2.RequestHandler):
@@ -161,7 +161,7 @@ class ChapterHandler(webapp2.RequestHandler):
             page_html = site.fetch_chapter_seed_page(url)
             info = site.chapter_info(page_html)
             chapter = Chapter.create(url, info['name'], info['pages'],
-                                     info['title_url'],
+                                     info['series_url'],
                                      info['prev_chapter_url'],
                                      info['next_chapter_url'])
             chapter.put()
@@ -170,7 +170,7 @@ class ChapterHandler(webapp2.RequestHandler):
             'name': chapter.name,
             'url': chapter.url,
             'pages': chapter.pages,
-            'title_url': chapter.title_url,
+            'series_url': chapter.series_url,
             'next_chapter_url': chapter.next_chapter_url,
             'prev_chapter_url': chapter.prev_chapter_url,
         }
@@ -189,51 +189,52 @@ class TestTokenHandler(webapp2.RequestHandler):
         return {}
 
 
-class ReadListHandler(webapp2.RequestHandler):
+class SeriesBookmarkHandler(webapp2.RequestHandler):
 
     @wrap_json
     @auth()
     def get(self):
-        titles = [Title.get_by_url(url) for url in self.user.read_list]
+        series = [Series.get_by_url(url) for url in self.user.bookmarked_series]
         return [{
-            'site': title.site,
-            'name': title.name,
-            'url': title.url,
-            'thumb_url': title.thumb_url,
-        } for title in titles]
+            'site': s.site,
+            'name': s.name,
+            'url': s.url,
+            'thumb_url': s.thumb_url,
+        } for s in series]
 
     @wrap_json
     @unpack_post(url=['ustring'], action=['ustring'])
     @auth()
     def post(self):
-        "Add or remove title from provided URL to read list"
+        "Add or remove series from provided URL to bookmark list"
 
         if self.data['action'] not in ('add', 'remove'):
             raise PyError({'msg': 'invalid_action'})
 
-        title = Title.get_by_url(self.data['url'])
-        if title is None:
-            raise PyError({'msg': 'title_not_created'})
+        series = Series.get_by_url(self.data['url'])
+        if series is None:
+            raise PyError({'msg': 'series_not_created'})
 
         if self.data['action'] == 'add':
-            if not self.user.add_to_read_list(title):
-                raise PyError({'msg': 'title_already_in_read_list'})
+            if not self.user.bookmark_series(series):
+                raise PyError({'msg': 'series_already_bookmarked'})
             return {}
 
         else:
-            if not self.user.remove_from_read_list(title):
-                raise PyError({'msg': 'title_already_in_read_list'})
+            if not self.user.unbookmark_series(series):
+                raise PyError({'msg': 'series_not_bookmarked'})
             return {}
 
 
-class BookmarkHandler(webapp2.RequestHandler):
+class ChapterBookmarkHandler(webapp2.RequestHandler):
 
     @wrap_json
     @auth()
     def get(self):
-        chapters = [Chapter.get_by_url(url) for url in self.user.bookmarks]
+        chapters = [Chapter.get_by_url(url)
+                    for url in self.user.bookmarked_chapters]
         return [{
-            'title_url': chapter.title_url,
+            'series_url': chapter.series_url,
             'name': chapter.name,
             'url': chapter.url,
         } for chapter in chapters]
@@ -252,11 +253,11 @@ class BookmarkHandler(webapp2.RequestHandler):
             raise PyError({'msg': 'chapter_not_created'})
 
         if self.data['action'] == 'add':
-            if not self.user.add_to_bookmarks(chapter):
-                raise PyError({'msg': 'chapter_already_in_bookmarks'})
+            if not self.user.bookmark_chapter(chapter):
+                raise PyError({'msg': 'chapter_already_bookmarked'})
             return {}
 
         else:
-            if not self.user.remove_from_bookmarks(chapter):
-                raise PyError({'msg': 'chapter_not_in_bookmarks'})
+            if not self.user.unbookmark_chapter(chapter):
+                raise PyError({'msg': 'chapter_not_bookmarked'})
             return {}

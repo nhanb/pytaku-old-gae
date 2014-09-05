@@ -1,19 +1,19 @@
 import sys
 sys.path.insert(0, 'lib')
 import webapp2
-from pytaku.api.api import RegisterHandler, LoginHandler, TitleHandler,\
+from pytaku.api.api import RegisterHandler, LoginHandler, SeriesHandler,\
     SearchHandler, ChapterHandler, TestTokenHandler, LogoutHandler,\
-    ReadListHandler, BookmarkHandler
+    SeriesBookmarkHandler, ChapterBookmarkHandler
 
 
 app = webapp2.WSGIApplication([
     ('/api/register', RegisterHandler),
     ('/api/login', LoginHandler),
     ('/api/logout', LogoutHandler),
-    ('/api/title', TitleHandler),
+    ('/api/series', SeriesHandler),
     ('/api/chapter', ChapterHandler),
     ('/api/search', SearchHandler),
     ('/api/test-token', TestTokenHandler),
-    ('/api/read-list', ReadListHandler),
-    ('/api/bookmarks', BookmarkHandler),
+    ('/api/series-bookmark', SeriesBookmarkHandler),
+    ('/api/chapter-bookmark', ChapterBookmarkHandler),
 ], debug=True)

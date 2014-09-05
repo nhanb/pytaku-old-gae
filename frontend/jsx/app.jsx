@@ -2,11 +2,11 @@
 var Chapter = require('./routes/chapter.jsx');
 var Home = require('./routes/home.jsx');
 var Login = require('./routes/login.jsx');
-var ReadList = require('./routes/read_list.jsx');
-var Bookmarks = require('./routes/bookmarks.jsx');
+var SeriesBookmarks = require('./routes/series_bookmarks.jsx');
+var ChapterBookmarks = require('./routes/chapter_bookmarks.jsx');
 var Register = require('./routes/register.jsx');
 var Search = require('./routes/search.jsx');
-var Title = require('./routes/title.jsx');
+var Series = require('./routes/series.jsx');
 var Navbar = require('./navbar.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
 
@@ -15,10 +15,10 @@ var app = {
     REGISTER: 'register',
     LOGIN: 'login',
     SEARCH: 'search',
-    TITLE: 'title',
+    SERIES: 'series',
     CHAPTER: 'chapter',
-    READLIST: 'readlist',
-    BOOKMARKS: 'bookmarks',
+    SBOOKMARKS: 'series-bookmarks',
+    CBOOKMARKS: 'chapter-bookmarks',
 };
 
 var PytakuApp = React.createClass({
@@ -29,8 +29,8 @@ var PytakuApp = React.createClass({
             '/': setState.bind(this, {route: app.HOME}),
             '/register': setState.bind(this, {route: app.REGISTER}),
             '/login': setState.bind(this, {route: app.LOGIN}),
-            '/readlist': setState.bind(this, {route: app.READLIST}),
-            '/bookmarks': setState.bind(this, {route: app.BOOKMARKS}),
+            '/series-bookmarks': setState.bind(this, {route: app.SBOOKMARKS}),
+            '/chapter-bookmarks': setState.bind(this, {route: app.CBOOKMARKS}),
             '/search': setState.bind(this, {route: app.SEARCH}),
 
             '/search/(.+)': (function() {
@@ -42,10 +42,10 @@ var PytakuApp = React.createClass({
                 };
             })(),
 
-            '/title/(.+)': (function() {
+            '/series/(.+)': (function() {
                 return function(url) {
                     self.setState({
-                        route: app.TITLE,
+                        route: app.SERIES,
                         url: decodeURIComponent(url)
                     });
                 };
@@ -78,7 +78,7 @@ var PytakuApp = React.createClass({
                 success: function() {
                     if (window.location.hash === '#/') {
                         // TODO: make default route configurable per user
-                        window.location.href = '/#/readlist';
+                        window.location.href = '/#/series-bookmarks';
                     }
                 },
                 error: function() {
@@ -109,20 +109,20 @@ var PytakuApp = React.createClass({
                 routeComponent = <Search loggedIn={this.state.loggedIn}
                     query={this.state.query} ajax={this.ajax} />;
                 break;
-            case app.TITLE:
-                routeComponent = <Title loggedIn={this.state.loggedIn}
+            case app.SERIES:
+                routeComponent = <Series loggedIn={this.state.loggedIn}
                     url={this.state.url} ajax={this.ajax} />;
                 break;
             case app.CHAPTER:
                 routeComponent = <Chapter url={this.state.url}
                     ajax={this.ajax} />;
                 break;
-            case app.READLIST:
-                routeComponent = <ReadList loggedIn={this.state.loggedIn}
+            case app.SBOOKMARKS:
+                routeComponent = <SeriesBookmarks loggedIn={this.state.loggedIn}
                     ajax={this.ajax} />;
                 break;
-            case app.BOOKMARKS:
-                routeComponent = <Bookmarks loggedIn={this.state.loggedIn}
+            case app.CBOOKMARKS:
+                routeComponent = <ChapterBookmarks loggedIn={this.state.loggedIn}
                     ajax={this.ajax} />;
                 break;
             default:
