@@ -174,12 +174,12 @@ var ActionBar = React.createClass({
     render: function() {
         var prevBtn = '';
         var nextBtn = '';
-        var titleBtn = '';
+        var seriesBtn = '';
 
         var info = this.props.info;
         var prev = info.prev_chapter_url;
         var next = info.next_chapter_url;
-        var title = info.title_url;
+        var series = info.series_url;
 
         if (prev !== null) {
             prev = '/#/chapter/' + encodeURIComponent(prev);
@@ -199,9 +199,9 @@ var ActionBar = React.createClass({
             );
         }
 
-        title = '/#/title/' + encodeURIComponent(title);
-        titleBtn =(
-            <a href={title} className="btn btn-info">
+        series = '/#/series/' + encodeURIComponent(series);
+        seriesBtn =(
+            <a href={series} className="btn btn-info">
                 <i className="fa fa-lg fa-angle-double-up"></i> Chapter list
             </a>
         );
@@ -212,7 +212,7 @@ var ActionBar = React.createClass({
 
         return (
             <div className="chapter-navs  btn-group">
-                {prevBtn} {titleBtn} {bookmarkBtn} {nextBtn}
+                {prevBtn} {seriesBtn} {bookmarkBtn} {nextBtn}
             </div>
         );
     },
