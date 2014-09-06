@@ -4,17 +4,24 @@
 # This helps with Jedi suggestions.
 export PYTHONPATH="$PYTHONPATH:$GAE_PATH:`pwd`"
 
+function deploy-gae {
+    # No arg provided => deploy to pytaku-dev
+    if [[ "$#" == "0" ]]; then
+        project='pytaku-dev'
+        echo ">>>> Deploying to ${project}.appspot.com..."
+        python $GAE_PATH/appcfg.py --oauth2 --application="$project" update .
+
+    else
+        # Args provided => each arg is a project name
+        # Deploy to all these projects one-by-one
+        for project in "$@"; do
+            echo ">>>> Deploying to ${project}.appspot.com..."
+            python $GAE_PATH/appcfg.py --oauth2 --application="$project" update .
+        done
+    fi
+}
+
 # Build frontend assets + deploy to google app engine
 function deploy {
-    if [[ -z "$1" ]]; then
-        project='pytaku-dev'
-    else
-        project=$1
-    fi
-
-    echo "Deploying to ${project}.appspot.com..."
-    gulp deploy && python $GAE_PATH/appcfg.py \
-        --oauth2 \
-        --application="$project" \
-        update .
+    gulp deploy && deploy-gae "$@"
 }
