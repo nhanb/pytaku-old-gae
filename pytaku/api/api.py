@@ -137,25 +137,28 @@ class SearchHandler(webapp2.RequestHandler):
     @unpack_get(keyword=['ustring'])
     def get(self):
         keyword = self.data['keyword']
-        series = []
+        search_results = {}  # {order: [series, series, ...]}
 
         def _search(queue):
-            keyword, site = queue.get()
-            results = site.search_series(keyword)
-            series.extend(results)
+            keyword, site, order = queue.get()
+            series_list = site.search_series(keyword)
+            search_results[order] = series_list
             queue.task_done()
 
         q = Queue()
 
-        for site in sites.available_sites:
-            q.put((keyword, site))
+        for order, site in enumerate(sites.available_sites):
+            q.put((keyword, site, order))
             worker = Thread(target=_search, args=(q,))
             worker.setDaemon(True)
             worker.start()
 
         q.join()
 
-        print '>> Series:', series
+        # Get ordered list of series results
+        series = []
+        for i in sorted(search_results):
+            series.extend(search_results[i])
         return series
 
 
