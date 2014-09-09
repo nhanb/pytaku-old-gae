@@ -213,7 +213,8 @@ class SeriesBookmarkHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        series = [Series.get_by_url(url) for url in self.user.bookmarked_series]
+        series = [Series.get_by_url(url)
+                  for url in self.user.bookmarked_series]
         return [{
             'site': s.site,
             'name': s.name,
