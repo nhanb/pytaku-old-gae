@@ -1,3 +1,5 @@
+from threading import Thread
+from Queue import Queue
 import webapp2
 from pytaku.models import User, createUser, Chapter, Series
 from pytaku import sites
@@ -137,9 +139,23 @@ class SearchHandler(webapp2.RequestHandler):
         keyword = self.data['keyword']
         series = []
 
-        for site in sites.available_sites:
-            series.extend(site.search_series(keyword))
+        def _search(queue):
+            keyword, site = queue.get()
+            results = site.search_series(keyword)
+            series.extend(results)
+            queue.task_done()
 
+        q = Queue()
+
+        for site in sites.available_sites:
+            q.put((keyword, site))
+            worker = Thread(target=_search, args=(q,))
+            worker.setDaemon(True)
+            worker.start()
+
+        q.join()
+
+        print '>> Series:', series
         return series
 
 
