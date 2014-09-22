@@ -4,3 +4,4 @@ pillow
 flake8
 # To enable Jedi code suggestions for webapp2:
 webapp2
+nose
