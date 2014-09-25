@@ -3,4 +3,5 @@ let NERDTreeIgnore = [
             \'.pyc$',
             \'^lib$[[dir]]',
             \'^node_modules$[[dir]]',
+            \'^.git$[[dir]]',
             \]
