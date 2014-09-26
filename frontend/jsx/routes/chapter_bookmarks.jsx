@@ -1,3 +1,4 @@
+/** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var store = require('../store.js');
