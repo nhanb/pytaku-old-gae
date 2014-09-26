@@ -84,7 +84,10 @@ var BookmarkButton = React.createClass({
 module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
-        return this.state.info.name;
+        if (!this.state.info.name) {
+            return 'Loading chapter info...';
+        }
+        return this.state.info.name + ' - ' + this.state.info.series_name ;
     },
 
     render: function() {
@@ -126,6 +129,7 @@ module.exports = React.createClass({
             info: {
                 pages: [],
                 name: '',
+                series_name: '',
                 next_chapter_url: null,
                 prev_chapter_url: null,
             },
