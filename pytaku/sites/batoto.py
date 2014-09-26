@@ -51,13 +51,13 @@ class Batoto(Site):
     def series_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
-        thumbnailUrl, tags = self._thumbnail_url_and_tags(soup)
+        thumb_url, tags = self._thumbnail_url_and_tags(soup)
         name = self._name(soup)
         status = self._status(soup)
         description = self._description(soup)
         return {
             'chapters': chapters,
-            'thumbnailUrl': thumbnailUrl,
+            'thumb_url': thumb_url,
             'name': name,
             'tags': tags,
             'status': status,

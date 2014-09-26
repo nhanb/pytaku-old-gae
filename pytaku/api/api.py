@@ -121,6 +121,7 @@ class ChapterHandler(webapp2.RequestHandler):
             'url': chapter.url,
             'pages': chapter.pages,
             'series_url': chapter.series_url,
+            'series_name': chapter.series_name,
             'next_chapter_url': chapter.next_chapter_url,
             'prev_chapter_url': chapter.prev_chapter_url,
         }
@@ -144,7 +145,7 @@ class SeriesBookmarkHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        series = [Series.get_by_url(url)
+        series = [create_or_get_series(url)
                   for url in self.user.bookmarked_series]
         return [{
             'site': s.site,
@@ -182,7 +183,7 @@ class ChapterBookmarkHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        chapters = [Chapter.get_by_url(url)
+        chapters = [create_or_get_chapter(url)
                     for url in self.user.bookmarked_chapters]
         return [{
             'series_url': chapter.series_url,

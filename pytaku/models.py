@@ -22,34 +22,6 @@ class Series(ndb.Model):
         # fresh == updated no longer than 1 day ago
         return (datetime.now() - self.last_update).days <= 1
 
-    def update(self, site, name, thumb_url, new_chapters, status, tags, desc):
-        self.site = site
-        self.name = name
-        self.thumb_url = thumb_url
-        self.status = status
-        self.tags = tags
-        self.description = desc
-
-        # Update next_chapter_url for the chapter that was previously the
-        # latest but not anymore
-        new_chapters_num = len(new_chapters) - len(self.chapters)
-        if new_chapters_num > 0:
-
-            # previously latest chapter that needs updating:
-            chapter_url = self.chapters[0]['url']
-            chap = Chapter.get_by_url(chapter_url)
-
-            if chap is not None:
-                i = new_chapters_num - 1
-                chap.next_chapter_url = new_chapters[i]['url']
-                chap.put()
-
-        self.chapters = new_chapters
-
-        self.last_updated = datetime.now()  # "refresh" this series
-        self.put()
-        return self
-
     @classmethod
     def create(cls, url, site, name, thumb_url, chapters, status, tags, desc):
         obj = cls(url=url, site=site, name=name, thumb_url=thumb_url,
@@ -70,21 +42,31 @@ class Chapter(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     next_chapter_url = ndb.StringProperty()
     prev_chapter_url = ndb.StringProperty()
+
     series_url = ndb.StringProperty()
+    series_name = ndb.StringProperty()
 
     def is_bookmarked(self, user):
         return self.url in user.bookmarked_chapters
 
     @classmethod
-    def create(cls, url, name, pages, series_url, prev, next):
+    def create(cls, url, name, pages, series_url, series_name, prev, next):
         obj = cls(url=url, name=name, pages=pages, series_url=series_url,
-                  prev_chapter_url=prev, next_chapter_url=next)
+                  series_name=series_name, prev_chapter_url=prev,
+                  next_chapter_url=next)
         obj.put()
         return obj
 
     @classmethod
     def get_by_url(cls, url):
         return cls.query(cls.url == url).get()
+
+    @classmethod
+    def set_series_name(cls, series_url, series_name):
+        chapters = cls.query(cls.series_url == series_url)
+        for chapter in chapters:
+            chapter.series_name = series_name
+            chapter.put()
 
 
 # Email is stored as id to ensure uniqueness

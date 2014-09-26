@@ -34,21 +34,22 @@ class Kissmanga(Site):
     # All kinds of data
     # - name "Naruto"
     # - chapters [{name, url}, {}, ...] - latest first
-    # - thumbnailUrl "url"
+    # - thumb_url "url"
     # - tags [tag1, tag2, ...]
     # - status "ongoing"/"completed"
     # - description ["paragraph1", "paragraph2", ...]
     def series_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
-        thumbnailUrl = self._thumbnail_url(soup)
+        thumb_url = self._thumbnail_url(soup)
         tags = self._tags(soup)
         name = self._name(soup)
         status = self._status(soup)
         description = self._description(soup)
         return {
+            'site': self.netloc,
             'chapters': chapters,
-            'thumbnailUrl': thumbnailUrl,
+            'thumb_url': thumb_url,
             'tags': tags,
             'name': name,
             'status': status,
