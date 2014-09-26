@@ -41,26 +41,25 @@ var BookmarkedChapter = React.createClass({
         var removeBtn;
         if (this.state.removing === true) {
             removeBtn = (
-                <button type="button" className="btn btn-danger"
+                <button type="button" className="btn btn-danger pull-right"
                     disabled="disabled">
                     <i className="fa fa-spinner fa-spin"></i> Removing...
                 </button>
             );
         } else {
             removeBtn = (
-                <button type="button" className="btn btn-danger"
+                <button type="button" className="btn btn-danger pull-right"
                 onClick={this.removeBookmark}>Remove</button>
             );
         }
 
         return (
             <li className="list-group-item" key={chapter.url}>
-                <a href={href}>{chapter.name}</a>
-                <div className="btn-group pull-right">
-                    <a href={href} className="btn btn-default">View</a>
-                    <a href={seriesHref} className="btn btn-default">Go to series</a>
-                    {removeBtn}
+                <div className="btn-group">
+                    <a href={seriesHref} className="btn btn-default">{chapter.series_name}</a>
+                    <a href={href} className="btn btn-primary">{chapter.name}</a>
                 </div>
+                {removeBtn}
                 <div className="clearfix"></div>
             </li>
         );

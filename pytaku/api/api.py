@@ -187,6 +187,7 @@ class ChapterBookmarkHandler(webapp2.RequestHandler):
                     for url in self.user.bookmarked_chapters]
         return [{
             'series_url': chapter.series_url,
+            'series_name': chapter.series_name,
             'name': chapter.name,
             'url': chapter.url,
         } for chapter in chapters]
