@@ -3,6 +3,7 @@ from Queue import Queue
 import webapp2
 from pytaku.models import User, createUser, Chapter, Series
 from pytaku import sites
+from pytaku.controllers import create_or_get_series
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
 
@@ -52,81 +53,26 @@ class SeriesHandler(webapp2.RequestHandler):
     @auth(required=False)
     @unpack_get(url=['ustring', 'urlencoded'], chapter_limit=['integer'])
     def get(self):
-        url = self.data['url']
 
-        # Check if this url is supported
-        site = sites.get_site(url)
-        if site is None:
-            raise PyError({'msg': 'unsupported_url'})
+        series = create_or_get_series(self.data['url'])
 
-        # Check if series is already in db
-        series_record = Series.get_by_url(url)
-
-        # Skip reloading series info if updated recently
-        if series_record and series_record.is_fresh():
-            limit = self.data['chapter_limit']
-            if limit < 1:
-                limit = None
-            chapters = series_record.chapters[:limit]
-            resp = {
-                'site': site.netloc,
-                'name': series_record.name,
-                'thumb_url': series_record.thumb_url,
-                'chapters': [{'name': c['name'], 'url': c['url']}
-                             for c in chapters],
-                'tags': series_record.tags,
-                'status': series_record.status,
-                'description': series_record.description,
-            }
-            if hasattr(self, 'user'):
-                user = self.user
-                resp['is_bookmarked'] = series_record.is_bookmarked_by(user)
-            return resp
-
-        # =============== Create/Update series record ====================
-
-        # Fetch basic series info (name, thumburl, chapter list)
-        series_page = site.fetch_manga_seed_page(url)
-        series = site.series_info(series_page)
-
-        # Create new series if not in db yet
-        if series_record is None:
-            series_record = Series.create(url,
-                                          site.netloc,
-                                          series['name'],
-                                          series['thumbnailUrl'],
-                                          series['chapters'],
-                                          series['status'],
-                                          series['tags'],
-                                          series['description'])
-        else:
-            series_record.update(site.netloc,
-                                 series['name'],
-                                 series['thumbnailUrl'],
-                                 series['chapters'],
-                                 series['status'],
-                                 series['tags'],
-                                 series['description'])
+        resp = {
+            field: getattr(series, field)
+            for field in ('site', 'name', 'thumb_url', 'tags', 'status',
+                          'description')
+        }
 
         # If the provided chapter_limit is valid, return only that many
         # chapters in API response.
-        chapters = series['chapters']
+        chapters = series.chapters
         chapter_limit = self.data['chapter_limit']
         if chapter_limit in range(len(chapters)):
             chapters = chapters[:chapter_limit]
+        resp['chapters'] = chapters
 
-        resp = {
-            'site': site.netloc,
-            'name': series['name'],
-            'thumb_url': series['thumbnailUrl'],
-            'chapters': chapters,
-            'tags': series['tags'],
-            'status': series['status'],
-            'description': series['description'],
-        }
-
+        # If user is logged in, tell if this series is in their bookmarks
         if hasattr(self, 'user'):
-            resp['is_bookmarked'] = series_record.is_bookmarked_by(self.user)
+            resp['is_bookmarked'] = series.is_bookmarked_by(self.user)
 
         return resp
 
