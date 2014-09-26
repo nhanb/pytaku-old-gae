@@ -1,4 +1,4 @@
-from pytaku.models import Series
+from pytaku.models import Series, Chapter
 from pytaku import sites
 from pytaku.api.exceptions import PyError
 
@@ -47,3 +47,27 @@ def create_or_get_series(url):
                              series['description'])
 
     return series_record
+
+
+def create_or_get_chapter(url):
+    """
+    Fetch info and create Chapter record if not already created.
+    Returns Chapter object.
+    """
+
+    # Check if this url is supported
+    site = sites.get_site(url)
+    if site is None:
+        raise PyError({'msg': 'unsupported_url'})
+
+    chapter = Chapter.get_by_url(url)
+    if chapter is None:
+        page_html = site.fetch_chapter_seed_page(url)
+        info = site.chapter_info(page_html)
+        chapter = Chapter.create(url, info['name'], info['pages'],
+                                 info['series_url'],
+                                 info['prev_chapter_url'],
+                                 info['next_chapter_url'])
+        chapter.put()
+
+    return chapter

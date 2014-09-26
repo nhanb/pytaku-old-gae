@@ -3,7 +3,7 @@ from Queue import Queue
 import webapp2
 from pytaku.models import User, createUser, Chapter, Series
 from pytaku import sites
-from pytaku.controllers import create_or_get_series
+from pytaku.controllers import create_or_get_series, create_or_get_chapter
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
 
@@ -114,22 +114,7 @@ class ChapterHandler(webapp2.RequestHandler):
     @auth(required=False)
     @unpack_get(url=['ustring', 'urlencoded'])
     def get(self):
-        url = self.data['url']
-
-        # Check if this url is supported
-        site = sites.get_site(url)
-        if site is None:
-            raise PyError({'msg': 'unsupported_url'})
-
-        chapter = Chapter.get_by_url(url)
-        if chapter is None:
-            page_html = site.fetch_chapter_seed_page(url)
-            info = site.chapter_info(page_html)
-            chapter = Chapter.create(url, info['name'], info['pages'],
-                                     info['series_url'],
-                                     info['prev_chapter_url'],
-                                     info['next_chapter_url'])
-            chapter.put()
+        chapter = create_or_get_chapter(self.data['url'])
 
         resp = {
             'name': chapter.name,
