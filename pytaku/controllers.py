@@ -107,5 +107,5 @@ def update_series(series, **kwargs):
     if 'name' in changed_keys:
         Chapter.set_series_name(series.url, kwargs['name'])
 
-    series.last_updated = datetime.now()  # "refresh" this series
+    series.last_update = datetime.now()  # "refresh" this series
     series.put()
