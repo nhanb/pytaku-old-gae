@@ -145,7 +145,7 @@ class SeriesBookmarkHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        series = [create_or_get_series(url)
+        series = [create_or_get_series(url, no_update=True)
                   for url in self.user.bookmarked_series]
         return [{
             'site': s.site,

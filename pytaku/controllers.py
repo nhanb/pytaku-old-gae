@@ -4,7 +4,7 @@ from pytaku.api.exceptions import PyError
 from datetime import datetime
 
 
-def create_or_get_series(url):
+def create_or_get_series(url, no_update=False):
     """
     Fetch info and create Series record if not already created.
     Returns Series object.
@@ -19,7 +19,7 @@ def create_or_get_series(url):
     series_record = Series.get_by_url(url)
 
     # Skip reloading series info if updated recently
-    if series_record and series_record.is_fresh():
+    if series_record and (no_update or series_record.is_fresh()):
         return series_record
 
     # Fetch series info (name, thumburl, chapter list, etc.)
