@@ -128,3 +128,13 @@ class Kissmanga(Site):
     def fetch_manga_seed_page(self, url):
         header = {'Cookie': 'vns_Adult=yes'}
         return self.get_html(url, headers=header)
+
+    def fetch_chapter_seed_page(self, url):
+        # http://kissmanga.com/Manga/Manga-Name/Chapter-Name?id=XXXXXXX
+        # The "Chapter-Name" part can be any non-empty string and the response
+        # will be the same. Problem is that it sometimes contains illegal chars
+        # that make pytaku's request fail. Let's replace it with something
+        # safe.
+        base = url[:url.rfind('/') + 1]  # http://.../Manga-Name/
+        id = url[url.rfind('?id='):]  # ?id=XXXXXX
+        return self.get_html(base + '_' + id)
