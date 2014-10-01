@@ -98,6 +98,10 @@ gulp.task('jsx', function() {
     browserify([
         './frontend/jsx/app.jsx'
     ]).bundle()
+    .on('error', function(err) {
+        console.log(err.message);
+        this.end();
+    })
     .pipe(source('main.js'))
     .on('error', notify.onError({message: 'JSX compilation failed!'}))
     .pipe(gulpif(target === PRODUCTION, streamify(uglify())))
