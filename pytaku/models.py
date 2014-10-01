@@ -124,6 +124,7 @@ class User(ndb.Model):
         user = cls.get_by_id(email)
         if user is not None and user.verify_password(password):
             user.generate_token()
+            user.last_login = datetime.now()
             user.put()
             return user
         else:
