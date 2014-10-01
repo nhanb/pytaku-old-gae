@@ -1,9 +1,13 @@
 /**
  * The only tasks you'll ever need to call are:
  *
- * $ gulp
+ * $ gulp init
  *   => Pull libraries with bower then compile everything.
  *      Run this once after `npm install`.
+ *
+ * $ gulp
+ *   => Recompile everything.
+ *      This assumes bower components have already been downloaded.
  *
  * $ gulp watch
  *   => Watch for changes in application code and trigger livereload.
@@ -121,9 +125,17 @@ gulp.task('favicon', function() {
     .pipe(gulp.dest('frontend-dist'));
 });
 
-// Download & build everything for development
+// Run this once to fetch bower components and build for the first time
+gulp.task('init', [], function() {
+    bower.commands.install([], {save: true}, {})
+    .on('end', function(){
+        gulp.start('default');
+    });
+});
+
+// Build everything for development
 gulp.task('default', [], function() {
-    gulp.start('lib', 'jsx', 'css', 'html', 'favicon');
+    gulp.start('jslib', 'csslib', 'jsx', 'css', 'html', 'favicon');
 });
 
 // Download & build & minify everything for deployment
@@ -141,8 +153,12 @@ gulp.task('watch', function() {
     gulp.watch('frontend/app.html', ['html']);
     gulp.watch('frontend/favicon.ico', ['favicon']);
 
-    // If there's a change in dist then trigger livereload
     var server = livereload();
+    // Livereload server won't be up until at least one "change" event has
+    // occurred, so here it is. It sounds stupid, I know.
+    server.changed('frontend/app.html');
+
+    // If there's a change in dist then trigger livereload
     gulp.watch(['frontend-dist/**/*', 'frontend']).on('change', function(file) {
         server.changed(file.path);
     });
