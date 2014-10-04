@@ -2,7 +2,8 @@
 
 # Add Google App Engine SDK path and project home dir to $PYTHONPATH.
 # This helps with Jedi suggestions.
-export PYTHONPATH="$PYTHONPATH:$GAE_PATH:`pwd`"
+curr=`pwd`
+export PYTHONPATH="$PYTHONPATH:$GAE_PATH:$curr:$curr/lib"
 
 function deploy-gae {
     # No arg provided => deploy to pytaku-dev
