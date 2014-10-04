@@ -1,7 +1,7 @@
 import json
-from pytaku.models import User
 from exceptions import PyError
 import validators
+from token import validate_token
 
 
 # When required == False: do authentication if auth headers are provided,
@@ -9,16 +9,15 @@ import validators
 def auth(required=True):
     def decorator(func):
         def wrapped(handler):
-            email = handler.request.headers.get('X-Email')
             token = handler.request.headers.get('X-Token')
-            if not (email and token):
+            if not token:
                 if required:
                     raise PyError({'msg': 'auth_headers_not_found'})
                 else:
                     return func(handler)
 
-            user, msg = User.auth_with_token(email, token)
-            if user:
+            user, msg = validate_token(token, max_days=2)
+            if user is not None:
                 handler.user = user
                 return func(handler)
             else:

@@ -1,4 +1,3 @@
-import uuid
 from google.appengine.ext import ndb
 from passlib.hash import pbkdf2_sha512
 from datetime import datetime
@@ -72,16 +71,12 @@ class Chapter(ndb.Model):
 # Email is stored as id to ensure uniqueness
 class User(ndb.Model):
     password_hash = ndb.StringProperty()
-    api_token = ndb.StringProperty(default=None)
     last_login = ndb.DateTimeProperty(auto_now_add=True)
     bookmarked_series = ndb.StringProperty(repeated=True)
     bookmarked_chapters = ndb.StringProperty(repeated=True)
 
     def verify_password(self, password):
         return pbkdf2_sha512.verify(password, self.password_hash)
-
-    def generate_token(self):
-        self.api_token = str(uuid.uuid4())
 
     def logout(self):
         self.api_token = None
@@ -123,7 +118,6 @@ class User(ndb.Model):
     def auth_with_password(cls, email, password):
         user = cls.get_by_id(email)
         if user is not None and user.verify_password(password):
-            user.generate_token()
             user.last_login = datetime.now()
             user.put()
             return user
@@ -147,6 +141,5 @@ def createUser(email, password):
         return None
 
     user = User(id=email, password_hash=User.hash_password(password))
-    user.generate_token()
     user.put()
     return user

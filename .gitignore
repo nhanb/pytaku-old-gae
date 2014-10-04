@@ -4,3 +4,4 @@ frontend-dist/
 bower_components/
 index.yaml
 .git/
+/pytaku/config.py

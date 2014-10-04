@@ -170,11 +170,9 @@ var PytakuApp = React.createClass({
     },
 
     authedAjax: function(options) {
-        var email = localStorage.getItem('email');
         var token = localStorage.getItem('token');
         options.dataType = 'json';
         options.headers = {
-            'X-Email': email,
             'X-Token': token
         };
         return $.ajax(options);

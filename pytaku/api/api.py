@@ -6,6 +6,7 @@ from pytaku import sites
 from pytaku.controllers import create_or_get_series, create_or_get_chapter
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
+from token import gen_token
 
 
 class LoginHandler(webapp2.RequestHandler):
@@ -17,7 +18,7 @@ class LoginHandler(webapp2.RequestHandler):
         password = self.data['password']
         user = User.auth_with_password(email, password)
         if user:
-            return {'token': user.api_token}
+            return {'token': gen_token(user)}
         else:
             raise PyError({'msg': 'invalid_password'})
 
@@ -43,7 +44,7 @@ class RegisterHandler(webapp2.RequestHandler):
         if new_user is None:
             raise PyError({'msg': 'existing_email'})
         return {
-            'token': new_user.api_token,
+            'token': gen_token(new_user)
         }
 
 
