@@ -12,13 +12,17 @@ from token import gen_token
 class LoginHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_post(email=['ustring', 'email'], password=['ustring'])
+    @unpack_post(email=['ustring', 'email'],
+                 password=['ustring'],
+                 remember=['boolean'])
     def post(self):
         email = self.data['email']
         password = self.data['password']
         user = User.auth_with_password(email, password)
+        expires = not self.data['remember']
+
         if user:
-            return {'token': gen_token(user)}
+            return {'token': gen_token(user, expires=expires)}
         else:
             raise PyError({'msg': 'invalid_password'})
 

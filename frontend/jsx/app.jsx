@@ -83,6 +83,7 @@ var PytakuApp = React.createClass({
                 },
                 error: function() {
                     localStorage.removeItem('token');
+                    localStorage.removeItem('email');
                     self.setState({loggedIn: false});
                 },
             });

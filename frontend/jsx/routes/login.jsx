@@ -3,6 +3,7 @@ var RouteMixin = require('../mixins/route.jsx');
 var auth = require('../mixins/auth.jsx');
 var HideWhenLoggedInMixin = auth.HideWhenLoggedInMixin;
 var TextInput = require('../shared_components/text_input.jsx');
+var CheckboxInput = require('../shared_components/checkbox_input.jsx');
 
 module.exports = React.createClass({
     mixins: [RouteMixin, HideWhenLoggedInMixin],
@@ -19,6 +20,7 @@ module.exports = React.createClass({
     handleSubmit: function() {
         var email = this.refs.email.state.value;
         var password = this.refs.password.state.value;
+        var remember = this.refs.remember.state.value;
 
         if (!email || !password) {
             return false;
@@ -30,7 +32,8 @@ module.exports = React.createClass({
         });
         var data = JSON.stringify({
             email: email,
-            password: password
+            password: password,
+            remember: remember ? '1' : '0',
         });
         var self = this;
         $.ajax({
@@ -43,7 +46,7 @@ module.exports = React.createClass({
                     msgType: 'success',
                     msg: 'Successfully logged in.'
                 });
-                self.props.setLoggedIn(email, data.token);
+                self.props.setLoggedIn(email, data.token, remember);
             },
             error: function(data) {
                 self.setState({
@@ -76,6 +79,7 @@ module.exports = React.createClass({
                 className="form-horizontal" role="form">
                 <TextInput ref="email" label="Email" type="email" />
                 <TextInput ref="password" label="Password" type="password" />
+                <CheckboxInput ref="remember" label="Remember me" />
 
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-10">

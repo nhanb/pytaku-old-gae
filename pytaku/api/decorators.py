@@ -16,7 +16,7 @@ def auth(required=True):
                 else:
                     return func(handler)
 
-            user, msg = validate_token(token, max_days=2)
+            user, msg = validate_token(token, max_days=1)
             if user is not None:
                 handler.user = user
                 return func(handler)
