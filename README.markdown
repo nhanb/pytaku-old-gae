@@ -49,6 +49,10 @@ recommended to install the packages in `requirements.txt`:
 ```bash
 $ pip install -r requirements.txt
 ```
+
+Remember to create a `./pytaku/config.py` file that stores a secret key of your choosing. Example
+file can be found at `./pytaku/config.py.sample`.
+
 Then use Google App Engine SDK to serve it normally at [http://localhost:8080][6]. Easy, no?
 
 **Note:** I have a weird thing for PEP-8 compatible code. If you use vim, install Syntastic and use
