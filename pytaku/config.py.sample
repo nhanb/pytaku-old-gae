@@ -1,1 +1,4 @@
-access_secret = 'mysecretstring'
+secret = {
+    'your-app-id': 'ENTER SOME SECRET STRING HERE',
+    'another-app-id-if-needed': 'ANOTHER SECRET',
+}

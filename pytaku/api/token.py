@@ -2,7 +2,10 @@ from datetime import datetime
 from pytaku.config import secret
 from pytaku.models import User
 from itsdangerous import URLSafeSerializer, BadSignature
-_signer = URLSafeSerializer(secret)
+from google.appengine.api.app_identity import get_application_id
+
+_secret_str = secret[get_application_id()]
+_signer = URLSafeSerializer(_secret_str)
 _datetimefmt = '%Y-%m-%d.%H:%M:%S'
 
 
