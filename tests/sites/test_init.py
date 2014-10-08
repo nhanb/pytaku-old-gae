@@ -2,7 +2,7 @@ from unittest import TestCase, main
 from pytaku.sites import get_site, Kissmanga, Batoto
 
 
-class test_get_site(TestCase):
+class GetSite(TestCase):
 
     def _test_none(self, *args):
         for url in args:
