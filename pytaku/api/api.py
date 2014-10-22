@@ -75,10 +75,14 @@ class SeriesHandler(webapp2.RequestHandler):
             chapters = chapters[:chapter_limit]
         resp['chapters'] = chapters
 
-        # If user is logged in, tell if this series is in their bookmarks
+        # If user is logged in
         if hasattr(self, 'user'):
+            # tell if this series is in their bookmarks
             resp['is_bookmarked'] = series.is_bookmarked_by(self.user)
 
+            # insert user's reading progress into each chapter too
+            for chap in resp['chapters']:
+                chap['progress'] = self.user.chapter_progress(chap['url'])
         return resp
 
 
@@ -134,6 +138,7 @@ class ChapterHandler(webapp2.RequestHandler):
         if hasattr(self, 'user'):
             user = self.user
             resp['is_bookmarked'] = chapter.is_bookmarked(user)
+            resp['progress'] = self.user.chapter_progress(resp['url'])
 
         return resp
 
@@ -219,3 +224,13 @@ class ChapterBookmarkHandler(webapp2.RequestHandler):
             if not self.user.unbookmark_chapter(chapter):
                 raise PyError({'msg': 'chapter_not_bookmarked'})
             return {}
+
+
+class ChapterProgressHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @unpack_post(url=['ustring'], progress=['ustring'])
+    @auth()
+    def post(self):
+        self.user.set_chapter_progress(self.data['url'], self.data['progress'])
+        return {}

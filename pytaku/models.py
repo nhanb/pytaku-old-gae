@@ -110,6 +110,13 @@ class User(ndb.Model):
     def unbookmark_chapter(self, chapter):
         return self._unbookmark(chapter, 'chapters')
 
+    def chapter_progress(self, chapter_url):
+        return ChapterProgress.get_progress(self.key.id(), chapter_url)
+
+    def set_chapter_progress(self, chapter_url, progress):
+        return ChapterProgress.set_progress(self.key.id(), chapter_url,
+                                            progress)
+
     @staticmethod
     def hash_password(password):
         return pbkdf2_sha512.encrypt(password)
@@ -143,3 +150,63 @@ def createUser(email, password):
     user = User(id=email, password_hash=User.hash_password(password))
     user.put()
     return user
+
+
+class ChapterProgress(ndb.Model):
+    email = ndb.StringProperty()
+    chapter_url = ndb.StringProperty()
+    finished = ndb.BooleanProperty(default=False)
+
+    UNREAD = 'unread'
+    READING = 'reading'
+    FINISHED = 'finished'
+
+    @classmethod
+    def set_reading(cls, email, chapter_url):
+        existing = cls.query(cls.email == email,
+                             cls.chapter_url == chapter_url).get()
+        if existing is not None:
+            return
+
+        record = cls(email=email, chapter_url=chapter_url)
+        record.put()
+
+    @classmethod
+    def set_finished(cls, email, chapter_url):
+        record = cls.query(cls.email == email,
+                           cls.chapter_url == chapter_url).get()
+        if record is None:
+            record = cls(email=email, chapter_url=chapter_url)
+
+        record.finished = True
+        record.put()
+
+    @classmethod
+    def set_progress(cls, email, chapter_url, progress):
+        record = cls.query(cls.email == email,
+                           cls.chapter_url == chapter_url).get()
+        if record is None:
+            if progress == cls.UNREAD:
+                return
+            record = cls(email=email, chapter_url=chapter_url)
+
+        if progress == cls.UNREAD:
+            record.key.delete()
+            # XXX: I don't even know if it requires calling a put() here.
+            return
+
+        if progress == cls.READING:
+            record.finished = False
+        elif progress == cls.FINISHED:
+            record.finished = True
+        record.put()
+
+    @classmethod
+    def get_progress(cls, email, chapter_url):
+        record = cls.query(cls.email == email,
+                           cls.chapter_url == chapter_url).get()
+        if record is None:
+            return cls.UNREAD
+        if record.finished:
+            return cls.FINISHED
+        return cls.READING
