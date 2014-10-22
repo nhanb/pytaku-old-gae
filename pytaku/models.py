@@ -111,7 +111,7 @@ class User(ndb.Model):
         return self._unbookmark(chapter, 'chapters')
 
     def chapter_progress(self, chapter_url):
-        return ChapterProgress.get_progress(self.key.id(), chapter_url)
+        return ChapterProgress.get_single(self.key.id(), chapter_url)
 
     @staticmethod
     def hash_password(password):
@@ -178,7 +178,7 @@ class ChapterProgress(ndb.Model):
         record.put()
 
     @classmethod
-    def get_progress(cls, email, chapter_url):
+    def get_single(cls, email, chapter_url):
         record = cls.query(cls.email == email,
                            cls.chapter_url == chapter_url).get()
         if record is None:
@@ -186,3 +186,12 @@ class ChapterProgress(ndb.Model):
         if record.finished:
             return cls.FINISHED
         return cls.READING
+
+    @classmethod
+    def get_by_series_url(cls, email, series_url):
+        results = cls.query(cls.email == email,
+                            cls.series_url == series_url).fetch()
+        return {
+            r.chapter_url: cls.FINISHED if r.finished else cls.READINg
+            for r in results
+        }

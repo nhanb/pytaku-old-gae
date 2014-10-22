@@ -81,8 +81,13 @@ class SeriesHandler(webapp2.RequestHandler):
             resp['is_bookmarked'] = series.is_bookmarked_by(self.user)
 
             # insert user's reading progress into each chapter too
+            progresses = ChapterProgress.get_by_series_url(self.user.key.id(),
+                                                           self.data['url'])
             for chap in resp['chapters']:
-                chap['progress'] = self.user.chapter_progress(chap['url'])
+                if chap['url'] in progresses:
+                    chap['progress'] = progresses[chap['url']]
+                else:
+                    chap['progress'] = 'unread'
         return resp
 
 
