@@ -1,7 +1,7 @@
 from threading import Thread
 from Queue import Queue
 import webapp2
-from pytaku.models import User, createUser, Chapter, Series
+from pytaku.models import User, createUser, Chapter, Series, ChapterProgress
 from pytaku import sites
 from pytaku.controllers import create_or_get_series, create_or_get_chapter
 from decorators import wrap_json, unpack_post, unpack_get, auth
@@ -232,5 +232,13 @@ class ChapterProgressHandler(webapp2.RequestHandler):
     @unpack_post(url=['ustring'], progress=['ustring'])
     @auth()
     def post(self):
-        self.user.set_chapter_progress(self.data['url'], self.data['progress'])
+        url = self.data['url']
+        progress = self.data['progress']
+
+        chapter = Chapter.get_by_url(url)
+        if chapter is None:
+            raise PyError('nonexistent_chapter')
+
+        ChapterProgress.set_progress(self.user.key.id(), progress,
+                                     chapter.url, chapter.series_url)
         return {}

@@ -113,10 +113,6 @@ class User(ndb.Model):
     def chapter_progress(self, chapter_url):
         return ChapterProgress.get_progress(self.key.id(), chapter_url)
 
-    def set_chapter_progress(self, chapter_url, progress):
-        return ChapterProgress.set_progress(self.key.id(), chapter_url,
-                                            progress)
-
     @staticmethod
     def hash_password(password):
         return pbkdf2_sha512.encrypt(password)
@@ -155,6 +151,7 @@ def createUser(email, password):
 class ChapterProgress(ndb.Model):
     email = ndb.StringProperty()
     chapter_url = ndb.StringProperty()
+    series_url = ndb.StringProperty()
     finished = ndb.BooleanProperty(default=False)
 
     UNREAD = 'unread'
@@ -162,27 +159,7 @@ class ChapterProgress(ndb.Model):
     FINISHED = 'finished'
 
     @classmethod
-    def set_reading(cls, email, chapter_url):
-        existing = cls.query(cls.email == email,
-                             cls.chapter_url == chapter_url).get()
-        if existing is not None:
-            return
-
-        record = cls(email=email, chapter_url=chapter_url)
-        record.put()
-
-    @classmethod
-    def set_finished(cls, email, chapter_url):
-        record = cls.query(cls.email == email,
-                           cls.chapter_url == chapter_url).get()
-        if record is None:
-            record = cls(email=email, chapter_url=chapter_url)
-
-        record.finished = True
-        record.put()
-
-    @classmethod
-    def set_progress(cls, email, chapter_url, progress):
+    def set_progress(cls, email, progress, chapter_url, series_url):
         record = cls.query(cls.email == email,
                            cls.chapter_url == chapter_url).get()
         if record is None:
@@ -192,7 +169,6 @@ class ChapterProgress(ndb.Model):
 
         if progress == cls.UNREAD:
             record.key.delete()
-            # XXX: I don't even know if it requires calling a put() here.
             return
 
         if progress == cls.READING:
