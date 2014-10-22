@@ -165,7 +165,8 @@ class ChapterProgress(ndb.Model):
         if record is None:
             if progress == cls.UNREAD:
                 return
-            record = cls(email=email, chapter_url=chapter_url)
+            record = cls(email=email, chapter_url=chapter_url,
+                         series_url=series_url)
 
         if progress == cls.UNREAD:
             record.key.delete()
@@ -192,6 +193,6 @@ class ChapterProgress(ndb.Model):
         results = cls.query(cls.email == email,
                             cls.series_url == series_url).fetch()
         return {
-            r.chapter_url: cls.FINISHED if r.finished else cls.READINg
+            r.chapter_url: cls.FINISHED if r.finished else cls.READING
             for r in results
         }

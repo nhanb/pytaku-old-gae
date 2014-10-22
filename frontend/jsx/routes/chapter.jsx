@@ -195,11 +195,11 @@ module.exports = React.createClass({
 
     _finishedOnReachBottomIsSet: false,
     setFinishedOnReachBottom: function() {
+        // As the name suggests: set chapter progress as "finished" when user
+        // scrolls to bottom of page
         if (this._finishedOnReachBottomIsSet) {
             return;
         }
-        // As the name suggests: set chapter progress as "finished" when user
-        // scrolls to bottom of page
         var self = this;
         window.onscroll = function(ev) {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
