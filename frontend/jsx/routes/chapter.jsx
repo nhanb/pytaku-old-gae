@@ -175,6 +175,9 @@ module.exports = React.createClass({
     },
 
     startProgressTimer: function() {
+        if (!this.props.loggedIn || this.state.info.progress === 'finished') {
+            return;
+        }
         console.log('starting startProgressTimer()...');
         var self = this;
         var initialUrl = window.location.href;
@@ -190,7 +193,11 @@ module.exports = React.createClass({
         }, delay);
     },
 
+    _finishedOnReachBottomIsSet: false,
     setFinishedOnReachBottom: function() {
+        if (this._finishedOnReachBottomIsSet) {
+            return;
+        }
         // As the name suggests: set chapter progress as "finished" when user
         // scrolls to bottom of page
         var self = this;
@@ -199,10 +206,14 @@ module.exports = React.createClass({
                 self.setProgress('finished');
                 console.log('progress set to finished');
             }
-        }
+        };
+        this._finishedOnReachBottomIsSet = true;
     },
 
     setProgress: function(progress) {
+        if (this.state.info.progress === progress) {
+            return;
+        }
         var url = this.props.url;
         var self = this;
         this.props.ajax({

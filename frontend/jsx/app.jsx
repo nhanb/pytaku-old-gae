@@ -116,7 +116,7 @@ var PytakuApp = React.createClass({
                 break;
             case app.CHAPTER:
                 routeComponent = <Chapter url={this.state.url}
-                    ajax={this.ajax} />;
+                    loggedIn={this.state.loggedIn} ajax={this.ajax} />;
                 break;
             case app.SBOOKMARKS:
                 routeComponent = <SeriesBookmarks loggedIn={this.state.loggedIn}
