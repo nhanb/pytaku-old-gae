@@ -147,6 +147,7 @@ module.exports = React.createClass({
         cachedData = store.get('chapter_' + url);
         if (cachedData !== null) {
             this.updateChapterData(cachedData);
+            this.startProgressTimer();
             return;
         }
 
@@ -158,6 +159,7 @@ module.exports = React.createClass({
             success: function(data) {
                 store.set('chapter_' + url, data);
                 self.updateChapterData(data);
+                self.startProgressTimer();
             },
             error: function() {
                 self.setState({fetching: false});
@@ -170,7 +172,78 @@ module.exports = React.createClass({
             info: data,
             fetching: false,
         });
+    },
+
+    startProgressTimer: function() {
+        console.log('starting startProgressTimer()...');
+        var self = this;
+        var initialUrl = window.location.href;
+
+        var delay = 4000;  // TODO: make this configurable
+        setTimeout(function() {
+            // Make sure user is still reading this page before doing anything
+            if (initialUrl === window.location.href) {
+                console.log('setting progress for ' + self.state.info.name);
+                self.setProgress('reading');
+                self.setFinishedOnReachBottom();
+            }
+        }, delay);
+    },
+
+    setFinishedOnReachBottom: function() {
+        // As the name suggests: set chapter progress as "finished" when user
+        // scrolls to bottom of page
+        var self = this;
+        window.onscroll = function(ev) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                self.setProgress('finished');
+                console.log('progress set to finished');
+            }
+        }
+    },
+
+    setProgress: function(progress) {
+        var url = this.props.url;
+        var self = this;
+        this.props.ajax({
+            url: '/api/chapter-progress',
+            data: JSON.stringify({
+                url: url,
+                progress: progress,
+            }),
+            dataType: 'json',
+            method: 'POST',
+            success: function(data) {
+                var info = self.state.info;
+
+                // Update existing cached chapter info
+                cachedChapter = info;
+                cachedChapter.progress = progress;
+                store.set('chapter_' + url, cachedChapter);
+                self.updateChapterData(cachedChapter);
+
+                // Update in series route too
+                // XXX: it's reaaaally wasteful to load and rewrite the whole
+                // series' info just to update a chapter... but it's easier
+                // this way so...
+                cachedSeries = store.get('series_' + info.series_url);
+                if (cachedSeries) {
+                    for (var i=0; i < cachedSeries.chapters.length; i++) {
+                        var chap = cachedSeries.chapters[i];
+                        if (chap.url == self.props.url) {
+                            chap.progress = progress;
+                            break;
+                        }
+                    }
+                    store.set('series_' + info.series_url, cachedSeries);
+                }
+            },
+            error: function(err) {
+                console.log('error while setting progress:', err);
+            }
+        })
     }
+
 
 });
 

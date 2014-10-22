@@ -56,9 +56,14 @@ var SeriesItem = React.createClass({
         if (!this.state.loading) {
             chapterArray = latest.map(function(chapter) {
                 var href = '/#/chapter/' + encodeURIComponent(chapter.url);
+                var badge = '';
+                if (chapter.progress === 'finished'
+                    || chapter.progress === 'reading') {
+                    badge = <span className="badge">{chapter.progress}</span>;
+                }
                 return (
                     <a className="list-group-item" href={href}>
-                        {chapter.name}
+                        {chapter.name} {badge}
                     </a>
                 );
             });
