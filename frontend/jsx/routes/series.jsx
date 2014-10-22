@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
+var ChapterList = require('../shared_components/chapter_list.jsx');
 var store = require('../store.js');
 
 module.exports = React.createClass({
@@ -67,20 +68,6 @@ module.exports = React.createClass({
                 self.setState({populating: false});
             }
         });
-    },
-
-    renderChapter: function(chapter) {
-        var href = '/#/chapter/' + encodeURIComponent(chapter.url);
-        var badge = '';
-        if (chapter.progress === 'finished'
-            || chapter.progress === 'reading') {
-            badge = <span className="badge">{chapter.progress}</span>;
-        }
-        return (
-            <a href={href} key={chapter.url} className="list-group-item">
-                {chapter.name} {badge}
-            </a>
-        );
     },
 
     renderBookmarkBtn: function() {
@@ -158,9 +145,7 @@ module.exports = React.createClass({
                     </div>
 
                     <hr />
-                    <div className="list-group">
-                        {info.chapters.map(this.renderChapter)}
-                    </div>
+                    <ChapterList chapters={info.chapters} />
                 </div>
             );
 

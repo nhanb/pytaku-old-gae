@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
+var ChapterList = require('../shared_components/chapter_list.jsx');
 var store = require('../store.js');
 
 // Each item represents a series, displaying its name and latest chapters
@@ -54,19 +55,7 @@ var SeriesItem = React.createClass({
 
         var chapterArray;
         if (!this.state.loading) {
-            chapterArray = latest.map(function(chapter) {
-                var href = '/#/chapter/' + encodeURIComponent(chapter.url);
-                var badge = '';
-                if (chapter.progress === 'finished'
-                    || chapter.progress === 'reading') {
-                    badge = <span className="badge">{chapter.progress}</span>;
-                }
-                return (
-                    <a className="list-group-item" href={href}>
-                        {chapter.name} {badge}
-                    </a>
-                );
-            });
+            chapterArray = <ChapterList chapters={latest} />;
         } else {
             chapterArray = <Loading />;
         }
