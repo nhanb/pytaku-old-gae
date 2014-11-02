@@ -178,7 +178,6 @@ module.exports = React.createClass({
         if (!this.props.loggedIn || this.state.info.progress === 'finished') {
             return;
         }
-        console.log('starting startProgressTimer()...');
         var self = this;
         var initialUrl = window.location.href;
 
@@ -186,7 +185,6 @@ module.exports = React.createClass({
         setTimeout(function() {
             // Make sure user is still reading this page before doing anything
             if (initialUrl === window.location.href) {
-                console.log('setting progress for ' + self.state.info.name);
                 self.setProgress('reading');
                 self.setFinishedOnReachBottom();
             }
@@ -204,7 +202,6 @@ module.exports = React.createClass({
         window.onscroll = function(ev) {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
                 self.setProgress('finished');
-                console.log('progress set to finished');
             }
         };
         this._finishedOnReachBottomIsSet = true;
