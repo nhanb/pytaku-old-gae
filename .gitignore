@@ -1,4 +1,5 @@
 **/*.pyc
+**/*.kate-swp
 node_modules/
 frontend-dist/
 bower_components/
