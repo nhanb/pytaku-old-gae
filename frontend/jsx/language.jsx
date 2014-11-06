@@ -9,7 +9,7 @@ if (!chosen) {
 loaded = store.persistentGet('lang_loaded_' + chosen);
 
 if (!loaded) {
-    var url = '/languages/' + chosen + '.yaml'
+    var url = '/static/languages/' + chosen + '.yaml'
     loaded = $.ajax({
         async: false,
         url: url

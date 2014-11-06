@@ -129,6 +129,12 @@ gulp.task('favicon', function() {
     .pipe(gulp.dest('frontend-dist'));
 });
 
+// Copy languages to static dir
+gulp.task('lang', function() {
+    gulp.src('frontend/languages/*.yaml')
+    .pipe(gulp.dest('frontend-dist/static/languages'));
+});
+
 // Run this once to fetch bower components and build for the first time
 gulp.task('init', [], function() {
     bower.commands.install([], {save: true}, {})
@@ -139,7 +145,7 @@ gulp.task('init', [], function() {
 
 // Build everything for development
 gulp.task('default', [], function() {
-    gulp.start('jslib', 'csslib', 'jsx', 'css', 'html', 'favicon');
+    gulp.start('jslib', 'csslib', 'jsx', 'css', 'html', 'favicon', 'lang');
 });
 
 // Download & build & minify everything for deployment
@@ -157,6 +163,7 @@ gulp.task('watch', function() {
     gulp.watch('frontend/jsx/**/*.js', ['jsx']);
     gulp.watch('frontend/app.html', ['html']);
     gulp.watch('frontend/favicon.ico', ['favicon']);
+    gulp.watch('frontend/languages/*.yaml', ['lang']);
 
     var server = livereload();
     // Livereload server won't be up until at least one "change" event has
