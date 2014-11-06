@@ -22,8 +22,13 @@ status: Tình trạng
 tags: Tags
 description: Nội dung
 series_info_not_fetched: Không tải được thông tin truyện rồi. Thử refresh xem :)
+bookmarked_chapters: Các chap đã đánh dấu
+remove: Xóa
 
 no_bookmarked_series_yet: Bạn chưa đánh dấu truyện nào hết :)
 no_bookmarked_chapter_yet: Bạn chưa đánh dấu chap nào hết :)
 this_feature_requires_logging_in: Bạn phải đăng nhập mới xem được trang này
 login_now: Đăng nhập ở đây
+
+finished: đã đọc
+reading: đang đọc

@@ -12,6 +12,7 @@ nav_register: Register
 search_search: Search
 search_searching: Searching...
 search_title: Manga series search
+enter_manga_title: Enter manga title
 
 series_loading: Loading series info
 bookmark: Bookmark
@@ -21,8 +22,13 @@ status: Status
 tags: Tags
 description: Description
 series_info_not_fetched: Series info not fetched. Try again.
+bookmarked_chapters: Bookmarked chapters
+remove: Remove
 
 no_bookmarked_series_yet: You have not bookmarked any series yet :)
 no_bookmarked_chapter_yet: You have not bookmarked any chapter yet :)
 this_feature_requires_logging_in: This feature requires loggin in
 login_now: Login now
+
+finished: finished
+reading: reading

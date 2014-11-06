@@ -51,7 +51,7 @@ var BookmarkedChapter = React.createClass({
         } else {
             removeBtn = (
                 <button type="button" className="btn btn-danger pull-right"
-                onClick={this.removeBookmark}>Remove</button>
+                onClick={this.removeBookmark}>{echo('remove')}</button>
             );
         }
 
@@ -151,7 +151,7 @@ module.exports = React.createClass({
             });
             content = (
                 <div className="panel panel-default bookmarks-container">
-                    <div className="panel-heading">Bookmarked chapters</div>
+                    <div className="panel-heading">{echo('bookmarked_chapters')}</div>
                     <ul className="list-group">
                         {chapters}
                     </ul>

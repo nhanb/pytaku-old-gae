@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 var Loading = require('../shared_components/loading.jsx');
+echo = require('../language.jsx').echo;
 
 module.exports = React.createClass({
 
@@ -7,9 +8,9 @@ module.exports = React.createClass({
         var href = '/#/chapter/' + encodeURIComponent(chapter.url);
         var progress = '';
         if (chapter.progress === 'finished') {
-            progress = <span className="badge">finished</span>;
+            progress = <span className="badge">{echo('finished')}</span>;
         } else if (chapter.progress === 'reading') {
-            progress = <span className="badge alert-info">reading</span>;
+            progress = <span className="badge alert-info">{echo('reading')}</span>;
         }
         return (
             <a href={href} key={chapter.url} className="list-group-item">
