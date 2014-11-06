@@ -52,6 +52,29 @@ class RegisterHandler(webapp2.RequestHandler):
         }
 
 
+class SettingsHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @auth()
+    def get(self):
+        return {
+            'language': self.user.language,
+        }
+
+    @wrap_json
+    @auth()
+    @unpack_post(language=['ustring', 'urlencoded'])
+    def post(self):
+        language = self.data['language']
+        if language not in ('en', 'vi'):
+            # TODO: refactor out hardcoded supported language list
+            raise PyError({'msg': 'unsupported_language'})
+
+        self.user.language = language
+        self.user.put()
+        return {}
+
+
 class SeriesHandler(webapp2.RequestHandler):
 
     @wrap_json

@@ -75,6 +75,9 @@ class User(ndb.Model):
     bookmarked_series = ndb.StringProperty(repeated=True)
     bookmarked_chapters = ndb.StringProperty(repeated=True)
 
+    # user settings
+    language = ndb.StringProperty(default=u'en')  # use ISO 639-1 language code
+
     def verify_password(self, password):
         return pbkdf2_sha512.verify(password, self.password_hash)
 
