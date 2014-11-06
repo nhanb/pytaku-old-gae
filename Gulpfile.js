@@ -154,6 +154,7 @@ gulp.task('watch', function() {
     // If there's a change in source code then build dist
     gulp.watch('frontend/css/**/*.css', ['css']);
     gulp.watch('frontend/jsx/**/*.jsx', ['jsx']);
+    gulp.watch('frontend/jsx/**/*.js', ['jsx']);
     gulp.watch('frontend/app.html', ['html']);
     gulp.watch('frontend/favicon.ico', ['favicon']);
 

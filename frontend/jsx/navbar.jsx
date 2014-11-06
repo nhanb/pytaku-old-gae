@@ -1,4 +1,6 @@
 /** @jsx React.DOM */
+var echo = require('./language.jsx').echo;
+
 module.exports = React.createClass({
 
     render: function() {
@@ -39,7 +41,9 @@ module.exports = React.createClass({
     </div>
     <div className="navbar-collapse collapse">
       <ul className="nav navbar-nav">
-        <li><a href="#/search"><i className="fa fa-search fa-lg"></i> Search</a></li>
+        <li><a href="#/search"><i className="fa fa-search fa-lg"></i>
+                {echo('nav_search')}
+        </a></li>
         <li><a href="#/series-bookmarks"><i className="fa fa-star fa-lg"></i> My Series</a></li>
         <li><a href="#/chapter-bookmarks"><i className="fa fa-bookmark fa-lg"></i> My Chapters</a></li>
       </ul>

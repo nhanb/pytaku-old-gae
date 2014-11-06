@@ -25,6 +25,10 @@ handlers:
   static_dir: frontend-dist/static
   secure: always
 
+- url: /languages
+  static_dir: frontend/languages
+  secure: always
+
 - url: /favicon\.ico
   static_files: frontend-dist/favicon.ico
   upload: frontend-dist/favicon\.ico
