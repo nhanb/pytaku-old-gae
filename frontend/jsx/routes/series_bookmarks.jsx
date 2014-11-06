@@ -3,6 +3,7 @@ var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var ChapterList = require('../shared_components/chapter_list.jsx');
 var store = require('../store.js');
+var echo = require('../language.jsx').echo;
 
 // Each item represents a series, displaying its name and latest chapters
 var SeriesItem = React.createClass({
@@ -140,7 +141,7 @@ module.exports = React.createClass({
         if (!this.props.loggedIn) {
             content = (
                 <div className="alert alert-danger" role="alert">
-                    This feature requires <a href="/#/login">logging in</a>.
+                    {echo('this_feature_requires_logging_in')}: <a href="/#/login">{echo('login_now')}</a>.
                 </div>
             );
 
@@ -160,7 +161,7 @@ module.exports = React.createClass({
         } else if (this.state.series_list.length === 0) {
             content = (
                 <div className="alert alert-warning" role="alert">
-                    You have not bookmarked any series yet :)
+                    {echo('no_bookmarked_series_yet')}
                 </div>
             );
 

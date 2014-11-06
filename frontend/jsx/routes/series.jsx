@@ -3,6 +3,7 @@ var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var ChapterList = require('../shared_components/chapter_list.jsx');
 var store = require('../store.js');
+var echo = require('../language.jsx').echo;
 
 module.exports = React.createClass({
     mixins: [RouteMixin],
@@ -11,7 +12,7 @@ module.exports = React.createClass({
         if (info) {
             return info.name;
         }
-        return 'Loading series info...';
+        return echo('series_loading') + '...';
     },
 
 
@@ -77,13 +78,13 @@ module.exports = React.createClass({
             if (info.is_bookmarked) {
                 bookmarkBtn = (
                     <button className="btn btn-success" disabled="disabled">
-                        <i className='fa fa-lg fa-check-circle'></i> Bookmarked
+                        <i className='fa fa-lg fa-check-circle'></i> {echo('bookmarked')}
                     </button>
                 );
             } else {
                 bookmarkBtn = (
                     <button className="btn btn-success" onClick={this.bookmark}>
-                        <i className='fa fa-star'></i> Bookmark
+                        <i className='fa fa-star'></i> {echo('bookmark')}
                     </button>
                 );
             }
@@ -136,10 +137,10 @@ module.exports = React.createClass({
                                 {info.name} {this.renderBookmarkBtn()}
                             </h2>
                             <ul>
-                                <li><a href={info.url}>Original link</a></li>
-                                <li><strong>Status:</strong> {info.status}</li>
-                                <li><strong>Tags:</strong> {tags}</li>
-                                <li><strong>Description:</strong> {desc}</li>
+                                <li><a href={info.url}>{echo('original_link')}</a></li>
+                                <li><strong>{echo('status')}:</strong> {info.status}</li>
+                                <li><strong>{echo('tags')}:</strong> {tags}</li>
+                                <li><strong>{echo('description')}:</strong> {desc}</li>
                             </ul>
                         </div>
                     </div>
@@ -150,7 +151,7 @@ module.exports = React.createClass({
             );
 
         } else {
-            body = 'Series info not fetched. Try again.';
+            body = echo('series_info_not_fetched');
         }
 
         return (

@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var store = require('../store.js');
+var echo = require('../language.jsx').echo;
 
 var SeriesList = React.createClass({
     css: {
@@ -44,8 +45,11 @@ var SearchButton = React.createClass({
     },
 
     text: function() {
-        if (this.props.searching) return 'Searching...';
-        else return 'Search';
+        if (this.props.searching) {
+            return echo('search_searching');
+        } else {
+            return echo('search_search');
+        };
     },
 
     render: function() {
@@ -62,7 +66,7 @@ module.exports = React.createClass({
     pageTitle: function() {
         var query = this.props.query;
         if (query) {
-            return query + ' - Manga series search';
+            return query + ' - ' + echo('search_title');
         } else {
             return 'Search manga series';
         }
@@ -138,7 +142,7 @@ module.exports = React.createClass({
                     onSubmit={this.handleSubmit}>
 
                     <input className="form-control" type="text" ref="queryInput"
-                        placeholder="Enter manga title" autoFocus="autofocus" />
+                        placeholder={echo('enter_manga_title')} autoFocus="autofocus" />
 
                     <SearchButton searching={this.state.searching} />
                 </form>

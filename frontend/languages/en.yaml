@@ -1,4 +1,28 @@
 auth_headers_not_found: Auth headers not found
 malformed_request: Malformed request
 
-nav_search: "Search shit"
+nav_search: Search
+nav_my_series: My Series
+nav_my_chapters: My Chapters
+nav_logout: Logout
+nav_welcome: Welcome,
+nav_login: Login
+nav_register: Register
+
+search_search: Search
+search_searching: Searching...
+search_title: Manga series search
+
+series_loading: Loading series info
+bookmark: Bookmark
+bookmarked: Bookmarked
+original_link: Original link
+status: Status
+tags: Tags
+description: Description
+series_info_not_fetched: Series info not fetched. Try again.
+
+no_bookmarked_series_yet: You have not bookmarked any series yet :)
+no_bookmarked_chapter_yet: You have not bookmarked any chapter yet :)
+this_feature_requires_logging_in: This feature requires loggin in
+login_now: Login now

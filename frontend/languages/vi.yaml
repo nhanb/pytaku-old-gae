@@ -1,2 +1,29 @@
 auth_headers_not_found: Không tìm thấy thông tin đăng nhập
 malformed_request: Request sai định dạng
+
+nav_search: Tìm
+nav_my_series: Truyện của tui
+nav_my_chapters: Chap của tui
+nav_logout: Đăng xuất
+nav_welcome: Hế lô 
+nav_login: Đăng nhập
+nav_register: Đăng ký
+
+search_search: Kiếm cho bố
+search_searching: Đang kiếm ạ...
+search_title: Tìm tựa manga
+enter_manga_title: Điền tên manga
+
+series_loading: Đang tải thông tin truyện
+bookmark: Đánh dấu
+bookmarked: Đã đánh dấu
+original_link: Link gốc
+status: Tình trạng
+tags: Tags
+description: Nội dung
+series_info_not_fetched: Không tải được thông tin truyện rồi. Thử refresh xem :)
+
+no_bookmarked_series_yet: Bạn chưa đánh dấu truyện nào hết :)
+no_bookmarked_chapter_yet: Bạn chưa đánh dấu chap nào hết :)
+this_feature_requires_logging_in: Bạn phải đăng nhập mới xem được trang này
+login_now: Đăng nhập ở đây

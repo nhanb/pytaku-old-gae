@@ -2,6 +2,7 @@
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var store = require('../store.js');
+var echo = require('../language.jsx').echo;
 
 var BookmarkedChapter = React.createClass({
     getInitialState: function() {
@@ -116,7 +117,7 @@ module.exports = React.createClass({
         if (!this.props.loggedIn) {
             content = (
                 <div className="alert alert-danger" role="alert">
-                    This feature requires <a href="/#/login">logging in</a>.
+                    {echo('this_feature_requires_logging_in')}: <a href="/#/login">{echo('login_now')}</a>.
                 </div>
             );
 
@@ -136,7 +137,7 @@ module.exports = React.createClass({
         } else if (this.state.chapters.length === 0) {
             content = (
                 <div className="alert alert-warning" role="alert">
-                    You have nothing in your bookmark list yet :)
+                    {echo('no_bookmarked_chapter_yet')}
                 </div>
             );
 

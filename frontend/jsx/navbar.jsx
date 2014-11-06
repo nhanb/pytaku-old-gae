@@ -10,10 +10,10 @@ module.exports = React.createClass({
                 <div>
                     <button id='logout'
                         className="navbar-btn navbar-right btn btn-danger"
-                        onClick={this.props.logout}>Logout</button>
+                        onClick={this.props.logout}>{echo('nav_logout')}</button>
 
                     <p className="navbar-text navbar-right">
-                        Welcome, <strong>{this.props.email}</strong>
+                        {echo('nav_welcome')} <strong>{this.props.email}</strong>
                     </p>
                 </div>
 
@@ -21,11 +21,15 @@ module.exports = React.createClass({
         } else {
             right_navs =  (
                 <ul className="nav navbar-nav navbar-right">
-                    <li><a href="#/login">Login</a></li>
-                    <li><a href="#/register">Register</a></li>
+                    <li><a href="#/login">{echo('nav_login')}</a></li>
+                    <li><a href="#/register">{echo('nav_register')}</a></li>
                 </ul>
             );
         }
+
+        var search = echo('nav_search');
+        var series = echo('nav_my_series');
+        var chapters = echo('nav_my_chapters');
 
         return (
 <div className="navbar navbar-default navbar-static-top" role="navigation">
@@ -41,11 +45,9 @@ module.exports = React.createClass({
     </div>
     <div className="navbar-collapse collapse">
       <ul className="nav navbar-nav">
-        <li><a href="#/search"><i className="fa fa-search fa-lg"></i>
-                {echo('nav_search')}
-        </a></li>
-        <li><a href="#/series-bookmarks"><i className="fa fa-star fa-lg"></i> My Series</a></li>
-        <li><a href="#/chapter-bookmarks"><i className="fa fa-bookmark fa-lg"></i> My Chapters</a></li>
+        <li><a href="#/search"><i className="fa fa-search fa-lg"></i> {search} </a></li>
+        <li><a href="#/series-bookmarks"><i className="fa fa-star fa-lg"></i> {series}</a></li>
+        <li><a href="#/chapter-bookmarks"><i className="fa fa-bookmark fa-lg"></i> {chapters}</a></li>
       </ul>
       {right_navs}
     </div>
