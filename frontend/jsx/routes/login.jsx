@@ -4,6 +4,7 @@ var auth = require('../mixins/auth.jsx');
 var HideWhenLoggedInMixin = auth.HideWhenLoggedInMixin;
 var TextInput = require('../shared_components/text_input.jsx');
 var CheckboxInput = require('../shared_components/checkbox_input.jsx');
+var lang = require('../language.jsx');
 
 module.exports = React.createClass({
     mixins: [RouteMixin, HideWhenLoggedInMixin],
@@ -47,6 +48,7 @@ module.exports = React.createClass({
                     msg: 'Successfully logged in.'
                 });
                 self.props.setLoggedIn(email, data.token, remember);
+                lang.set(data.settings.language);
             },
             error: function(data) {
                 self.setState({

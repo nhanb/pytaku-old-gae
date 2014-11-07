@@ -22,7 +22,10 @@ class LoginHandler(webapp2.RequestHandler):
         expires = not self.data['remember']
 
         if user:
-            return {'token': gen_token(user, expires=expires)}
+            return {
+                'token': gen_token(user, expires=expires),
+                'settings': user.settings,
+            }
         else:
             raise PyError({'msg': 'invalid_password'})
 
@@ -57,9 +60,7 @@ class SettingsHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     def get(self):
-        return {
-            'language': self.user.language,
-        }
+        return self.user.settings
 
     @wrap_json
     @auth()

@@ -78,6 +78,12 @@ class User(ndb.Model):
     # user settings
     language = ndb.StringProperty(default=u'en')  # use ISO 639-1 language code
 
+    @property
+    def settings(self):
+        return {
+            'language': self.language,
+        }
+
     def verify_password(self, password):
         return pbkdf2_sha512.verify(password, self.password_hash)
 
