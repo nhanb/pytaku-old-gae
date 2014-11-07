@@ -78,7 +78,7 @@ module.exports = React.createClass({
         var submitBtn = this.renderSubmitBtn(this.state.submitting);
         return (
             <form onSubmit={this.handleSubmit}
-                className="form-horizontal" role="form">
+                className="form-horizontal center-form" role="form">
                 <TextInput ref="email" label="Email" type="email" />
                 <TextInput ref="password" label="Password" type="password" />
                 <CheckboxInput ref="remember" label="Remember me" />

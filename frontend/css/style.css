@@ -11,8 +11,8 @@ html {
     margin-top: 70px;
 }
 
-.form-horizontal {
-    max-width: 400px;
+.center-form {
+    max-width: 500px;
     margin: auto;
 }
 

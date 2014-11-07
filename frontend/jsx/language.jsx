@@ -2,10 +2,14 @@
 var yaml = require('js-yaml');
 var store = require('./store.js');
 var loaded = {};
+var supported = [
+    ['en', 'english'],
+    ['vi', 'vietnamese'],
+];
 
 var chosen = localStorage.getItem('lang_chosen');
 if (!chosen) {
-    chosen = 'en';
+    chosen = supported[0][0];
 }
 
 var url = '/static/languages/' + chosen + '.yaml'
@@ -34,4 +38,5 @@ module.exports = {
     loaded: loaded,
     echo: echo,
     chosen: chosen,
+    supported: supported,
 };

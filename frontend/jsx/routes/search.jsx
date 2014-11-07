@@ -138,7 +138,7 @@ module.exports = React.createClass({
     render: function(e) {
         return (
             <div>
-                <form className="form-horizontal" role="form" style={this.css}
+                <form className="form-horizontal center-form" role="form" style={this.css}
                     onSubmit={this.handleSubmit}>
 
                     <input className="form-control" type="text" ref="queryInput"
