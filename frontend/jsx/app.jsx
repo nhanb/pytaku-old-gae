@@ -8,6 +8,7 @@ var Register = require('./routes/register.jsx');
 var Search = require('./routes/search.jsx');
 var Series = require('./routes/series.jsx');
 var Navbar = require('./navbar.jsx');
+var Settings = require('./routes/settings.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
 
 var app = {
@@ -19,6 +20,7 @@ var app = {
     CHAPTER: 'chapter',
     SBOOKMARKS: 'series-bookmarks',
     CBOOKMARKS: 'chapter-bookmarks',
+    SETTINGS: 'settings',
 };
 
 var PytakuApp = React.createClass({
@@ -31,6 +33,7 @@ var PytakuApp = React.createClass({
             '/login': setState.bind(this, {route: app.LOGIN}),
             '/series-bookmarks': setState.bind(this, {route: app.SBOOKMARKS}),
             '/chapter-bookmarks': setState.bind(this, {route: app.CBOOKMARKS}),
+            '/settings': setState.bind(this, {route: app.SETTINGS}),
             '/search': setState.bind(this, {route: app.SEARCH}),
 
             '/search/(.+)': (function() {
@@ -109,6 +112,10 @@ var PytakuApp = React.createClass({
             case app.SEARCH:
                 routeComponent = <Search loggedIn={this.state.loggedIn}
                     query={this.state.query} ajax={this.ajax} />;
+                break;
+            case app.SETTINGS:
+                routeComponent = <Settings loggedIn={this.state.loggedIn}
+                    ajax={this.ajax} />;
                 break;
             case app.SERIES:
                 routeComponent = <Series loggedIn={this.state.loggedIn}

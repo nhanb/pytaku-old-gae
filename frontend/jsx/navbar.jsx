@@ -30,6 +30,7 @@ module.exports = React.createClass({
         var search = echo('nav_search');
         var series = echo('nav_my_series');
         var chapters = echo('nav_my_chapters');
+        var settings = echo('user_settings');
 
         return (
 <div className="navbar navbar-default navbar-static-top" role="navigation">
@@ -48,6 +49,7 @@ module.exports = React.createClass({
         <li><a href="#/search"><i className="fa fa-search fa-lg"></i> {search} </a></li>
         <li><a href="#/series-bookmarks"><i className="fa fa-star fa-lg"></i> {series}</a></li>
         <li><a href="#/chapter-bookmarks"><i className="fa fa-bookmark fa-lg"></i> {chapters}</a></li>
+        <li><a href="#/settings"><i className="fa fa-gear fa-lg"></i> {settings}</a></li>
       </ul>
       {right_navs}
     </div>
