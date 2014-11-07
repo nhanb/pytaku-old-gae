@@ -1,38 +1,37 @@
 /** @jsx React.DOM */
 var yaml = require('js-yaml');
 var store = require('./store.js');
+var loaded = {};
 
 var chosen = localStorage.getItem('lang_chosen');
 if (!chosen) {
     chosen = 'en';
 }
-loaded = store.persistentGet('lang_loaded_' + chosen);
 
-if (!loaded) {
-    var url = '/static/languages/' + chosen + '.yaml'
-    loaded = $.ajax({
-        async: false,
-        url: url
-    }).responseText;
-}
+var url = '/static/languages/' + chosen + '.yaml'
+var loaded = $.ajax({
+    async: false,
+    url: url
+}).responseText;
 
 loaded = yaml.load(loaded);
+
+var echo = function(code) {
+    try {
+        return loaded[code];
+    } catch (e) {
+        return code;
+    }
+};
 
 var setLanguage = function(lang, callback) {
     localStorage.setItem('lang_chosen', lang);
     location.reload();
-}
-
-var echo = function(code) {
-    if (!loaded.hasOwnProperty(code)) {
-        return code;
-    }
-
-    return loaded[code];
-}
+};
 
 module.exports = {
     set: setLanguage,
     loaded: loaded,
     echo: echo,
+    chosen: chosen,
 };

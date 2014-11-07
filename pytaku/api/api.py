@@ -171,13 +171,6 @@ class ChapterHandler(webapp2.RequestHandler):
         return resp
 
 
-class TestTokenHandler(webapp2.RequestHandler):
-    @wrap_json
-    @auth()
-    def get(self):
-        return {}
-
-
 class SeriesBookmarkHandler(webapp2.RequestHandler):
 
     @wrap_json

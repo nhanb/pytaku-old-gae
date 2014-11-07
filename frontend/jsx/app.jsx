@@ -10,6 +10,7 @@ var Series = require('./routes/series.jsx');
 var Navbar = require('./navbar.jsx');
 var Settings = require('./routes/settings.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
+var lang = require('./language.jsx');
 
 var HOME = 'home',
     REGISTER = 'register',
@@ -73,10 +74,16 @@ var PytakuApp = React.createClass({
         if (loggedIn === true) {
             var self = this;
 
-            // Check if credentials stored on client are still valid
+            // Check if credentials stored on client are still valid by trying
+            // to get user's settings.
             self.authedAjax({
-                url: '/api/test-token',
-                success: function() {
+                url: '/api/settings',
+                success: function(data) {
+
+                    if (lang.chosen !== data.language) {
+                        lang.set(data.language);
+                    }
+
                     if (window.location.hash === '#/') {
                         // TODO: make default route configurable per user
                         window.location.href = '/#/series-bookmarks';
