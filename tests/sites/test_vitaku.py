@@ -104,5 +104,18 @@ class ChapterInfo(TestCase):
             self.assertEqual(info[key], val,
                              u"Chapter info field '%s' mismatch:\nExpected:\n%s\nFound:\n%s" % (key, val, info[key]))
 
+    def test_special_next_prev_url(self):
+        """
+        In this case, the next/prev chapter urls don't start with "../" as
+        usual. They're simply like "death-note-chapter-25.htm"
+        """
+        url = 'http://doctruyen.vitaku.com/doc-truyen/death-note-chapter-24.htm'
+        info = site.chapter_info(site.fetch_chapter_seed_page(url))
+        self.assertIsInstance(info, dict)
+
+        self.assertEqual(info['next_chapter_url'], 'http://doctruyen.vitaku.com/doc-truyen/death-note-chapter-25.htm')
+        self.assertEqual(info['prev_chapter_url'], 'http://doctruyen.vitaku.com/doc-truyen/death-note-chapter-23.htm')
+
+
 if __name__ == '__main__':
     main()

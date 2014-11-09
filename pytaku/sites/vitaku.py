@@ -72,6 +72,19 @@ class Vitaku(Site):
             'site': 'vitaku',
         }
 
+    def _prev_next_url(self, url):
+        if url is not None:
+            url = url['href']
+            base = 'http://' + self.netlocs[1] + '/doc-truyen'
+            if url.startswith('../'):
+                url = url.replace('..', base, 1)
+            elif not url.startswith('http://'):
+                if url.startswith('/'):
+                    url = base + url
+                else:
+                    url = base + '/' + url
+        return url
+
     # Chapter data
     # - name "Naruto Ch.101"
     # - pages [{filename, url}, {}, ...] - in ascending order
@@ -91,16 +104,10 @@ class Vitaku(Site):
         pages = [img['src'] for img in page_imgs]
 
         prev = soup.find('a', id='MainContent_hplBack')
-        if prev is not None:
-            prev = prev['href']
-            if prev.startswith('../'):
-                prev = prev.replace('..', 'http://%s/doc-truyen' % self.netlocs[1], 1)
+        prev = self._prev_next_url(prev)
 
         next = soup.find('a', id='MainContent_hplNext')
-        if next is not None:
-            next = next['href']
-            if next.startswith('../'):
-                next = next.replace('..', 'http://%s/doc-truyen' % self.netlocs[1], 1)
+        next = self._prev_next_url(next)
 
         series_url = soup.find('a', id='hplHomeLink')['href']
 
