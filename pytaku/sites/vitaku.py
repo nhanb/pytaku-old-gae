@@ -1,8 +1,20 @@
 # -*- coding: utf-8 -*-
 import urllib
+import re
 from google.appengine.api import urlfetch
 import json
 from pytaku.sites import Site
+from bs4 import BeautifulSoup
+
+
+# Define custom BeautifulSoup filter to get <a> tags that link to chapters
+def _chapter_href(tag):
+    if tag.name == 'a' and 'href' in tag.attrs:
+        _page_url_pat = re.compile(
+            '^http://doctruyen.vitaku.com/doc-truyen/.*-chapter-\d+.htm/$'
+        )
+        return bool(_page_url_pat.match(tag.attrs['href']))
+    return False
 
 
 class Vitaku(Site):
@@ -36,15 +48,27 @@ class Vitaku(Site):
 
         return returns
 
-    # All kinds of data
-    # - name "Naruto"
-    # - chapters [{name, url}, {}, ...] - latest first
-    # - thumb_url "url"
-    # - tags [tag1, tag2, ...]
-    # - status "ongoing"/"completed"
-    # - description ["paragraph1", "paragraph2", ...]
     def series_info(self, html):
-        pass
+        soup = BeautifulSoup(html)
+
+        name = soup.find('title').text.split(' - ')[0]
+        thumb_url = soup.find_all('img', itemprop='image')[-1]['src']
+
+        desc_h4 = soup.find('h4', text='Review Summary:')
+        description = [desc_h4.parent.nextSibling.text]
+
+        chapter_hrefs = soup.find_all(_chapter_href)
+        chapters = [{'url': a['href'], 'name': a.text} for a in chapter_hrefs]
+
+        return {
+            'name': name,
+            'chapters': chapters,
+            'tags': [],
+            'status': 'n/a',
+            'description': description,
+            'thumb_url': thumb_url,
+            'site': 'vitaku',
+        }
 
     # Chapter data
     # - name "Naruto Ch.101"
