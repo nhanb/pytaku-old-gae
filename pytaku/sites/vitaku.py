@@ -73,16 +73,22 @@ class Vitaku(Site):
         }
 
     def _prev_next_url(self, url):
-        if url is not None:
-            url = url['href']
-            base = 'http://' + self.netlocs[1] + '/doc-truyen'
-            if url.startswith('../'):
-                url = url.replace('..', base, 1)
-            elif not url.startswith('http://'):
-                if url.startswith('/'):
-                    url = base + url
-                else:
-                    url = base + '/' + url
+        if url is None:
+            return None
+
+        if url.get('href', None) is None:
+            return None
+
+        url = url['href']
+        base = 'http://' + self.netlocs[1] + '/doc-truyen'
+        if url.startswith('../'):
+            url = url.replace('..', base, 1)
+        elif not url.startswith('http://'):
+            if url.startswith('/'):
+                url = base + url
+            else:
+                url = base + '/' + url
+
         return url
 
     # Chapter data
