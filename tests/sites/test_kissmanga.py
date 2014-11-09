@@ -99,7 +99,7 @@ class ChapterInfo(TestCase):
             ],
             'series_url': 'http://kissmanga.com/Manga/One-Piece',
             'next_chapter_url': 'http://kissmanga.com/Manga/One-Piece/One-Piece-760--The-Same-Stakes?id=207602',
-            'prev_chapter_url': 'shttp://kissmanga.com/Manga/One-Piece/One-Piece-758--Ignore-it-and-move-on?id=206441',
+            'prev_chapter_url': 'http://kissmanga.com/Manga/One-Piece/One-Piece-758--Ignore-it-and-move-on?id=206441',
         }
         for key, val in expected.iteritems():
             self.assertEqual(info[key], val,
