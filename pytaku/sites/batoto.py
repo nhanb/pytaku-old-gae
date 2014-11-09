@@ -18,7 +18,7 @@ def _page_img_tag(tag):
 
 class Batoto(Site):
 
-    netloc = 'bato.to'
+    netlocs = ['bato.to']
 
     def search_series(self, keyword):
         url = 'http://bato.to/search?'

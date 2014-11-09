@@ -65,5 +65,44 @@ class SeriesInfo(TestCase):
             self.assertIn('name', chap)
 
 
+class ChapterInfo(TestCase):
+
+    def test_normal(self):
+        url = 'http://doctruyen.vitaku.com/doc-truyen/one-piece-chapter-664.htm/'
+        info = site.chapter_info(site.fetch_chapter_seed_page(url))
+        self.assertIsInstance(info, dict)
+
+        expected = {
+            'name': 'One Piece chapter 664',
+            'pages': [
+                'http://2.bp.blogspot.com/-SZQMoSXd_P0/T5TDNo7tacI/AAAAAAAAEQ8/kmjL6PL6P8Y/s0/1.jpg%3fimgmax%3d1600',
+                'http://2.bp.blogspot.com/-3uTmgromws8/T5TDP2LMZaI/AAAAAAAAERE/qkbiAJFlDUU/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-MK7WRcipUXo/T5TDRDdyHyI/AAAAAAAAERI/PfXJPpAmKW0/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-hqe158B7w5U/T5TDRyd37SI/AAAAAAAAERU/z1USOSUc5LI/s0/1.jpg%3fimgmax%3d1600',
+                'http://3.bp.blogspot.com/-K4qN9UeW6ig/T5TDS7xZ_hI/AAAAAAAAERY/ZXJ0O543zpA/s0/1.jpg%3fimgmax%3d1600',
+                'http://4.bp.blogspot.com/-StdMur9LYRA/T5TDT28WlqI/AAAAAAAAERk/ZfDblE3zg3Y/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-FgGlPhgpWfE/T5TDUnTIW3I/AAAAAAAAERo/2bbSacjTpJE/s0/1.jpg%3fimgmax%3d1600',
+                'http://3.bp.blogspot.com/-3UAsVix5_S8/T5TDVvc6S-I/AAAAAAAAER0/7-Tp7yePNqI/s0/1.jpg%3fimgmax%3d1600',
+                'http://3.bp.blogspot.com/-jmCnKJaW00g/T5TDWgliVRI/AAAAAAAAER8/BJvn7LrpawY/s0/1.jpg%3fimgmax%3d1600',
+                'http://3.bp.blogspot.com/-YPJhI19ZAhI/T5TDXZbf_uI/AAAAAAAAESA/HZn_1G8ZF0M/s0/1.jpg%3fimgmax%3d1600',
+                'http://3.bp.blogspot.com/-6xPUD5SqzR4/T5TDYeBveLI/AAAAAAAAESM/gcGgvDxGznQ/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-Ti1iQuGYaBY/T5TDZmrsOiI/AAAAAAAAESU/GwbJAtiGhgk/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-H7dU2X5QTy4/T5TDajGUMXI/AAAAAAAAESc/Uw-vyecZm1c/s0/1.jpg%3fimgmax%3d1600',
+                'http://4.bp.blogspot.com/-diaal7e2FMU/T5TDbv6Ly6I/AAAAAAAAESk/Dcx5bKtQhOo/s0/1.jpg%3fimgmax%3d1600',
+                'http://3.bp.blogspot.com/-KpBJkK-35GU/T5TDchwqN0I/AAAAAAAAESo/A1WaG2wIOOw/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-9xNB8LCAXPk/T5TDdvv8TgI/AAAAAAAAESw/Zy2FebR0Wl4/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-sRcu2mB9A5g/T5TDeQ2R1iI/AAAAAAAAES8/xFNPbKCR-CI/s0/1.jpg%3fimgmax%3d1600',
+                'http://4.bp.blogspot.com/-nELWph0DxfE/T5TDfZdMvAI/AAAAAAAAETE/TWYEFtXgvOw/s0/1.jpg%3fimgmax%3d1600',
+                'http://1.bp.blogspot.com/-FqAqnv9OXqs/T5TDgXHJ6MI/AAAAAAAAETI/VdTBTY4cx08/s0/1.jpg%3fimgmax%3d1600',
+                'http://2.bp.blogspot.com/-xtryRwJdfp8/T5TDhAqj2JI/AAAAAAAAETQ/lUa8Z7IzcpA/s0/1.jpg%3fimgmax%3d1600',
+            ],
+            'series_url': 'http://vitaku.com/doc-one-piece-online/',
+            'next_chapter_url': 'http://doctruyen.vitaku.com/doc-truyen/one-piece-chapter-665.htm',
+            'prev_chapter_url': 'http://doctruyen.vitaku.com/doc-truyen/one-piece-chapter-663.htm',
+        }
+        for key, val in expected.iteritems():
+            self.assertEqual(info[key], val,
+                             u"Chapter info field '%s' mismatch:\nExpected:\n%s\nFound:\n%s" % (key, val, info[key]))
+
 if __name__ == '__main__':
     main()

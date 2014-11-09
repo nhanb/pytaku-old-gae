@@ -37,6 +37,6 @@ available_sites = [
 def get_site(url):
     netloc = urlparse.urlparse(url).netloc
     for site in available_sites:
-        if netloc == site.netloc:
+        if netloc in site.netlocs:
             return site
     return None

@@ -13,13 +13,14 @@ def _chapter_href(tag):
         _page_url_pat = re.compile(
             '^http://doctruyen.vitaku.com/doc-truyen/.*-chapter-\d+.htm/$'
         )
-        return bool(_page_url_pat.match(tag.attrs['href']))
+        return (bool(_page_url_pat.match(tag.attrs['href']))
+                and tag.text.strip() != '')
     return False
 
 
 class Vitaku(Site):
 
-    netloc = 'vitaku.com'
+    netlocs = ['vitaku.com', 'doctruyen.vitaku.com']
 
     def search_series(self, keyword):
         url = 'http://vitaku.com/wp-admin/admin-ajax.php'
@@ -58,7 +59,8 @@ class Vitaku(Site):
         description = [desc_h4.parent.nextSibling.text]
 
         chapter_hrefs = soup.find_all(_chapter_href)
-        chapters = [{'url': a['href'], 'name': a.text} for a in chapter_hrefs]
+        chapters = [{'url': a['href'], 'name': a.text.strip()}
+                    for a in chapter_hrefs]
 
         return {
             'name': name,
@@ -77,4 +79,35 @@ class Vitaku(Site):
     # - next_chapter_url
     # - series_url
     def chapter_info(self, html):
-        pass
+        soup = BeautifulSoup(html)
+
+        # One Piece - Đọc truyện tranh One Piece chapter 664 - Vitaku
+        name = soup.find('title').text.split(' - ')[1].strip()
+        if name.startswith(u'Đọc truyện tranh '):
+            name = name[17:]
+
+        page = soup.find('div', class_='page')
+        page_imgs = page.findChildren('img', recursive=False)
+        pages = [img['src'] for img in page_imgs]
+
+        prev = soup.find('a', id='MainContent_hplBack')
+        if prev is not None:
+            prev = prev['href']
+            if prev.startswith('../'):
+                prev = prev.replace('..', 'http://%s/doc-truyen' % self.netlocs[1], 1)
+
+        next = soup.find('a', id='MainContent_hplNext')
+        if next is not None:
+            next = next['href']
+            if next.startswith('../'):
+                next = next.replace('..', 'http://%s/doc-truyen' % self.netlocs[1], 1)
+
+        series_url = soup.find('a', id='hplHomeLink')['href']
+
+        return {
+            'name': name,
+            'pages': pages,
+            'prev_chapter_url': prev,
+            'next_chapter_url': next,
+            'series_url': series_url,
+        }

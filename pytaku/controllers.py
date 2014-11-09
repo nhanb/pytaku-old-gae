@@ -29,7 +29,7 @@ def create_or_get_series(url, no_update=False):
     # Create new series if not in db yet
     if series_record is None:
         series_record = Series.create(url,
-                                      site.netloc,
+                                      site.netlocs[0],
                                       series['name'],
                                       series['thumb_url'],
                                       series['chapters'],

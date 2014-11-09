@@ -103,7 +103,7 @@ class ChapterInfo(TestCase):
         }
         for key, val in expected.iteritems():
             self.assertEqual(info[key], val,
-                             "Chapter info field '%s' mismatch:\nExpected:\n%s\nFound:\n%s" % (key, info[key], val))
+                             "Chapter info field '%s' mismatch:\nExpected:\n%s\nFound:\n%s" % (key, val, info[key]))
 
 if __name__ == '__main__':
     main()

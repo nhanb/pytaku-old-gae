@@ -8,7 +8,7 @@ from pytaku.sites import Site
 
 class Kissmanga(Site):
 
-    netloc = 'kissmanga.com'
+    netlocs = ['kissmanga.com']
 
     # Return a list of dictionaries that store at least name and url:
     # [ { 'name': 'Naruto', 'url': 'http://...' }, {...}, ... ]
@@ -47,7 +47,7 @@ class Kissmanga(Site):
         status = self._status(soup)
         description = self._description(soup)
         return {
-            'site': self.netloc,
+            'site': self.netlocs[0],
             'chapters': chapters,
             'thumb_url': thumb_url,
             'tags': tags,
@@ -86,7 +86,7 @@ class Kissmanga(Site):
 
     # Chapter data
     # - name "Naruto Ch.101"
-    # - pages [{filename, url}, {}, ...] - in ascending order
+    # - pages [url1, url2, ...] - in ascending order
     # - prev_chapter_url
     # - next_chapter_url
     # - series_url
