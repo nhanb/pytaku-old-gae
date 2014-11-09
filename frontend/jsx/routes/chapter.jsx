@@ -2,6 +2,7 @@
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var store = require('../store.js');
+var echo = require('../language.jsx').echo;
 
 var BookmarkButton = React.createClass({
     getInitialState: function() {
@@ -17,21 +18,21 @@ var BookmarkButton = React.createClass({
             if (this.state && this.state.processing === true) {
                 bookmarkBtn = (
                     <button className="btn btn-danger" disabled="disabled">
-                        <i className='fa fa-lg fa-spinner fa-spin'></i> Processing...
+                        <i className='fa fa-lg fa-spinner fa-spin'></i> {echo('processing')}...
                     </button>
                 );
 
             } else if (info.is_bookmarked) {
                 bookmarkBtn = (
                     <button className="btn btn-danger" onClick={this.removeBookmark}>
-                        <i className='fa fa-lg fa-ban'></i> Unbookmark
+                        <i className='fa fa-lg fa-ban'></i> {echo('unbookmark')}
                     </button>
                 );
 
             } else {
                 bookmarkBtn = (
                     <button className="btn btn-success" onClick={this.addBookmark}>
-                        <i className='fa fa-bookmark'></i> Bookmark
+                        <i className='fa fa-bookmark'></i> {echo('bookmark')}
                     </button>
                 );
             }
@@ -270,7 +271,7 @@ var ActionBar = React.createClass({
             prev = '/#/chapter/' + encodeURIComponent(prev);
             prevBtn =(
                 <a href={prev} className="btn btn-primary">
-                    <i className="fa fa-lg fa-angle-double-left"></i> Prev
+                    <i className="fa fa-lg fa-angle-double-left"></i> {echo('prev')}
                 </a>
             );
         }
@@ -279,7 +280,7 @@ var ActionBar = React.createClass({
             next = '/#/chapter/' + encodeURIComponent(next);
             nextBtn =(
                 <a href={next} className="btn btn-primary">
-                    Next <i className="fa fa-lg fa-angle-double-right"></i>
+                    {echo('next')} <i className="fa fa-lg fa-angle-double-right"></i>
                 </a>
             );
         }
@@ -287,7 +288,7 @@ var ActionBar = React.createClass({
         series = '/#/series/' + encodeURIComponent(series);
         seriesBtn =(
             <a href={series} className="btn btn-info">
-                <i className="fa fa-lg fa-angle-double-up"></i> Chapter list
+                <i className="fa fa-lg fa-angle-double-up"></i> {echo('chapter_list')}
             </a>
         );
 

@@ -16,6 +16,7 @@ enter_manga_title: Điền tên manga
 
 series_loading: Đang tải thông tin truyện
 bookmark: Đánh dấu
+unbookmark: Bỏ đánh dấu
 bookmarked: Đã đánh dấu
 original_link: Link gốc
 status: Tình trạng
@@ -39,3 +40,8 @@ language: Ngôn ngữ
 vietnamese: Tiếng Việt
 english: Tiếng Anh
 save: Lưu
+
+chapter_list: Danh sách chap
+prev: Lùi
+next: Tới
+processing: Đang xử lý

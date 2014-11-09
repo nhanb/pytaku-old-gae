@@ -16,6 +16,7 @@ enter_manga_title: Enter manga title
 
 series_loading: Loading series info
 bookmark: Bookmark
+unbookmark: Unbookmark
 bookmarked: Bookmarked
 original_link: Original link
 status: Status
@@ -39,3 +40,8 @@ language: Language
 vietnamese: Vietnamese
 english: English
 save: Save
+
+chapter_list: Chapter list
+prev: Prev
+next: Next
+processing: Processing
