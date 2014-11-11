@@ -118,5 +118,18 @@ class ChapterInfo(TestCase):
         self.assertEqual(info['prev_chapter_url'], 'http://doctruyen.vitaku.com/doc-truyen/death-note-chapter-23.htm')
 
 
+class SearchByAuthor(TestCase):
+
+    def test_empty(self):
+        """
+        Vitaku (currently) doesn't have author info at all.
+        """
+
+        series_list = site.search_by_author('Akari Shinohara')
+        # No, you'll probably never see her again.
+        # That was simply a figment of your imagination.
+        self.assertEquals(series_list, [])
+
+
 if __name__ == '__main__':
     main()
