@@ -55,6 +55,7 @@ class Batoto(Site):
         name = self._name(soup)
         status = self._status(soup)
         description = self._description(soup)
+        authors = self._authors(soup)
         return {
             'chapters': chapters,
             'thumb_url': thumb_url,
@@ -62,6 +63,8 @@ class Batoto(Site):
             'tags': tags,
             'status': status,
             'description': description,
+            'authors': authors,
+            'site': 'batoto',
         }
 
     def _name(self, soup):
@@ -119,6 +122,22 @@ class Batoto(Site):
                 # of paragraphs.  Neat eh?
                 return s.get_text('|||').split('|||')
         return ['unknown']
+
+    def _authors(self, soup):
+        authors = soup.find('td', text='Author:').next_siblings
+        artists = soup.find('td', text='Artist:').next_siblings
+        results = []
+        # XXX: 3 nested loops. Yikes!
+        # Should probably sprinkle some comprehensions on top?
+        for gen in [authors, artists]:
+            for sibling in gen:
+                if type(sibling) == bs4.element.Tag and sibling.name == 'td':
+                    a_tags = sibling.find_all('a')
+                    for tag in a_tags:
+                        name = tag.text.strip()
+                        if name not in results:
+                            results.append(name)
+        return results
 
     def chapter_info(self, html):
         soup = BeautifulSoup(html)

@@ -38,6 +38,7 @@ class Kissmanga(Site):
     # - tags [tag1, tag2, ...]
     # - status "ongoing"/"completed"
     # - description ["paragraph1", "paragraph2", ...]
+    # - authors ["Kishimoto Masashi", ...]
     def series_info(self, html):
         soup = BeautifulSoup(html)
         chapters = self._chapters(soup)
@@ -46,6 +47,7 @@ class Kissmanga(Site):
         name = self._name(soup)
         status = self._status(soup)
         description = self._description(soup)
+        authors = self._authors(soup)
         return {
             'site': self.netlocs[0],
             'chapters': chapters,
@@ -54,6 +56,7 @@ class Kissmanga(Site):
             'name': name,
             'status': status,
             'description': description,
+            'authors': authors,
         }
 
     def _chapters(self, soup):
@@ -83,6 +86,10 @@ class Kissmanga(Site):
         p_tags = desc_span.next_siblings
         desc = [s.text for s in p_tags if type(s) == bs4.element.Tag]
         return desc
+
+    def _authors(self, soup):
+        authors = soup.find('span', text='Author:').find_next_siblings('a')
+        return [text.string.strip() for text in authors]
 
     # Chapter data
     # - name "Naruto Ch.101"

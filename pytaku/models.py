@@ -13,6 +13,7 @@ class Series(ndb.Model):
     tags = ndb.StringProperty(repeated=True)
     status = ndb.StringProperty()  # ongoing/completed/unknown
     description = ndb.StringProperty(repeated=True, indexed=False)
+    authors = ndb.StringProperty(repeated=True, default=[])
 
     def is_bookmarked_by(self, user):
         return self.url in user.bookmarked_series
@@ -22,10 +23,11 @@ class Series(ndb.Model):
         return (datetime.now() - self.last_update).days <= 1
 
     @classmethod
-    def create(cls, url, site, name, thumb_url, chapters, status, tags, desc):
+    def create(cls, url, site, name, thumb_url, chapters, status, tags, desc,
+               authors=[]):
         obj = cls(url=url, site=site, name=name, thumb_url=thumb_url,
                   chapters=chapters, status=status, tags=tags,
-                  description=desc)
+                  description=desc, authors=authors)
         obj.put()
         return obj
 

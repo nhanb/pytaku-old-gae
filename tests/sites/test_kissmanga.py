@@ -44,6 +44,7 @@ class SeriesInfo(TestCase):
             'thumb_url': 'http://kissmanga.com/Uploads/Etc/8-24-2011/5569412cover.jpg',
             'tags': ['action', 'adventure', 'comedy', 'drama', 'fantasy',
                      'manga', 'martial arts', 'mystery', 'shounen'],
+            'authors': ['Oda Eiichiro'],
         }
         for key, val in expected.iteritems():
             self.assertEqual(info[key], val)
