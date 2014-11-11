@@ -35,11 +35,12 @@ def create_or_get_series(url, no_update=False):
                                       series['chapters'],
                                       series['status'],
                                       series['tags'],
-                                      series['description'])
+                                      series['description'],
+                                      series['authors'])
     else:
         # Update existing Series db record
         fields = ('site', 'name', 'thumb_url', 'chapters', 'status', 'tags',
-                  'description')
+                  'description', 'authors')
         params = {field: series[field] for field in fields}
         update_series(series_record, **params)
 

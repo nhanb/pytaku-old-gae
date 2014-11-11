@@ -88,7 +88,7 @@ class SeriesHandler(webapp2.RequestHandler):
         resp = {
             field: getattr(series, field)
             for field in ('site', 'name', 'thumb_url', 'tags', 'status',
-                          'description')
+                          'description', 'authors')
         }
 
         # If the provided chapter_limit is valid, return only that many
@@ -118,14 +118,23 @@ class SeriesHandler(webapp2.RequestHandler):
 class SearchHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_get(keyword=['ustring'])
+    @unpack_get(keyword=['ustring'], type=['ustring'])
     def get(self):
         keyword = self.data['keyword']
+        type = self.data['type']
         search_results = {}  # {order: [series, series, ...]}
+
+        if type == 'name':  # search by series name
+            func_name = 'search_series'
+        elif type == 'author':  # search by author name
+            func_name = 'search_by_author'
+        else:
+            raise PyError('invalid_type')
 
         def _search(queue):
             keyword, site, order = queue.get()
-            series_list = site.search_series(keyword)
+            search_func = getattr(site, func_name)
+            series_list = search_func(keyword)
             search_results[order] = series_list
             queue.task_done()
 

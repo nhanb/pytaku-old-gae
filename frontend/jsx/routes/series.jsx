@@ -119,6 +119,7 @@ module.exports = React.createClass({
         } else if (this.state.populated) {
             var info = this.state.info;
             var tags = info.tags.join(', ');
+            var author = info.authors.join(', ');
             var desc = info.description.map(function(paragraph) {
                 return <p>{paragraph}</p>;
             });
@@ -141,6 +142,7 @@ module.exports = React.createClass({
                                 <li><strong>{echo('status')}:</strong> {info.status}</li>
                                 <li><strong>{echo('tags')}:</strong> {tags}</li>
                                 <li><strong>{echo('description')}:</strong> {desc}</li>
+                                <li><strong>{echo('author')}:</strong> {author}</li>
                             </ul>
                         </div>
                     </div>

@@ -13,7 +13,7 @@ class Series(ndb.Model):
     tags = ndb.StringProperty(repeated=True)
     status = ndb.StringProperty()  # ongoing/completed/unknown
     description = ndb.StringProperty(repeated=True, indexed=False)
-    authors = ndb.StringProperty(repeated=True, default=[])
+    authors = ndb.StringProperty(repeated=True)
 
     def is_bookmarked_by(self, user):
         return self.url in user.bookmarked_series

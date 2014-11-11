@@ -22,6 +22,7 @@ original_link: Original link
 status: Status
 tags: Tags
 description: Description
+author: Author
 series_info_not_fetched: Series info not fetched. Try again.
 bookmarked_chapters: Bookmarked chapters
 remove: Remove

@@ -155,6 +155,10 @@ class Kissmanga(Site):
 
         soup = BeautifulSoup(resp.content)
         table = soup.find('table', class_='listing')
+
+        if table is None:  # no author of this name
+            return []
+
         return [{
             'name': a.text.strip(),
             'url': 'http://kissmanga.com' + a['href'],

@@ -95,7 +95,8 @@ module.exports = React.createClass({
 
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
-        window.location.href = '/#/search/' + encodeURIComponent(query);
+        var type = this.props.type;
+        window.location.href = '/#/search/' + type + '/' + encodeURIComponent(query);
         return false; // So that browser won't submit an old-fashioned POST
     },
 
@@ -120,7 +121,7 @@ module.exports = React.createClass({
 
         var self = this;
         $.ajax({
-            url: '/api/search?keyword=' + encodeURIComponent(query),
+            url: '/api/search?type=' + self.props.type + '&keyword=' + encodeURIComponent(query),
             dataType: 'json',
             method: 'GET',
             success: function(data) {
