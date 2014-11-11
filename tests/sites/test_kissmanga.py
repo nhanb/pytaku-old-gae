@@ -106,5 +106,40 @@ class ChapterInfo(TestCase):
             self.assertEqual(info[key], val,
                              "Chapter info field '%s' mismatch:\nExpected:\n%s\nFound:\n%s" % (key, val, info[key]))
 
+
+class SearchByAuthor(TestCase):
+
+    def test_normal(self):
+        """
+        Vitaku (currently) doesn't have author info at all.
+        """
+
+        series_list = k.search_by_author('FUJIKO F. Fujio')
+        print '>>> Got list:'
+        for s in series_list:
+            print s
+        self.assertEquals(series_list, [
+            {
+                'name': 'Chinpui',
+                'url': 'http://kissmanga.com/Manga/Chinpui',
+                'site': 'kissmanga',
+            },
+            {
+                'name': 'Doraemon',
+                'url': 'http://kissmanga.com/Manga/Doraemon',
+                'site': 'kissmanga',
+            },
+            {
+                'name': 'The Doraemons',
+                'url': 'http://kissmanga.com/Manga/The-Doraemons',
+                'site': 'kissmanga',
+            },
+            {
+                'name': 'The Doraemons - Doraemon Game Comic',
+                'url': 'http://kissmanga.com/Manga/The-Doraemons-Doraemon-Game-Comic',
+                'site': 'kissmanga',
+            },
+        ])
+
 if __name__ == '__main__':
     main()

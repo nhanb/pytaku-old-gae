@@ -145,3 +145,18 @@ class Kissmanga(Site):
         base = url[:url.rfind('/') + 1]  # http://.../Manga-Name/
         id = url[url.rfind('?id='):]  # ?id=XXXXXX
         return self.get_html(base + '_' + id)
+
+    def search_by_author(self, author):
+        url = 'http://kissmanga.com/AuthorArtist/' + author.replace(' ', '-')
+        resp = urlfetch.fetch(url)
+
+        if resp.status_code != 200:
+            return []
+
+        soup = BeautifulSoup(resp.content)
+        table = soup.find('table', class_='listing')
+        return [{
+            'name': a.text.strip(),
+            'url': 'http://kissmanga.com' + a['href'],
+            'site': 'kissmanga',
+        } for a in table.find_all('a') if len(a['href'].split('/')) == 3]
