@@ -9,6 +9,8 @@ class Site:
 
     def get_html(self, url, **kwargs):
         resp = urlfetch.fetch(url, **kwargs)
+        print url
+        print resp.status_code
         if resp.status_code != 200:
             raise PyError({'msg': 'external_request_fail', 'url': url})
         return resp.content
@@ -25,11 +27,13 @@ class Site:
 from kissmanga import Kissmanga
 from batoto import Batoto
 from vitaku import Vitaku
+from vechai import Vechai
 
 available_sites = [
     Kissmanga(),
     Vitaku(),
     Batoto(),
+    Vechai()
 ]
 
 
