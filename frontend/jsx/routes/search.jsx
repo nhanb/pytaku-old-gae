@@ -48,7 +48,7 @@ var SearchButton = React.createClass({
         if (this.props.searching) {
             return echo('search_searching');
         } else {
-            return echo('search_search');
+            return this.props.msg;
         };
     },
 
@@ -110,7 +110,7 @@ module.exports = React.createClass({
         this.setState({searching: true});
         query = query.trim();
 
-        var cachedData = store.get('search_' + query);
+        var cachedData = store.get('search_' + this.props.type + '_' + query);
         if (cachedData !== null) {
             this.setState({
                 items: cachedData,
@@ -137,15 +137,26 @@ module.exports = React.createClass({
     css: {textAlign: 'center'},
 
     render: function(e) {
+        var placeholder, searchBtnMsg;
+
+        if (this.props.type === 'name') {
+            placeholder = echo('enter_manga_title');
+            searchBtnMsg = echo('search_manga');
+
+        } else if (this.props.type === 'author') {
+            placeholder = echo('enter_author_name');
+            searchBtnMsg = echo('search_author');
+        }
+
         return (
             <div>
                 <form className="form-horizontal center-form" role="form" style={this.css}
                     onSubmit={this.handleSubmit}>
 
                     <input className="form-control" type="text" ref="queryInput"
-                        placeholder={echo('enter_manga_title')} autoFocus="autofocus" />
+                        placeholder={placeholder} autoFocus="autofocus" />
 
-                    <SearchButton searching={this.state.searching} />
+                    <SearchButton searching={this.state.searching} msg={searchBtnMsg}/>
                 </form>
 
                 <SeriesList items={this.state.items}

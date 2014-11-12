@@ -9,10 +9,12 @@ nav_welcome: Welcome,
 nav_login: Login
 nav_register: Register
 
-search_search: Search
 search_searching: Searching...
 search_title: Manga series search
 enter_manga_title: Enter manga title
+enter_author_name: Enter author name
+search_manga: Search by title
+search_author: Search by author
 
 series_loading: Loading series info
 bookmark: Bookmark

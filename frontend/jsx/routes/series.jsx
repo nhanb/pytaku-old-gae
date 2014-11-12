@@ -5,6 +5,25 @@ var ChapterList = require('../shared_components/chapter_list.jsx');
 var store = require('../store.js');
 var echo = require('../language.jsx').echo;
 
+/* intersperse: Return an array with the separator interspersed between
+ * each element of the input array.
+ *
+ * > _([1,2,3]).intersperse(0)
+ * [1,0,2,0,3]
+ *
+ * http://stackoverflow.com/questions/23618744/rendering-comma-separated-list-of-links
+ */
+function intersperse(arr, sep) {
+    if (arr.length === 0) {
+        return [];
+    }
+
+    return arr.slice(1).reduce(function(xs, x, i) {
+        return xs.concat([sep, x]);
+    }, [arr[0]]);
+}
+
+
 module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
@@ -119,7 +138,12 @@ module.exports = React.createClass({
         } else if (this.state.populated) {
             var info = this.state.info;
             var tags = info.tags.join(', ');
-            var author = info.authors.join(', ');
+            var authors = info.authors.map(function(author) {
+                var href = "/#/search/author/" + encodeURIComponent(author);
+                return <a href={href} key={href}>{author}</a>
+            });
+            authors = intersperse(authors, ', ');
+
             var desc = info.description.map(function(paragraph) {
                 return <p>{paragraph}</p>;
             });
@@ -142,7 +166,7 @@ module.exports = React.createClass({
                                 <li><strong>{echo('status')}:</strong> {info.status}</li>
                                 <li><strong>{echo('tags')}:</strong> {tags}</li>
                                 <li><strong>{echo('description')}:</strong> {desc}</li>
-                                <li><strong>{echo('author')}:</strong> {author}</li>
+                                <li><strong>{echo('author')}:</strong> {authors}</li>
                             </ul>
                         </div>
                     </div>

@@ -9,10 +9,12 @@ nav_welcome: Hế lô
 nav_login: Đăng nhập
 nav_register: Đăng ký
 
-search_search: Kiếm cho bố
-search_searching: Đang kiếm ạ...
+search_searching: Đang tìm...
 search_title: Tìm tựa manga
 enter_manga_title: Điền tên manga
+enter_author_name: Điền tên tác giả
+search_manga: Tìm theo tên
+search_author: Tìm theo tác giả
 
 series_loading: Đang tải thông tin truyện
 bookmark: Đánh dấu
