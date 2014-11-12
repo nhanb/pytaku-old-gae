@@ -15,7 +15,7 @@ var echo = require('../language.jsx').echo;
  */
 function intersperse(arr, sep) {
     if (arr.length === 0) {
-        return [];
+        return '(' + echo('unknown') + ')';
     }
 
     return arr.slice(1).reduce(function(xs, x, i) {
@@ -137,7 +137,7 @@ module.exports = React.createClass({
 
         } else if (this.state.populated) {
             var info = this.state.info;
-            var tags = info.tags.join(', ');
+            var tags = intersperse(info.tags, ', ');
             var authors = info.authors.map(function(author) {
                 var href = "/#/search/author/" + encodeURIComponent(author);
                 return <a href={href} key={href}>{author}</a>

@@ -15,6 +15,7 @@ enter_manga_title: Enter manga title
 enter_author_name: Enter author name
 search_manga: Search by title
 search_author: Search by author
+unknown: unknown
 
 series_loading: Loading series info
 bookmark: Bookmark
