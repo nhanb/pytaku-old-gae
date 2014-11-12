@@ -62,7 +62,10 @@ def create_or_get_chapter(url):
         page_html = site.fetch_chapter_seed_page(url)
         info = site.chapter_info(page_html)
 
-        series = create_or_get_series(info['series_url'])
+        if info['series_url']:
+            series = create_or_get_series(info['series_url'])
+        else:
+            series = type('', (object, ), {'name': 'Unknown'})
 
         chapter = Chapter.create(url,
                                  info['name'],
