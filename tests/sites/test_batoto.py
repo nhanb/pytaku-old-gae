@@ -1,5 +1,5 @@
 from unittest import TestCase, main
-from pytaku.sites import Batoto
+from pytaku.sites.batoto import Batoto
 
 site = Batoto()
 
@@ -41,6 +41,38 @@ class SeriesInfo(TestCase):
             self.assertIsInstance(chap, dict)
             self.assertIn('url', chap)
             self.assertIn('name', chap)
+
+
+class SearchByAuthor(TestCase):
+
+    def test_normal(self):
+
+        series_list = site.search_by_author('Fujiko F. Fujio')
+        print '>>> Got list:'
+        for s in series_list:
+            print s
+        self.assertEquals(series_list, [
+            {
+                'name': 'Daichouhen Doraemon',
+                'url': 'http://bato.to/comic/_/daichouhen-doraemon-r5414',
+                'site': 'batoto',
+            },
+            {
+                'name': 'Doraemon',
+                'url': 'http://bato.to/comic/_/doraemon-r1791',
+                'site': 'batoto',
+            },
+            {
+                'name': 'Doraemon - Doranote (Doujinshi)',
+                'url': 'http://bato.to/comic/_/doraemon-doranote-doujinshi-r7663',
+                'site': 'batoto',
+            },
+            {
+                'name': 'The Doraemons - Doraemon Game Comic',
+                'url': 'http://bato.to/comic/_/the-doraemons-doraemon-game-comic-r11386',
+                'site': 'batoto',
+            },
+        ])
 
 
 if __name__ == '__main__':

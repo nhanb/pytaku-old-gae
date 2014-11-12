@@ -212,3 +212,27 @@ class Batoto(Site):
             img_url = soup.find('img', id='comic_page')['src']
             returns.append(img_url)
         return returns
+
+    def search_by_author(self, author):
+        url = 'http://bato.to/search?artist_name=' + urllib.quote(author)
+        resp = urlfetch.fetch(url)
+
+        if resp.status_code != 200:
+            return []
+
+        soup = BeautifulSoup(resp.content)
+
+        try:
+            table = soup.find('table', class_='chapters_list')
+            rows = table.find_all('tr', class_='')
+            hrefs = [tr.find('td').find('strong').find('a')
+                     for tr in rows if 'style' not in tr.attrs]
+
+            return [{
+                'name': a.text.strip(),
+                'url': a['href'],
+                'site': 'batoto',
+            } for a in hrefs]
+
+        except Exception:
+            return []
