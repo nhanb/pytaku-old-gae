@@ -110,10 +110,6 @@ class ChapterInfo(TestCase):
 class SearchByAuthor(TestCase):
 
     def test_normal(self):
-        """
-        Vitaku (currently) doesn't have author info at all.
-        """
-
         series_list = k.search_by_author('FUJIKO F. Fujio')
         print '>>> Got list:'
         for s in series_list:
