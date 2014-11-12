@@ -7,6 +7,7 @@ from pytaku.controllers import create_or_get_series, create_or_get_chapter
 from decorators import wrap_json, unpack_post, unpack_get, auth
 from exceptions import PyError
 from token import gen_token
+from unidecode import unidecode
 
 
 class LoginHandler(webapp2.RequestHandler):
@@ -125,7 +126,7 @@ class SearchHandler(webapp2.RequestHandler):
 
         def _search(queue):
             keyword, site, order = queue.get()
-            series_list = site.search_series(keyword)
+            series_list = site.search_series(unidecode(keyword))
             search_results[order] = series_list
             queue.task_done()
 
