@@ -28,8 +28,9 @@ To build client side assets, you'll need `gulp`. If you're not familiar with nod
 [installing it with `nvm`][5]. When you have done that, clone this repo, `cd` into it and run:
 
 ```bash
-$ npm install -g gulp
+$ npm install -g gulp bower
 $ npm install
+$ bower install
 $ gulp
 # If you want to minify css/js, use `gulp deploy` instead of `gulp`
 ```
