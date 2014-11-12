@@ -164,9 +164,9 @@ module.exports = React.createClass({
                             <ul>
                                 <li><a href={info.url}>{echo('original_link')}</a></li>
                                 <li><strong>{echo('status')}:</strong> {info.status}</li>
+                                <li><strong>{echo('author')}:</strong> {authors}</li>
                                 <li><strong>{echo('tags')}:</strong> {tags}</li>
                                 <li><strong>{echo('description')}:</strong> {desc}</li>
-                                <li><strong>{echo('author')}:</strong> {authors}</li>
                             </ul>
                         </div>
                     </div>
