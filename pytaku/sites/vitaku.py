@@ -59,8 +59,10 @@ class Vitaku(Site):
         description = [desc_h4.parent.nextSibling.text]
 
         chapter_hrefs = soup.find_all(_chapter_href)
-        chapters = [{'url': a['href'], 'name': a.text.strip()}
-                    for a in chapter_hrefs]
+        chapters = [{
+            'url': a['href'],
+            'name': a.text.strip(),
+        } for a in chapter_hrefs]
 
         return {
             'name': name,
@@ -70,6 +72,7 @@ class Vitaku(Site):
             'description': description,
             'thumb_url': thumb_url,
             'site': 'vitaku',
+            'authors': [],  # douchebag site doesn't even mention authors
         }
 
     def _prev_next_url(self, url):

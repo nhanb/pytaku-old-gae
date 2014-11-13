@@ -44,6 +44,7 @@ class SeriesInfo(TestCase):
             'thumb_url': 'http://kissmanga.com/Uploads/Etc/8-24-2011/5569412cover.jpg',
             'tags': ['action', 'adventure', 'comedy', 'drama', 'fantasy',
                      'manga', 'martial arts', 'mystery', 'shounen'],
+            'authors': ['Oda Eiichiro'],
         }
         for key, val in expected.iteritems():
             self.assertEqual(info[key], val)
@@ -104,6 +105,37 @@ class ChapterInfo(TestCase):
         for key, val in expected.iteritems():
             self.assertEqual(info[key], val,
                              "Chapter info field '%s' mismatch:\nExpected:\n%s\nFound:\n%s" % (key, val, info[key]))
+
+
+class SearchByAuthor(TestCase):
+
+    def test_normal(self):
+        series_list = k.search_by_author('FUJIKO F. Fujio')
+        print '>>> Got list:'
+        for s in series_list:
+            print s
+        self.assertEquals(series_list, [
+            {
+                'name': 'Chinpui',
+                'url': 'http://kissmanga.com/Manga/Chinpui',
+                'site': 'kissmanga',
+            },
+            {
+                'name': 'Doraemon',
+                'url': 'http://kissmanga.com/Manga/Doraemon',
+                'site': 'kissmanga',
+            },
+            {
+                'name': 'The Doraemons',
+                'url': 'http://kissmanga.com/Manga/The-Doraemons',
+                'site': 'kissmanga',
+            },
+            {
+                'name': 'The Doraemons - Doraemon Game Comic',
+                'url': 'http://kissmanga.com/Manga/The-Doraemons-Doraemon-Game-Comic',
+                'site': 'kissmanga',
+            },
+        ])
 
 if __name__ == '__main__':
     main()

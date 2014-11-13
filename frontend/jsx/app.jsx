@@ -35,10 +35,11 @@ var PytakuApp = React.createClass({
             '/settings': setState.bind(this, {route: SETTINGS}),
             '/search': setState.bind(this, {route: SEARCH}),
 
-            '/search/(.+)': (function() {
-                return function(query) {
+            '/search/:type/(.*)': (function() {
+                return function(type, query) {
                     self.setState({
                         route: SEARCH,
+                        type: type,
                         query: decodeURIComponent(query)
                     });
                 };
@@ -116,7 +117,8 @@ var PytakuApp = React.createClass({
                 break;
             case SEARCH:
                 routeComponent = <Search loggedIn={this.state.loggedIn}
-                    query={this.state.query} ajax={this.ajax} />;
+                    query={this.state.query} type={this.state.type}
+                    ajax={this.ajax} />;
                 break;
             case SETTINGS:
                 routeComponent = <Settings loggedIn={this.state.loggedIn}

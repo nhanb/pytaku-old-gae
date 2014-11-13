@@ -24,6 +24,18 @@ class Site:
     def fetch_page_image(self, url, **kwargs):
         return self.get_html(url, **kwargs)
 
+    def search_by_author(self, author):
+        """
+        Return list of chapter dicts whose keys are:
+            name
+            url
+            site
+
+        This should be specifically implemented in each Site subclass. If not,
+        this method will be used which returns an empty list.
+        """
+        return []
+
 from kissmanga import Kissmanga
 from batoto import Batoto
 from vitaku import Vitaku

@@ -48,6 +48,7 @@ class SeriesInfo(TestCase):
             'tags': [],
             'description': [u'One Piece là một câu chuyện phiêu lưu vui nhộn, với dàn nhân vật vẫn tiếp tục phát triển, với những pha hành động và kịch tính giữa nhân vật tuyệt vời. Nét vẽ của Oda là sáng tạo và giàu trí tưởng tượng cứ như tràn ra tất cả các khung truyện. Việc xử lý khung tranh của Oda chứa rất nhiều những góc nhìn và phương hướng thú vị, nhất là ở những đoạn hành động cháy nổ, lúc nào cũng rất kinh ngạc.'],
             'status': 'n/a',
+            'authors': [],
         }
         for key, val in expected.iteritems():
             print '>>> Asserting', key
@@ -115,6 +116,19 @@ class ChapterInfo(TestCase):
 
         self.assertEqual(info['next_chapter_url'], 'http://doctruyen.vitaku.com/doc-truyen/death-note-chapter-25.htm')
         self.assertEqual(info['prev_chapter_url'], 'http://doctruyen.vitaku.com/doc-truyen/death-note-chapter-23.htm')
+
+
+class SearchByAuthor(TestCase):
+
+    def test_empty(self):
+        """
+        Vitaku (currently) doesn't have author info at all.
+        """
+
+        series_list = site.search_by_author('Akari Shinohara')
+        # No, you'll probably never see her again.
+        # That was simply a figment of your imagination.
+        self.assertEquals(series_list, [])
 
 
 if __name__ == '__main__':

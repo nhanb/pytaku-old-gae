@@ -48,7 +48,7 @@ var SearchButton = React.createClass({
         if (this.props.searching) {
             return echo('search_searching');
         } else {
-            return echo('search_search');
+            return this.props.msg;
         };
     },
 
@@ -95,7 +95,8 @@ module.exports = React.createClass({
 
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
-        window.location.href = '/#/search/' + encodeURIComponent(query);
+        var type = this.props.type;
+        window.location.href = '/#/search/' + type + '/' + encodeURIComponent(query);
         return false; // So that browser won't submit an old-fashioned POST
     },
 
@@ -109,7 +110,7 @@ module.exports = React.createClass({
         this.setState({searching: true});
         query = query.trim();
 
-        var cachedData = store.get('search_' + query);
+        var cachedData = store.get('search_' + this.props.type + '_' + query);
         if (cachedData !== null) {
             this.setState({
                 items: cachedData,
@@ -120,7 +121,7 @@ module.exports = React.createClass({
 
         var self = this;
         $.ajax({
-            url: '/api/search?keyword=' + encodeURIComponent(query),
+            url: '/api/search?type=' + self.props.type + '&keyword=' + encodeURIComponent(query),
             dataType: 'json',
             method: 'GET',
             success: function(data) {
@@ -136,15 +137,26 @@ module.exports = React.createClass({
     css: {textAlign: 'center'},
 
     render: function(e) {
+        var placeholder, searchBtnMsg;
+
+        if (this.props.type === 'name') {
+            placeholder = echo('enter_manga_title');
+            searchBtnMsg = echo('search_manga');
+
+        } else if (this.props.type === 'author') {
+            placeholder = echo('enter_author_name');
+            searchBtnMsg = echo('search_author');
+        }
+
         return (
             <div>
                 <form className="form-horizontal center-form" role="form" style={this.css}
                     onSubmit={this.handleSubmit}>
 
                     <input className="form-control" type="text" ref="queryInput"
-                        placeholder={echo('enter_manga_title')} autoFocus="autofocus" />
+                        placeholder={placeholder} autoFocus="autofocus" />
 
-                    <SearchButton searching={this.state.searching} />
+                    <SearchButton searching={this.state.searching} msg={searchBtnMsg}/>
                 </form>
 
                 <SeriesList items={this.state.items}
