@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from unidecode import unidecode
 import logging
-import re
 
 
 # Define custom BeautifulSoup filter to get <a> tags that link to chapters
@@ -75,6 +74,7 @@ class Vechai(Site):
             'description': description,
             'thumb_url': thumb_url,
             'site': 'vitaku',
+            'authors': [],
         }
 
     def chapter_info(self, html):
@@ -92,7 +92,7 @@ class Vechai(Site):
         # find prev_page or next_page by decrease or increase chapter number
         chap_url = soup.find('link', rel='canonical')['href']
         chap_info = chap_url.split('/')[-2]
-        #Structure chap (.*)-chap-(\d+)
+        # Structure chap (.*)-chap-(\d+)
         chap_name, chap_num = re.match('(.*)-chap-(\d+)', chap_info).groups()
 
         return {
