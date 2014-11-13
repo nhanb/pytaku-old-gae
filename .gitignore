@@ -6,3 +6,5 @@ bower_components/
 index.yaml
 .git/
 /pytaku/config.py
+.idea
+env
