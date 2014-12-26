@@ -33,26 +33,23 @@ class Vechai(Site):
         resp = urlfetch.fetch(url)
         if resp.status_code != 200:
             return []
-        try:
-            results = eval(resp.content.replace('var items = ', '').replace(';', ''))
-            returns = []
 
-            for r in results:
-                try:
-                    title = unicode(r[0].decode('utf8'))
-                except:
-                    continue
-                r[0] = unidecode(title)
-                if keyword.lower() in r[0].lower():
-                    returns.append({
-                        'name': r[0],
-                        'url': r[1],
-                        'site': 'vechai',
-                    })
-            return returns
-        except BaseException, e:
-            logging.error(e)
-            return []
+        results = eval(resp.content.replace('var items = ', '').replace(';', ''))
+        returns = []
+
+        for r in results:
+            try:
+                title = unicode(r[0].decode('utf8'))
+            except:
+                continue
+            r[0] = unidecode(title)
+            if keyword.lower() in r[0].lower():
+                returns.append({
+                    'name': r[0],
+                    'url': r[1],
+                    'site': 'vechai',
+                })
+        return returns
 
     def series_info(self, html):
         soup = BeautifulSoup(html)
