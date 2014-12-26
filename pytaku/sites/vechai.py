@@ -6,9 +6,8 @@ from google.appengine.api import urlfetch
 
 from pytaku.sites import Site
 from bs4 import BeautifulSoup
-from datetime import datetime
 from unidecode import unidecode
-import logging
+import json
 
 
 # Define custom BeautifulSoup filter to get <a> tags that link to chapters
@@ -27,20 +26,27 @@ class Vechai(Site):
     netlocs = ['doctruyen.vechai.info', 'vechai.info']
 
     def search_series(self, keyword):
-        d = datetime.now()
-        url = 'http://vechai.info/search/items.js?v=%s-%s-%s' % (d.day, d.month + 1, d.hour)
+        url = 'http://vechai.info/search/items.js'
         urlfetch.set_default_fetch_deadline(60)
         resp = urlfetch.fetch(url)
         if resp.status_code != 200:
             return []
 
-        results = eval(resp.content.replace('var items = ', '').replace(';', ''))
+        # resp.content is a javascript array declaration:
+        # var items = [["Series name", "http://series/url"], ...];
+        content = resp.content
+        if content.startswith('var items='):
+            content = content[10:]
+        if content.endswith(';'):
+            content = content[:-1]
+        results = json.loads(content)
+
         returns = []
 
         for r in results:
             try:
                 title = unicode(r[0].decode('utf8'))
-            except:
+            except ValueError:
                 continue
             r[0] = unidecode(title)
             if keyword.lower() in r[0].lower():
