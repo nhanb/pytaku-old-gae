@@ -135,7 +135,6 @@ class SearchHandler(webapp2.RequestHandler):
         def _search(queue):
             keyword, site, order = queue.get()
             search_func = getattr(site, func_name)
-            series_list = search_func(keyword)
             series_list = search_func(unidecode(keyword))
             search_results[order] = series_list
             queue.task_done()
