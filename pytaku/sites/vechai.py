@@ -44,12 +44,8 @@ class Vechai(Site):
         returns = []
 
         for r in results:
-            try:
-                title = unicode(r[0].decode('utf8'))
-            except ValueError:
-                continue
-            r[0] = unidecode(title)
-            if keyword.lower() in r[0].lower():
+            title = unidecode(r[0])
+            if keyword.lower() in title.lower():
                 returns.append({
                     'name': r[0],
                     'url': r[1],
@@ -61,11 +57,10 @@ class Vechai(Site):
         soup = BeautifulSoup(html)
 
         name = soup.find('title').text.split(' - ')[0]
-        thumb_url = soup.find_all('img', class_='insertimage')[0]['src']
+        thumb_url = soup.find_all('img', class_='insertimage')[0].attrs['src']
+        description = []
 
-        description = ["", ]
-
-        chapter_hrefs = soup.find('div', class_='baitonghop').find_all(_chapter_href)
+        chapter_hrefs = soup.find_all(_chapter_href)
         chapters = [{'url': a['href'], 'name': a.text.strip()}
                     for a in chapter_hrefs]
 
