@@ -93,11 +93,14 @@ class Vechai(Site):
         # Structure chap (.*)-chap-(\d+)
         chap_name, chap_num = re.match('(.*)-chap-(\d+)', chap_info).groups()
 
+        base = 'http://doctruyen.vechai.info/%s-chap-%s/'
+        prev = base % (chap_name, 0 if int(chap_num) < 2 else int(chap_num)-1)
+        next = base % (chap_name, int(chap_num)+1)
+
         return {
             'name': name,
             'pages': pages,
-            'prev_chapter_url': 'http://doctruyen.vechai.info/%s-chap-%s/' % (chap_name,
-                                                                              0 if int(chap_num) < 2 else int(chap_num)-1),
-            'next_chapter_url': 'http://doctruyen.vechai.info/%s-chap-%s/' % (chap_name, int(chap_num)+1),
+            'prev_chapter_url': prev,
+            'next_chapter_url': next,
             'series_url': 'http://vechai.info/%s' % chap_name,
         }
