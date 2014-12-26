@@ -147,6 +147,8 @@ module.exports = React.createClass({
             var desc = info.description.map(function(paragraph) {
                 return <p>{paragraph}</p>;
             });
+            desc = intersperse(desc);
+
             body = (
                 <div className="series-info">
                     <div className="row">
