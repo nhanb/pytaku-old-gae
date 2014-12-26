@@ -21,6 +21,11 @@ def _chapter_href(tag):
     return False
 
 
+def _thumb_img(tag):
+    return (tag.name == 'img'
+            and tag.attrs['src'].startswith('http://i.vechai.info/img/'))
+
+
 class Vechai(Site):
 
     netlocs = ['doctruyen.vechai.info', 'vechai.info']
@@ -57,7 +62,11 @@ class Vechai(Site):
         soup = BeautifulSoup(html)
 
         name = soup.find('title').text.split(' - ')[0]
-        thumb_url = soup.find_all('img', class_='insertimage')[0].attrs['src']
+        thumb_img = soup.find('img', class_='insertimage')
+        if thumb_img is None:
+            thumb_img = soup.find('div', id='zoomtext').find(_thumb_img)
+
+        thumb_url = thumb_img.attrs['src']
         description = []
 
         chapter_hrefs = soup.find_all(_chapter_href)
