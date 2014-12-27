@@ -46,7 +46,7 @@ var SeriesItem = React.createClass({
             'margin-bottom': '15px',
         };
         var removeBtn = <button onClick={this.remove} style={removeBtnCss}
-            className="btn btn-sm btn-danger">remove</button>;
+            className="btn btn-sm btn-danger">{echo('remove')}</button>;
 
         var seriesHref = '/#/series/' + encodeURIComponent(this.props.url);
 
@@ -102,7 +102,7 @@ var SeriesItem = React.createClass({
 
 module.exports = React.createClass({
     mixins: [RouteMixin],
-    pageTitle: 'My series bookmarks',
+    pageTitle: echo('my_series_bookmarks'),
 
     getInitialState: function() {
         return {

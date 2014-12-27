@@ -10,7 +10,7 @@ nav_login: Đăng nhập
 nav_register: Đăng ký
 
 search_searching: Đang tìm...
-search_title: Tìm tựa manga
+search_title: Tìm manga
 enter_manga_title: Điền tên manga
 enter_author_name: Điền tên tác giả
 search_manga: Tìm theo tên
@@ -29,6 +29,9 @@ author: Tác giả
 series_info_not_fetched: Không tải được thông tin truyện rồi. Thử refresh xem :)
 bookmarked_chapters: Các chap đã đánh dấu
 remove: Xóa
+
+my_series_bookmarks: Truyện tui đang hóng
+my_chapter_bookmarks: Chap tui đánh dấu
 
 no_bookmarked_series_yet: Bạn chưa đánh dấu truyện nào hết :)
 no_bookmarked_chapter_yet: Bạn chưa đánh dấu chap nào hết :)

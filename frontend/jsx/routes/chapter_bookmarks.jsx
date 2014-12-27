@@ -70,7 +70,7 @@ var BookmarkedChapter = React.createClass({
 
 module.exports = React.createClass({
     mixins: [RouteMixin],
-    pageTitle: 'My chapter bookmarks',
+    pageTitle: echo('my_chapter_bookmarks'),
 
     getInitialState: function() {
         return {

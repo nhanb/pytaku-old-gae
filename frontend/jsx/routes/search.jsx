@@ -68,7 +68,7 @@ module.exports = React.createClass({
         if (query) {
             return query + ' - ' + echo('search_title');
         } else {
-            return 'Search manga series';
+            return echo('search_title');
         }
     },
 

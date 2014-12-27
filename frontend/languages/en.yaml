@@ -30,6 +30,9 @@ series_info_not_fetched: Series info not fetched. Try again.
 bookmarked_chapters: Bookmarked chapters
 remove: Remove
 
+my_series_bookmarks: My series bookmarks
+my_chapter_bookmarks: My chapter bookmarks
+
 no_bookmarked_series_yet: You have not bookmarked any series yet :)
 no_bookmarked_chapter_yet: You have not bookmarked any chapter yet :)
 this_feature_requires_logging_in: This feature requires loggin in
