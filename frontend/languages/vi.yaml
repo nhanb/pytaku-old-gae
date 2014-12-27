@@ -52,3 +52,10 @@ chapter_list: Danh sách chap
 prev: Lùi
 next: Tới
 processing: Đang xử lý
+
+external_request_timeout: |
+  Trang manga gốc chậm quá nên timeout rồi, thử refresh nhé!
+
+unknown_server_error: |
+  Lỗi server (có vẻ nặng). Admin đã được email thông báo rồi, chịu khó ngồi chờ
+  bọn này sửa lỗi nhé...

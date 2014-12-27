@@ -153,7 +153,7 @@ module.exports = React.createClass({
         } else if (this.state.errMsg) {
             content = (
                 <div className="alert alert-danger" role="alert">
-                    {this.state.errMsg}
+                    {echo(this.state.errMsg)}
                 </div>
             );
 

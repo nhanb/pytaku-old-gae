@@ -44,12 +44,12 @@ def wrap_json(func):
 
         except DeadlineExceededError, e:
             print traceback.format_exc()
-            resp_body = "external_request_timeout"
+            resp_body = {"msg": "external_request_timeout"}
             handler.response.set_status(504)
 
         except Exception, e:
             print traceback.format_exc()
-            resp_body = "unknown_server_error"
+            resp_body = {"msg": "unknown_server_error"}
             handler.response.set_status(500)
 
             # Inform admins
