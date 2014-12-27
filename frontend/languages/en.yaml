@@ -60,3 +60,5 @@ external_request_timeout: |
 unknown_server_error: |
   Something seriously wrong happened. Don't worry, your trusty admins have been
   notified. We'll (attempt to) fix it... when we feel like it.
+
+loading_chapter_info: Loading chapter info...

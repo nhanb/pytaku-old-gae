@@ -87,7 +87,7 @@ module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
         if (!this.state.info.name) {
-            return 'Loading chapter info...';
+            return echo('loading_chapter_info');
         }
         return this.state.info.name + ' - ' + this.state.info.series_name ;
     },
