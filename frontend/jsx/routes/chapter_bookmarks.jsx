@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
+var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../language.jsx').echo;
 
@@ -127,11 +128,7 @@ module.exports = React.createClass({
 
         // Finished loading but there's an error
         } else if (this.state.errMsg) {
-            content = (
-                <div className="alert alert-danger" role="alert">
-                    {this.state.errMsg}
-                </div>
-            );
+            content = <Alert msg={this.state.errMsg} />;
 
         // No error but user has nothing in bookmark list yet
         } else if (this.state.chapters.length === 0) {
