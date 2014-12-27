@@ -2,6 +2,8 @@ import json
 import traceback
 from exceptions import PyError
 from google.appengine.api.urlfetch_errors import DeadlineExceededError
+from google.appengine.api import mail
+from google.appengine.api.app_identity import get_application_id
 import validators
 from token import validate_token
 
@@ -35,17 +37,30 @@ def wrap_json(func):
     def wrapped(handler):
         try:
             resp_body = func(handler)
+
         except PyError, e:
             resp_body = e.value
             handler.response.set_status(e.status_code)
+
         except DeadlineExceededError, e:
             print traceback.format_exc()
             resp_body = "external_request_timeout"
             handler.response.set_status(504)
+
         except Exception, e:
             print traceback.format_exc()
             resp_body = "unknown_server_error"
             handler.response.set_status(500)
+
+            # Inform admins
+            app_name = get_application_id()
+            sender = 'noreply@%s.appspotmail.com' % app_name
+            subject = '%s server error' % app_name.capitalize()
+            body = """
+==== API: %s
+==== %s
+            """ % (str(handler.request.route), traceback.format_exc())
+            mail.send_mail_to_admins(sender, subject, body)
 
         handler.response.headers['Content-Type'] = 'application/json'
         handler.response.write(json.dumps(resp_body))
