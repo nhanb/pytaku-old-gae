@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
+var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../language.jsx').echo;
 
@@ -106,13 +107,24 @@ module.exports = React.createClass({
 
         var setState = this.setState.bind(this);
 
+        var body;
+        if (this.state.errorMsg) {
+            return (
+                <div className="chapter-container">
+                    <Alert msg={this.state.errorMsg} />
+                </div>
+            );
+        }
+
         return (
             <div className="chapter-container">
                 <h2 className="chapter-name">{name}</h2>
-                <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
-                <Loading loading={fetching} />
-                {pages}
-                <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
+                <div>
+                    <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
+                    <Loading loading={fetching} />
+                    {pages}
+                    <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
+                </div>
             </div>
         );
     },
@@ -162,7 +174,12 @@ module.exports = React.createClass({
                 self.updateChapterData(data);
                 self.startProgressTimer();
             },
-            error: function() {
+            error: function(data) {
+                self.setState({
+                    errorMsg: data.responseJSON.msg
+                });
+            },
+            complete: function() {
                 self.setState({fetching: false});
             }
         });
