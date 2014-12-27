@@ -1,5 +1,7 @@
 import json
+import traceback
 from exceptions import PyError
+from google.appengine.api.urlfetch_errors import DeadlineExceededError
 import validators
 from token import validate_token
 
@@ -28,6 +30,7 @@ def auth(required=True):
 
 
 # Wrap data from server to proper JSON format for response body
+# Handle any exception to prevent it from blowing up in client's face
 def wrap_json(func):
     def wrapped(handler):
         try:
@@ -35,6 +38,14 @@ def wrap_json(func):
         except PyError, e:
             resp_body = e.value
             handler.response.set_status(e.status_code)
+        except DeadlineExceededError, e:
+            print traceback.format_exc()
+            resp_body = "external_request_timeout"
+            handler.response.set_status(504)
+        except Exception, e:
+            print traceback.format_exc()
+            resp_body = "unknown_server_error"
+            handler.response.set_status(500)
 
         handler.response.headers['Content-Type'] = 'application/json'
         handler.response.write(json.dumps(resp_body))
