@@ -14,6 +14,17 @@ module.exports = React.createClass({
         }
 
         var className = "alert alert-" + cssClass;
+
+        if (this.props.hasOwnProperty('dismissible') &&
+            this.props.dismissible === "true") {
+            return (
+                <div className={className + ' alert-dimissible'} role="alert">
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {echo(this.props.msg)}
+                </div>
+            )
+        }
+
         return (
             <div className="container">
                 <div className={className} role="alert">{echo(this.props.msg)}</div>
