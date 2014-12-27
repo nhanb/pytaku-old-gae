@@ -54,11 +54,10 @@ next: Next
 processing: Processing
 
 external_request_timeout: |
-  Timed out while requesting original manga site. This is most likely not our
-  fault (hopefully). Maybe try refreshing?
+  Timed out while requesting original manga site. Try refreshing :)
 
 unknown_server_error: |
-  Something seriously wrong happened. Don't worry, your trusty admins have been
-  notified. We'll (attempt to) fix it... when we feel like it.
+  Unexpected server error. Administrators have to notified. Please try other
+  pages for now :)
 
 loading_chapter_info: Loading chapter info...
