@@ -119,6 +119,8 @@ module.exports = React.createClass({
 
     bookmark: function() {
         var self = this;
+        self.setState({bookmarkErrorMsg: ''});
+
         this.props.ajax({
             url: '/api/series-bookmark',
             method: 'POST',
@@ -131,7 +133,10 @@ module.exports = React.createClass({
                 info.is_bookmarked = true;
                 self.setState({info: info});
                 store.set('series_' + self.props.url, info);
-            }
+            },
+            error: function(data) {
+                self.setState({bookmarkErrorMsg: data.responseJSON.msg});
+            },
         });
     },
 
@@ -155,6 +160,13 @@ module.exports = React.createClass({
             });
             desc = intersperse(desc);
 
+            var bookmarkErrorAlert = <span></span>;
+            if (this.state.bookmarkErrorMsg) {
+                var msg = echo('add_series_bookmark_failed') + ': ' +
+                    echo(this.state.bookmarkErrorMsg);
+                bookmarkErrorAlert = <Alert msg={msg} />;
+            }
+
             body = (
                 <div className="series-info">
                     <div className="row">
@@ -169,6 +181,7 @@ module.exports = React.createClass({
                             <h2 className="series-name">
                                 {info.name} {this.renderBookmarkBtn()}
                             </h2>
+                            {bookmarkErrorAlert}
                             <ul>
                                 <li><a href={info.url}>{echo('original_link')}</a></li>
                                 <li><strong>{echo('status')}:</strong> {info.status}</li>
@@ -185,7 +198,7 @@ module.exports = React.createClass({
             );
 
         } else {
-            body = <Alert msg={this.state.errorMsg} />;
+            body = <Alert msg={echo(this.state.errorMsg)} />;
         }
 
         return (

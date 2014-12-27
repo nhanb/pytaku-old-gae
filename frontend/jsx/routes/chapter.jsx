@@ -111,7 +111,7 @@ module.exports = React.createClass({
         if (this.state.errorMsg) {
             return (
                 <div className="chapter-container">
-                    <Alert msg={this.state.errorMsg} />
+                    <Alert msg={echo(this.state.errorMsg)} />
                 </div>
             );
         }

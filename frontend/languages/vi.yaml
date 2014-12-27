@@ -57,7 +57,8 @@ external_request_timeout: |
   Trang manga gốc chậm quá nên timeout rồi, thử refresh nhé!
 
 unknown_server_error: |
-  Lỗi server - ban quản trị đã được thông báo và đang cố gắng khắc phục. Vui
-  lòng xem thử các trang khác nhé :)
+  Lỗi server - ban quản trị đã được thông báo và đang cố gắng khắc phục.
 
 loading_chapter_info: Đang tải thông tin chap...
+
+add_series_bookmark_failed: Không đánh dấu series được

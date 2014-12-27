@@ -156,7 +156,7 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <Alert msg={this.state.errorMsg} />
+                <Alert msg={echo(this.state.errorMsg)} />
 
                 <form className="form-horizontal center-form" role="form" style={this.css}
                     onSubmit={this.handleSubmit}>

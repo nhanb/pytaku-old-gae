@@ -57,7 +57,8 @@ external_request_timeout: |
   Timed out while requesting original manga site. Try refreshing :)
 
 unknown_server_error: |
-  Unexpected server error. Administrators have to notified. Please try other
-  pages for now :)
+  Unexpected server error. Administrators have been notified.
 
 loading_chapter_info: Loading chapter info...
+
+add_series_bookmark_failed: Couldn't add series bookmark
