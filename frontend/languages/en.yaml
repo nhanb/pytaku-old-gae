@@ -62,3 +62,4 @@ unknown_server_error: |
 loading_chapter_info: Loading chapter info...
 
 add_series_bookmark_failed: Couldn't add series bookmark
+load_series_failed: Couldn't load series info

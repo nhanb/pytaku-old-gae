@@ -2,6 +2,7 @@
 var RouteMixin = require('../mixins/route.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var ChapterList = require('../shared_components/chapter_list.jsx');
+var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../language.jsx').echo;
 
@@ -26,6 +27,9 @@ var SeriesItem = React.createClass({
             url: url,
             success: function(data) {
                 self.setState({chapters: data.chapters});
+            },
+            error: function(data) {
+                self.setState({errorMsg: data.responseJSON.msg});
             },
             complete: function(data) {
                 self.setState({loading: false});
@@ -56,7 +60,12 @@ var SeriesItem = React.createClass({
 
         var chapterArray;
         if (!this.state.loading) {
-            chapterArray = <ChapterList chapters={latest} />;
+            if (this.state.errorMsg) {
+                var msg = echo('load_series_failed') + ': ' + echo(this.state.errorMsg);
+                chapterArray = <Alert msg={msg} />;
+            } else {
+                chapterArray = <ChapterList chapters={latest} />;
+            }
         } else {
             chapterArray = <Loading />;
         }
@@ -151,11 +160,7 @@ module.exports = React.createClass({
 
         // Finished loading but there's an error
         } else if (this.state.errMsg) {
-            content = (
-                <div className="alert alert-danger" role="alert">
-                    {echo(this.state.errMsg)}
-                </div>
-            );
+            content = <Alert msg={echo(this.state.errMsg)} />;
 
         // No error but user hasn't bookmarked any series yet
         } else if (this.state.series_list.length === 0) {
