@@ -2,6 +2,7 @@
 var RouteMixin = require('../mixins/route.jsx');
 var store = require('../store.js');
 var echo = require('../language.jsx').echo;
+var Alert = require('../shared_components/alert.jsx');
 
 var SeriesList = React.createClass({
     css: {
@@ -128,6 +129,11 @@ module.exports = React.createClass({
                 store.set('search_' + query, data);
                 self.setState({items: data});
             },
+            error: function(data) {
+                self.setState({
+                    errorMsg: data.responseJSON.msg
+                });
+            },
             complete: function() {
                 self.setState({searching: false});
             }
@@ -150,6 +156,8 @@ module.exports = React.createClass({
 
         return (
             <div>
+                <Alert msg={this.state.errorMsg} />
+
                 <form className="form-horizontal center-form" role="form" style={this.css}
                     onSubmit={this.handleSubmit}>
 
