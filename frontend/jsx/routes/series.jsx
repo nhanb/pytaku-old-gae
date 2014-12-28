@@ -183,7 +183,7 @@ module.exports = React.createClass({
                             </h2>
                             {bookmarkErrorAlert}
                             <ul>
-                                <li><a href={info.url}>{echo('original_link')}</a></li>
+                                <li><a className="external" href={info.url}>{echo('original_link')}</a></li>
                                 <li><strong>{echo('status')}:</strong> {info.status}</li>
                                 <li><strong>{echo('author')}:</strong> {authors}</li>
                                 <li><strong>{echo('tags')}:</strong> {tags}</li>

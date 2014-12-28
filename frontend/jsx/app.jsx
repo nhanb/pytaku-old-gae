@@ -242,6 +242,10 @@ if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navig
 
 // Hijack href clicks so that the browser won't reload
 $(document).on('click', 'a', function (e) {
+    if (this.className === 'external') {
+        return true;
+    }
+
     // remove the "http://domain.com" part:
     var route = this.href.replace(/^.*\/\/[^\/]+/, '');
     router.setRoute(route);
