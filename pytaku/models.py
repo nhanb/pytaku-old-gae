@@ -116,7 +116,8 @@ class User(ndb.Model):
             return False
 
         user.password_hash = cls.hash_password(password)
-        user.reset_pw_exp = datetime.now() - timedelta(days=1)
+        user.reset_pw_exp = None
+        user.reset_pw_token = None
         user.put()
         return True
 
