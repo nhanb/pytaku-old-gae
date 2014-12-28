@@ -42,7 +42,7 @@ module.exports = React.createClass({
         <span className="icon-bar"></span>
         <span className="icon-bar"></span>
       </button>
-      <a className="navbar-brand" href="#">Pytaku</a>
+      <a className="navbar-brand" href="/">Pytaku</a>
     </div>
     <div className="navbar-collapse collapse">
       <ul className="nav navbar-nav">
