@@ -9,6 +9,7 @@ var Search = require('./routes/search.jsx');
 var Series = require('./routes/series.jsx');
 var Navbar = require('./navbar.jsx');
 var Settings = require('./routes/settings.jsx');
+var ResetPassword = require('./routes/reset_password.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
 var lang = require('./language.jsx');
 
@@ -18,6 +19,7 @@ var HOME = 'home',
     SEARCH = 'search',
     SERIES = 'series',
     CHAPTER = 'chapter',
+    RESETPW = 'reset-password',
     SBOOKMARKS = 'series-bookmarks',
     CBOOKMARKS = 'chapter-bookmarks',
     SETTINGS = 'settings';
@@ -59,6 +61,16 @@ var PytakuApp = React.createClass({
                     self.setState({
                         route: CHAPTER,
                         url: decodeURIComponent(url)
+                    });
+                };
+            })(),
+
+            '/reset-password': setState.bind(this, {route: RESETPW}),
+            '/reset-password/(.+)': (function() {
+                return function(token) {
+                    self.setState({
+                        route: RESETPW,
+                        token: token,
                     });
                 };
             })(),
@@ -139,6 +151,9 @@ var PytakuApp = React.createClass({
             case CBOOKMARKS:
                 routeComponent = <ChapterBookmarks loggedIn={this.state.loggedIn}
                     ajax={this.ajax} />;
+                break;
+            case RESETPW:
+                routeComponent = <ResetPassword token={this.state.token} />;
                 break;
             default:
                 routeComponent = <Home />;

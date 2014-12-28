@@ -63,3 +63,6 @@ loading_chapter_info: Loading chapter info...
 
 add_series_bookmark_failed: Couldn't add series bookmark
 load_series_failed: Couldn't load series info
+
+reset_password: Reset password
+your_email: Your email

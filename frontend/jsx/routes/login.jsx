@@ -91,6 +91,14 @@ module.exports = React.createClass({
 
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-10">
+                        <div className="checkbox">
+                            <a href="/#/reset-password">Forgot password?</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="col-sm-offset-2 col-sm-10">
                         {msgBlock}
                     </div>
                 </div>
