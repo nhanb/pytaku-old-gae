@@ -2,6 +2,11 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block metadata %}
+<meta property="og:image" content="{{thumb_url}}" />
+<meta property="og:site_name" content="Pytaku manga reader" />
+{% endblock %}
+
 {% block content %}
 <h1>{{title}}</h1>
 <img src="{{thumb_url}}" alt="{{title}} thumbnail image" />
