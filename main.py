@@ -27,7 +27,10 @@ app = webapp2.WSGIApplication([
     ('/chapter/(.+)', HomeRoute),
     ('/series/(.+)', HomeRoute),
     ('/search/(.+)', HomeRoute),
+    ('/reset-password/(.+)', HomeRoute),
     ('/series-bookmarks', AppOnlyRoute),
     ('/chapter-bookmarks', AppOnlyRoute),
     ('/settings', AppOnlyRoute),
+    ('/login', AppOnlyRoute),
+    ('/register', AppOnlyRoute),
 ], debug=True)

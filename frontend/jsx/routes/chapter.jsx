@@ -285,7 +285,7 @@ var ActionBar = React.createClass({
         var series = info.series_url;
 
         if (prev !== null) {
-            prev = '/#/chapter/' + encodeURIComponent(prev);
+            prev = '/chapter/' + encodeURIComponent(prev);
             prevBtn =(
                 <a href={prev} className="btn btn-primary">
                     <i className="fa fa-lg fa-angle-double-left"></i> {echo('prev')}
@@ -294,7 +294,7 @@ var ActionBar = React.createClass({
         }
 
         if (next !== null) {
-            next = '/#/chapter/' + encodeURIComponent(next);
+            next = '/chapter/' + encodeURIComponent(next);
             nextBtn =(
                 <a href={next} className="btn btn-primary">
                     {echo('next')} <i className="fa fa-lg fa-angle-double-right"></i>
@@ -302,7 +302,7 @@ var ActionBar = React.createClass({
             );
         }
 
-        series = '/#/series/' + encodeURIComponent(series);
+        series = '/series/' + encodeURIComponent(series);
         seriesBtn =(
             <a href={series} className="btn btn-info">
                 <i className="fa fa-lg fa-angle-double-up"></i> {echo('chapter_list')}

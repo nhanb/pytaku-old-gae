@@ -52,7 +52,7 @@ var SeriesItem = React.createClass({
         var removeBtn = <button onClick={this.remove} style={removeBtnCss}
             className="btn btn-sm btn-danger">{echo('remove')}</button>;
 
-        var seriesHref = '/#/series/' + encodeURIComponent(this.props.url);
+        var seriesHref = '/series/' + encodeURIComponent(this.props.url);
 
 
         var latest = chapters.slice(0, this.props.chapter_num);
@@ -150,7 +150,7 @@ module.exports = React.createClass({
         if (!this.props.loggedIn) {
             content = (
                 <div className="alert alert-danger" role="alert">
-                    {echo('this_feature_requires_logging_in')}: <a href="/#/login">{echo('login_now')}</a>.
+                    {echo('this_feature_requires_logging_in')}: <a href="/login">{echo('login_now')}</a>.
                 </div>
             );
 

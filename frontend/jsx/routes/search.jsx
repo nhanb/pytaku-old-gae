@@ -14,7 +14,7 @@ var SeriesList = React.createClass({
         // Assign unique key to make sure outdated Series components are
         // destroyed instead of reused - http://fb.me/react-warning-keys
         var key = item.url;
-        var href = '/#/series/' + encodeURIComponent(item.url);
+        var href = '/series/' + encodeURIComponent(item.url);
         return (
             <a className="list-group-item" key={key} href={href}>
                 {item.name}
@@ -97,7 +97,7 @@ module.exports = React.createClass({
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
         var type = this.props.type;
-        window.location.href = '/#/search/' + type + '/' + encodeURIComponent(query);
+        window.location.href = '/search/' + type + '/' + encodeURIComponent(query);
         return false; // So that browser won't submit an old-fashioned POST
     },
 

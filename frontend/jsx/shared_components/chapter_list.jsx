@@ -5,7 +5,7 @@ echo = require('../language.jsx').echo;
 module.exports = React.createClass({
 
     renderChapter: function(chapter, index) {
-        var href = '/#/chapter/' + encodeURIComponent(chapter.url);
+        var href = '/chapter/' + encodeURIComponent(chapter.url);
         var progress = '';
         if (chapter.progress === 'finished') {
             progress = <span className="badge">{echo('finished')}</span>;

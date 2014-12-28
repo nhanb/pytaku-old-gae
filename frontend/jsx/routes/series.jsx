@@ -150,7 +150,7 @@ module.exports = React.createClass({
             var info = this.state.info;
             var tags = intersperse(info.tags, ', ');
             var authors = info.authors.map(function(author) {
-                var href = "/#/search/author/" + encodeURIComponent(author);
+                var href = "/search/author/" + encodeURIComponent(author);
                 return <a href={href} key={href}>{author}</a>
             });
             authors = intersperse(authors, ', ');

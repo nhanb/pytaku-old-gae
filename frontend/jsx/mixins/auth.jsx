@@ -9,7 +9,7 @@ exports.RequireLoginMixin = {
     componentDidMount: function() {
         if (this.props.loggedIn === false) {
             setTimeout(function() {
-                window.location.href = '/#/login';
+                window.location.href = '/login';
             }, 50);
             // Notice the stupid setTimeout? For whatever reason if you visit a
             // "requireLogin" route directly using the address bar (instead of
@@ -36,7 +36,7 @@ exports.HideWhenLoggedInMixin = {
             if (history.length > 2) { // new tab (blank) page + current page
                 history.back();
             } else {
-                window.location.href = '/#/';
+                window.location.href = '/';
             }
         }
     }

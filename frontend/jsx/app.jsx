@@ -74,8 +74,10 @@ var PytakuApp = React.createClass({
                     });
                 };
             })(),
-        });
-        router.init('/');
+
+        }).configure({html5history: true});
+
+        router.init();
     },
 
     getInitialState: function() {
@@ -97,9 +99,9 @@ var PytakuApp = React.createClass({
                         lang.set(data.language);
                     }
 
-                    if (window.location.hash === '#/') {
+                    if (window.location.hash === '') {
                         // TODO: make default route configurable per user
-                        window.location.href = '/#/series-bookmarks';
+                        window.location.href = '/series-bookmarks';
                     }
                 },
                 error: function() {

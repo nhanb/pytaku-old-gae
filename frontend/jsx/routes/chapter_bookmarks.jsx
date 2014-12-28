@@ -38,8 +38,8 @@ var BookmarkedChapter = React.createClass({
 
     render: function() {
         var chapter = this.props.chapter;
-        var href = '/#/chapter/' + encodeURIComponent(chapter.url);
-        var seriesHref = '/#/series/' + encodeURIComponent(chapter.series_url);
+        var href = '/chapter/' + encodeURIComponent(chapter.url);
+        var seriesHref = '/series/' + encodeURIComponent(chapter.series_url);
 
         var removeBtn;
         if (this.state.removing === true) {
@@ -118,7 +118,7 @@ module.exports = React.createClass({
         if (!this.props.loggedIn) {
             content = (
                 <div className="alert alert-danger" role="alert">
-                    {echo('this_feature_requires_logging_in')}: <a href="/#/login">{echo('login_now')}</a>.
+                    {echo('this_feature_requires_logging_in')}: <a href="/login">{echo('login_now')}</a>.
                 </div>
             );
 
