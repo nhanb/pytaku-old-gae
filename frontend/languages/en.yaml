@@ -66,3 +66,5 @@ load_series_failed: Couldn't load series info
 
 reset_password: Reset password
 your_email: Your email
+reset_link_sent: A password reset link has been sent to your email.
+email_not_found: Email not found.

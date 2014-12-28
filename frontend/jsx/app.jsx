@@ -153,7 +153,8 @@ var PytakuApp = React.createClass({
                     ajax={this.ajax} />;
                 break;
             case RESETPW:
-                routeComponent = <ResetPassword token={this.state.token} />;
+                routeComponent = <ResetPassword token={this.state.token}
+                    ajax={this.ajax} />;
                 break;
             default:
                 routeComponent = <Home />;

@@ -2,6 +2,8 @@ from threading import Thread
 import traceback
 from Queue import Queue
 import webapp2
+from google.appengine.api import mail
+from google.appengine.api.app_identity import get_application_id
 from pytaku.models import User, createUser, Chapter, Series, ChapterProgress
 from pytaku import sites
 from pytaku.controllers import create_or_get_series, create_or_get_chapter
@@ -39,6 +41,30 @@ class LogoutHandler(webapp2.RequestHandler):
     def post(self):
         self.user.logout()
         return {}
+
+
+class ResetPasswordHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @unpack_post(email=['ustring', 'email'])
+    def post(self):
+        email = self.data['email']
+        token = User.generate_reset_password_token(email)
+        if token is None:
+            raise PyError({'msg': 'email_not_found'})
+
+        # Email password reset token to user
+        app_name = get_application_id()
+        sender = 'noreply@%s.appspotmail.com' % app_name
+        subject = '%s password reset' % app_name.capitalize()
+        body = """
+A password reset has been requested for your account. If you did not request
+it, simply ignore this email, otherwise visit this link to reset your password:
+
+https://%s.appspot.com/#/reset-password/%s
+        """ % (app_name, token)
+        mail.send_mail(sender, email, subject, body)
+        return {'msg': 'reset_link_sent'}
 
 
 class RegisterHandler(webapp2.RequestHandler):

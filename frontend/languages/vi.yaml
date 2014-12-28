@@ -66,3 +66,5 @@ load_series_failed: Không tải thông tin truyện được
 
 reset_password: Đặt lại mật khẩu
 your_email: Email của bạn
+reset_link_sent: Link đặt lại mật khẩu đã được gửi đến địa chỉ email của bạn.
+email_not_found: Không tìm thấy email này.

@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
 from passlib.hash import pbkdf2_sha512
-from datetime import datetime
+from datetime import datetime, timedelta
+import uuid
 
 
 class Series(ndb.Model):
@@ -80,6 +81,9 @@ class User(ndb.Model):
     # user settings
     language = ndb.StringProperty(default=u'en')  # use ISO 639-1 language code
 
+    reset_pw_token = ndb.StringProperty(indexed=True)
+    reset_pw_exp = ndb.DateTimeProperty()
+
     @property
     def settings(self):
         return {
@@ -92,6 +96,16 @@ class User(ndb.Model):
     def logout(self):
         self.api_token = None
         self.put()
+
+    @classmethod
+    def generate_reset_password_token(cls, email):
+        user = cls.get_by_id(email)
+        if user is None:
+            return None
+
+        user.reset_pw_token = unicode(uuid.uuid1())
+        user.reset_pw_exp = datetime.now() + timedelta(hours=12)
+        return user.reset_pw_token
 
     def _bookmark(self, record, name):
         list_name = 'bookmarked_' + name
