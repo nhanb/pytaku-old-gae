@@ -103,9 +103,9 @@ var PytakuApp = React.createClass({
                         lang.set(data.language);
                     }
 
-                    if (window.location.hash === '') {
+                    if (window.location.pathname === '/') {
                         // TODO: make default route configurable per user
-                        window.location.href = '/series-bookmarks';
+                        router.setRoute('/search/name/');
                     }
                 },
                 error: function() {
