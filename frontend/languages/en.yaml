@@ -72,6 +72,12 @@ set_new_password: Set new password
 password_updated: Password updated.
 password_confirm_mismatch: Password confirmation mismatch
 invalid_token: Invalid token.
+forgot_password?: Forgot password?
 
 invalid_access_token: Invalid access token.
 expired_access_token: Access token expired. Please login again.
+
+password: Password
+remember_me: Remember me
+login: Login
+register: Register

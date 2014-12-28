@@ -72,6 +72,12 @@ set_new_password: Đặt mật khẩu mới
 password_updated: Đã cập nhật mật khẩu.
 password_confirm_mismatch: Xác nhận mật khẩu không khớp.
 invalid_token: Token không hợp lệ.
+forgot_password?: Quên mật khẩu?
 
 invalid_access_token: Access token không hợp lệ.
 expired_access_token: Access token đã hết hạn. Vui lòng đăng nhập lại.
+
+password: Mật khẩu
+remember_me: Nhớ thông tin đăng nhập
+login: Đăng nhập
+register: Đăng ký

@@ -80,8 +80,8 @@ module.exports = React.createClass({
             <form onSubmit={this.handleSubmit}
                 className="form-horizontal center-form" role="form">
                 <TextInput ref="email" label="Email" type="email" />
-                <TextInput ref="password" label="Password" type="password" />
-                <CheckboxInput ref="remember" label="Remember me" />
+                <TextInput ref="password" label={echo('password')} type="password" />
+                <CheckboxInput ref="remember" label={echo('remember_me')} />
 
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-10">
@@ -92,7 +92,7 @@ module.exports = React.createClass({
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-10">
                         <div className="checkbox">
-                            <a href="/#/reset-password">Forgot password?</a>
+                            <a href="/#/reset-password">{echo('forgot_password?')}</a>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ module.exports = React.createClass({
         if (!submitting) {
             return (
                 <button type="submit" className="btn btn-primary">
-                    Login
+                    {echo('login')}
                 </button>
             );
         } else {
