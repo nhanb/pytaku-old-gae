@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{title}}</h1>
+<img src="{{thumb_url}}" alt="{{title}} thumbnail image" />
+
+{% for desc in descriptions %}
+<div>
+  <p>{{desc}}</p>
+</div>
+{% endfor %}
+
+{% endblock %}

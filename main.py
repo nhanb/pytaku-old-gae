@@ -6,7 +6,7 @@ from pytaku.api.api import RegisterHandler, LoginHandler, SeriesHandler,\
     ChapterBookmarkHandler, ChapterProgressHandler, SettingsHandler,\
     ResetPasswordHandler, SetNewPasswordHandler
 
-from pytaku.routes.routes import AppOnlyRoute, HomeRoute
+from pytaku.routes.routes import AppOnlyRoute, HomeRoute, SeriesRoute
 
 
 app = webapp2.WSGIApplication([
@@ -25,7 +25,7 @@ app = webapp2.WSGIApplication([
 
     ('/', HomeRoute),
     ('/chapter/(.+)', HomeRoute),
-    ('/series/(.+)', HomeRoute),
+    ('/series/(.+)', SeriesRoute),
     ('/search/(.+)', HomeRoute),
     ('/reset-password/(.+)', AppOnlyRoute),
     ('/series-bookmarks', AppOnlyRoute),

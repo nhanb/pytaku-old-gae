@@ -1,7 +1,9 @@
 import os
-from common import crawlable
+from urllib import unquote
 import jinja2
 import webapp2
+from pytaku.controllers import create_or_get_series
+from common import crawlable
 
 jinja = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates'),
@@ -26,4 +28,19 @@ class HomeRoute(webapp2.RequestHandler):
         template = jinja.get_template('home.html')
         self.response.write(template.render({
             'title': 'Home',
+        }))
+
+
+class SeriesRoute(webapp2.RequestHandler):
+
+    @crawlable
+    def get(self, query=None):
+        url = unquote(query)
+        series = create_or_get_series(url, no_update=True)
+
+        template = jinja.get_template('series.html')
+        self.response.write(template.render({
+            'title': series.name,
+            'thumb_url': series.thumb_url,
+            'descriptions': series.description,
         }))
