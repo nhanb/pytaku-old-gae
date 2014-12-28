@@ -67,6 +67,19 @@ https://%s.appspot.com/#/reset-password/%s
         return {'msg': 'reset_link_sent'}
 
 
+class SetNewPasswordHandler(webapp2.RequestHandler):
+
+    @wrap_json
+    @unpack_post(token=['ustring'], password=['ustring'])
+    def post(self):
+        success = User.set_new_password(self.data['token'],
+                                        self.data['password'])
+        if not success:
+            raise PyError({'msg': 'invalid_token'})
+
+        return {'msg': 'password_updated'}
+
+
 class RegisterHandler(webapp2.RequestHandler):
 
     @wrap_json

@@ -4,7 +4,7 @@ import webapp2
 from pytaku.api.api import RegisterHandler, LoginHandler, SeriesHandler,\
     SearchHandler, ChapterHandler, LogoutHandler, SeriesBookmarkHandler,\
     ChapterBookmarkHandler, ChapterProgressHandler, SettingsHandler,\
-    ResetPasswordHandler
+    ResetPasswordHandler, SetNewPasswordHandler
 
 
 app = webapp2.WSGIApplication([
@@ -12,6 +12,7 @@ app = webapp2.WSGIApplication([
     ('/api/login', LoginHandler),
     ('/api/logout', LogoutHandler),
     ('/api/reset-password', ResetPasswordHandler),
+    ('/api/set-new-password', SetNewPasswordHandler),
     ('/api/settings', SettingsHandler),
     ('/api/series', SeriesHandler),
     ('/api/chapter', ChapterHandler),

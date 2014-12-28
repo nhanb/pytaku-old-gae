@@ -68,3 +68,7 @@ reset_password: Reset password
 your_email: Your email
 reset_link_sent: A password reset link has been sent to your email.
 email_not_found: Email not found.
+set_new_password: Set new password
+password_updated: Password updated.
+password_confirm_mismatch: Password confirmation mismatch
+invalid_token: Invalid token.

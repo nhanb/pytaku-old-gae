@@ -105,7 +105,20 @@ class User(ndb.Model):
 
         user.reset_pw_token = unicode(uuid.uuid1())
         user.reset_pw_exp = datetime.now() + timedelta(hours=12)
+        user.put()
         return user.reset_pw_token
+
+    @classmethod
+    def set_new_password(cls, token, password):
+        user = cls.query(cls.reset_pw_token == token,
+                         cls.reset_pw_exp > datetime.now()).get()
+        if user is None:
+            return False
+
+        user.password_hash = cls.hash_password(password)
+        user.reset_pw_exp = datetime.now() - timedelta(days=1)
+        user.put()
+        return True
 
     def _bookmark(self, record, name):
         list_name = 'bookmarked_' + name

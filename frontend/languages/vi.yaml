@@ -68,3 +68,7 @@ reset_password: Đặt lại mật khẩu
 your_email: Email của bạn
 reset_link_sent: Link đặt lại mật khẩu đã được gửi đến địa chỉ email của bạn.
 email_not_found: Không tìm thấy email này.
+set_new_password: Đặt mật khẩu mới
+password_updated: Đã cập nhật mật khẩu.
+password_confirm_mismatch: Xác nhận mật khẩu không khớp.
+invalid_token: Token không hợp lệ.
