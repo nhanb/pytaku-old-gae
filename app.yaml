@@ -29,11 +29,6 @@ handlers:
   static_files: frontend-dist/favicon.ico
   upload: frontend-dist/favicon\.ico
 
-- url: /
-  static_files: frontend-dist/app.html
-  upload: frontend-dist/app\.html
-  secure: always
-
 - url: .*
   script: main.app
   secure: always
