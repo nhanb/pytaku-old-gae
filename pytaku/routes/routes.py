@@ -2,7 +2,7 @@ import os
 from urllib import unquote
 import jinja2
 import webapp2
-from pytaku.controllers import create_or_get_series
+from pytaku.controllers import create_or_get_series, create_or_get_chapter
 from common import crawlable
 
 jinja = jinja2.Environment(
@@ -43,4 +43,17 @@ class SeriesRoute(webapp2.RequestHandler):
             'title': series.name,
             'thumb_url': series.thumb_url,
             'descriptions': series.description,
+        }))
+
+
+class ChapterRoute(webapp2.RequestHandler):
+
+    @crawlable
+    def get(self, query=None):
+        url = unquote(query)
+        chapter = create_or_get_chapter(url)
+        template = jinja.get_template('series.html')
+        self.response.write(template.render({
+            'title': '%s - %s' % (chapter.name, chapter.series_name),
+            'thumb_url': chapter.pages[0],
         }))
