@@ -24,11 +24,15 @@ var HOME = 'home',
     CBOOKMARKS = 'chapter-bookmarks',
     SETTINGS = 'settings';
 
+// Expose Director's router object for use later in the href click hijack
+// script. Somewhat ugly, but hey, as long as it works, right?
+var router;
+
 var PytakuApp = React.createClass({
     componentDidMount: function() {
         var setState = this.setState;
         var self = this;
-        var router = Router({
+        router = Router({
             '/': setState.bind(this, {route: HOME}),
             '/register': setState.bind(this, {route: REGISTER}),
             '/login': setState.bind(this, {route: LOGIN}),
@@ -239,3 +243,11 @@ React.renderComponent(<PytakuApp />, document.getElementById('app'));
 if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     React.renderComponent(<ScrollToTopBtn />, document.getElementById('up-component'));
 }
+
+// Hijack href clicks so that the browser won't reload
+$(document).on('click', 'a', function (e) {
+    // remove the "http://domain.com" part:
+    var route = this.href.replace(/^.*\/\/[^\/]+/, '');
+    router.setRoute(route);
+    return false;
+});

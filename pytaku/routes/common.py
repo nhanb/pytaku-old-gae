@@ -8,9 +8,6 @@ def crawlable(func):
     html.
     """
     def wrapped(handler, query=None):
-        print '>> headers:', str(handler.request.headers)
-        print '>> query:', query
-
         # If requester is a bot, serve custom "bot version"
         crawlers = ('Googlebot', 'facebookexternalhit')
         for crawler in crawlers:
