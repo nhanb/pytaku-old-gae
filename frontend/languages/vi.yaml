@@ -81,3 +81,18 @@ password: Mật khẩu
 remember_me: Nhớ thông tin đăng nhập
 login: Đăng nhập
 register: Đăng ký
+
+welcome_to_pytaku: Chào mừng bạn đến với Pytaku!
+
+pytaku_is: |
+  Pytaku là trang đọc manga online có thể lấy nguồn từ nhiều trang manga tiếng
+  Anh và tiếng Việt (kissmanga, batoto, vitaku, v.v...)
+
+pytaku_instructions: |
+  Bạn có thể click "Tìm" để bắt đầu đọc truyện. Người dùng có đăng ký (miễn phí)
+  có thể đánh dấu chapter hoặc lập một list những tựa truyện để theo dõi chapter
+  mới dễ dàng hơn. Trang web cũng tự động lưu những chapter bạn đã đọc: khi mở
+  một chapter được vài giây, nó sẽ được đánh dấu "đang đọc"; nếu bạn scroll chạm
+  đáy, nó sẽ trở thành "đã đọc".
+
+can_be_found_on_github: Mã nguồn trang web được đặt trên GitHub

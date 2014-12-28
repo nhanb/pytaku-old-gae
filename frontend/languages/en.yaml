@@ -81,3 +81,18 @@ password: Password
 remember_me: Remember me
 login: Login
 register: Register
+
+welcome_to_pytaku: Welcome to Pytaku!
+
+pytaku_is: |
+  Pytaku is an online manga reader that pulls data from various English and
+  Vietnamese manga sites (kissmanga, batoto, vitaku, etc.)
+
+pytaku_instructions: |
+  You can get started right away by searching for a manga title. Logged in users
+  can bookmark chapters or maintain a list of series to check for updates
+  easily. We also automatically record chapters you have read: once you have
+  a chapter open for a few seconds, it will be marked as "reading"; scrolling
+  to the bottom will update it to "finished".
+
+can_be_found_on_github: The source code can be found on GitHub
