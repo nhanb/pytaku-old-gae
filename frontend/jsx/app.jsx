@@ -103,10 +103,6 @@ var PytakuApp = React.createClass({
                         lang.set(data.language);
                     }
 
-                    if (window.location.pathname === '/') {
-                        // TODO: make default route configurable per user
-                        router.setRoute('/search/name/');
-                    }
                 },
                 error: function() {
                     localStorage.removeItem('token');
