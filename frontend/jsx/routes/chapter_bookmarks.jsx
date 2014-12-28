@@ -128,7 +128,7 @@ module.exports = React.createClass({
 
         // Finished loading but there's an error
         } else if (this.state.errMsg) {
-            content = <Alert msg={this.state.errMsg} />;
+            content = <Alert msg={echo(this.state.errMsg)} />;
 
         // No error but user has nothing in bookmark list yet
         } else if (this.state.chapters.length === 0) {

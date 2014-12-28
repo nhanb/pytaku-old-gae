@@ -24,20 +24,20 @@ def validate_token(message, max_days=None):
     try:
         data = _signer.loads(message)
     except BadSignature:
-        return None, 'invalid_token'
+        return None, 'invalid_access_token'
 
     # Tokens without creation time don't expire over time
     if 'created_at' in data:
         token_created_at = datetime.strptime(data['created_at'], _datetimefmt)
         if (datetime.now() - token_created_at).days > max_days:
-            return None, 'expired_token'
+            return None, 'expired_access_token'
 
     user = User.get_by_id(data['id'])
     if user is None:
-        return None, 'invalid_token'
+        return None, 'invalid_access_token'
 
     # All existing tokens expire when user password has been changed
     if user.password_hash != data['hash']:
-        return None, 'expired_token'
+        return None, 'expired_access_token'
 
     return user, None
