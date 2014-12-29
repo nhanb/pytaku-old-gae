@@ -121,16 +121,21 @@ module.exports = React.createClass({
             <div className="chapter-container">
                 <h2 className="chapter-name">{name}</h2>
                 <div>
+
                     <ActionBar info={info} ajax={this.props.ajax} setState={setState}
                         updatingProgress={this.state.updatingProgress}
                         loggedIn={this.props.loggedIn}
                         setProgress={setProgress} />
 
                     <Loading loading={fetching} />
+
                     {pages}
+
                     <ActionBar info={info} ajax={this.props.ajax} setState={setState}
                         updatingProgress={this.state.updatingProgress}
+                        loggedIn={this.props.loggedIn}
                         setProgress={setProgress} />
+
                 </div>
             </div>
         );
