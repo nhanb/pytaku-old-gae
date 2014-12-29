@@ -97,7 +97,8 @@ module.exports = React.createClass({
     handleSubmit: function(e) {
         var query = this.refs.queryInput.state.value;
         var type = this.props.type;
-        window.location.href = '/search/' + type + '/' + encodeURIComponent(query);
+        var newRoute = '/search/' + type + '/' + encodeURIComponent(query);
+        this.props.router.setRoute(newRoute);
         return false; // So that browser won't submit an old-fashioned POST
     },
 
