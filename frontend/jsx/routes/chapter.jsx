@@ -123,6 +123,7 @@ module.exports = React.createClass({
                 <div>
                     <ActionBar info={info} ajax={this.props.ajax} setState={setState}
                         updatingProgress={this.state.updatingProgress}
+                        loggedIn={this.props.loggedIn}
                         setProgress={setProgress} />
 
                     <Loading loading={fetching} />
@@ -290,7 +291,10 @@ var ProgressButton = React.createClass({
     render: function() {
         var progress = this.props.progress;
 
-        if (this.props.updating === true) {
+        if (this.props.loggedIn !== true) {
+            return <span></span>;
+
+        } else if (this.props.updating === true) {
             return (
                 <button className="btn btn-danger" disabled="disabled">
                     <i className='fa fa-spinner fa-spin'></i> {echo('updating')}
@@ -383,7 +387,8 @@ var ActionBar = React.createClass({
         var bookmarkBtn = <BookmarkButton info={info} ajax={this.props.ajax}
             setState={this.props.setState} />;
 
-        var progressBtn = <ProgressButton updating={this.props.updatingProgress}
+        var progressBtn = <ProgressButton loggedIn={this.props.loggedIn}
+            updating={this.props.updatingProgress}
             progress={info.progress} setProgress={this.props.setProgress} />;
 
         return (
