@@ -39,13 +39,11 @@ class Site:
 from kissmanga import Kissmanga
 from batoto import Batoto
 from vitaku import Vitaku
-from vechai import Vechai
 
 available_sites = [
     Kissmanga(),
     Vitaku(),
     Batoto(),
-    Vechai()
 ]
 
 
