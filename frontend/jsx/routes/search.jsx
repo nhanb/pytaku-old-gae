@@ -112,7 +112,9 @@ module.exports = React.createClass({
         this.setState({searching: true});
         query = query.trim();
 
-        var cachedData = store.get('search_' + this.props.type + '_' + query);
+        var cachedDataKey = 'search_' + this.props.type + '_' + query;
+
+        var cachedData = store.get(cachedDataKey);
         if (cachedData !== null) {
             this.setState({
                 items: cachedData,
@@ -127,7 +129,7 @@ module.exports = React.createClass({
             dataType: 'json',
             method: 'GET',
             success: function(data) {
-                store.set('search_' + query, data);
+                store.set(cachedDataKey, data);
                 self.setState({items: data});
             },
             error: function(data) {
