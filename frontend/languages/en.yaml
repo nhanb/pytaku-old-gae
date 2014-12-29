@@ -38,8 +38,11 @@ no_bookmarked_chapter_yet: You have not bookmarked any chapter yet :)
 this_feature_requires_logging_in: This feature requires logging in
 login_now: Login now
 
-finished: finished
-reading: reading
+finished: Finished
+reading: Reading
+unread: Unread
+
+updating: Updating
 
 user_settings: My settings
 

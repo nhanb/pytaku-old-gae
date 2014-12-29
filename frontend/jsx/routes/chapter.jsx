@@ -106,6 +106,7 @@ module.exports = React.createClass({
         });
 
         var setState = this.setState.bind(this);
+        var setProgress = this.setProgress;
 
         var body;
         if (this.state.errorMsg) {
@@ -120,10 +121,15 @@ module.exports = React.createClass({
             <div className="chapter-container">
                 <h2 className="chapter-name">{name}</h2>
                 <div>
-                    <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
+                    <ActionBar info={info} ajax={this.props.ajax} setState={setState}
+                        updatingProgress={this.state.updatingProgress}
+                        setProgress={setProgress} />
+
                     <Loading loading={fetching} />
                     {pages}
-                    <ActionBar info={info} ajax={this.props.ajax} setState={setState} />
+                    <ActionBar info={info} ajax={this.props.ajax} setState={setState}
+                        updatingProgress={this.state.updatingProgress}
+                        setProgress={setProgress} />
                 </div>
             </div>
         );
@@ -193,13 +199,14 @@ module.exports = React.createClass({
     },
 
     startProgressTimer: function() {
-        if (!this.props.loggedIn || this.state.info.progress === 'finished') {
+        var progress = this.state.info.progress;
+        if (!this.props.loggedIn || (progress === 'finished' || progress === 'reading')) {
             return;
         }
         var self = this;
         var initialUrl = window.location.href;
 
-        var delay = 4000;  // TODO: make this configurable
+        var delay = 2000;  // TODO: make this configurable
         setTimeout(function() {
             // Make sure user is still reading this page before doing anything
             if (initialUrl === window.location.href) {
@@ -229,6 +236,9 @@ module.exports = React.createClass({
         if (this.state.info.progress === progress) {
             return;
         }
+
+        this.setState({updatingProgress: true});
+
         var url = this.props.url;
         var self = this;
         this.props.ajax({
@@ -266,11 +276,72 @@ module.exports = React.createClass({
             },
             error: function(err) {
                 console.log('error while setting progress:', err);
-            }
+            },
+            complete: function() {
+                self.setState({updatingProgress: false});
+            },
         })
     }
 
 
+});
+
+var ProgressButton = React.createClass({
+    render: function() {
+        var progress = this.props.progress;
+
+        if (this.props.updating === true) {
+            return (
+                <button className="btn btn-danger" disabled="disabled">
+                    <i className='fa fa-spinner fa-spin'></i> {echo('updating')}
+                </button>
+            );
+
+        } else if (typeof progress === 'undefined' || progress === 'unread') {
+            return (
+                <button className="btn btn-primary" onClick={this.rotateProgress}>
+                    <i className='fa fa-eye'></i> {echo('unread')}
+                </button>
+            );
+
+        } else if (progress === 'reading') {
+            return (
+                <button className="btn btn-info" onClick={this.rotateProgress}>
+                    <i className='fa fa-eye'></i> {echo('reading')}
+                </button>
+            );
+
+        } else if (progress === 'finished') {
+            return (
+                <button className="btn btn-default" onClick={this.rotateProgress}>
+                    <i className='fa fa-eye'></i> {echo('finished')}
+                </button>
+            );
+        } else {
+            return (
+                <button className="btn btn-info" onClick={this.rotateProgress}>
+                    ERROR!
+                </button>
+            );
+        }
+    },
+
+    rotateProgress: function() {
+        // unread -> reading -> finished -> unread -> ...
+        var nextProgress;
+        switch (this.props.progress) {
+            case 'reading':
+                nextProgress = 'finished';
+                break;
+            case 'finished':
+                nextProgress = 'unread';
+                break;
+            default:  // "unread" or undefined
+                nextProgress = 'reading';
+                break;
+        }
+        this.props.setProgress(nextProgress);
+    },
 });
 
 var ActionBar = React.createClass({
@@ -312,10 +383,12 @@ var ActionBar = React.createClass({
         var bookmarkBtn = <BookmarkButton info={info} ajax={this.props.ajax}
             setState={this.props.setState} />;
 
+        var progressBtn = <ProgressButton updating={this.props.updatingProgress}
+            progress={info.progress} setProgress={this.props.setProgress} />;
 
         return (
             <div className="chapter-navs  btn-group">
-                {prevBtn} {seriesBtn} {bookmarkBtn} {nextBtn}
+                {prevBtn} {seriesBtn} {progressBtn} {bookmarkBtn} {nextBtn}
             </div>
         );
     },

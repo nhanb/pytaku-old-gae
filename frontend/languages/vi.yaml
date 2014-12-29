@@ -38,8 +38,11 @@ no_bookmarked_chapter_yet: Bạn chưa đánh dấu chap nào hết :)
 this_feature_requires_logging_in: Bạn phải đăng nhập mới xem được trang này
 login_now: Đăng nhập ở đây
 
-finished: đã đọc
-reading: đang đọc
+finished: Đã đọc
+reading: Đang đọc
+unread: Chưa đọc
+
+updating: Đang cập nhật
 
 user_settings: Tùy chỉnh
 
