@@ -242,7 +242,8 @@ if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navig
 
 // Hijack href clicks so that the browser won't reload
 $(document).on('click', 'a', function (e) {
-    if (this.className === 'external') {
+    if (this.className === 'external'
+        || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
         return true;
     }
 
