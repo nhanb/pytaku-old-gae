@@ -61,34 +61,43 @@ var SeriesItem = React.createClass({
         });
     },
 
-    render: function() {
-        var returnVal;
-        var chapters = this.state.chapters;
-        var latestChapters = '';
-
+    renderRemoveBtn: function() {
         var removeBtnCss = {
             'width': '100%',
             'margin-bottom': '15px',
         };
-        var removeBtn;
+
         if (this.state.removing === true) {
-            removeBtn = (
+            return (
                 <button type="button" className="btn btn-sm btn-danger"
-                    style={removeBtnCss}
-                    disabled="disabled">
+                    style={removeBtnCss} disabled="disabled">
                     <i className="fa fa-spinner fa-spin"></i> {echo('removing')}...
                 </button>
             );
         } else {
-            removeBtn = <button onClick={this.removeBookmark} style={removeBtnCss}
+            return <button onClick={this.removeBookmark} style={removeBtnCss}
                 className="btn btn-sm btn-danger">{echo('remove')}</button>;
         }
+    },
 
+    renderThumbnail: function() {
         var seriesHref = '/series/' + encodeURIComponent(this.props.url);
 
+        return (
+            <div className="col-md-2">
+                <a className="thumbnail" href={seriesHref}>
+                    <img src={this.props.thumb} alt="thumbnail" />
+                </a>
+                {this.renderRemoveBtn()}
+            </div>
+        );
+    },
 
-        var latest = chapters.slice(0, this.props.chapter_num);
-        nameRowSpan = latest.length;
+    render: function() {
+        var chapters = this.state.chapters;
+
+        var removeBtn = this.renderRemoveBtn();
+        var thumbnail = this.renderThumbnail();
 
         var chapterArray;
         if (!this.state.loading) {
@@ -96,28 +105,22 @@ var SeriesItem = React.createClass({
                 var msg = echo('load_series_failed') + ': ' + echo(this.state.errorMsg);
                 chapterArray = <Alert msg={msg} />;
             } else {
-                chapterArray = <ChapterList chapters={latest} />;
+                chapterArray = <ChapterList chapters={chapters} />;
             }
         } else {
             chapterArray = <Loading />;
         }
 
-        returnVal = (
+        return (
             <div className="row">
 
-                <div className="col-md-2">
-                    <a className="thumbnail" href={seriesHref}>
-                        <img src={this.props.thumb} alt="thumbnail" />
-                    </a>
-                        {removeBtn}
-                </div>
+                {thumbnail}
 
                 <div className="list-group col-md-10">
                     {chapterArray}
                 </div>
             </div>
         );
-        return returnVal;
     },
 
 });
