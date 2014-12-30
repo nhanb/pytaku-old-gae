@@ -20,7 +20,7 @@ var SeriesItem = React.createClass({
         this.setState({loading: true});
 
         url = '/api/series?url=' + encodeURIComponent(this.props.url);
-        url += '&chapter_limit=' + this.props.chapter_num;
+        url += '&only_unread=1';
 
         var self = this;
         this.props.ajax({
@@ -176,7 +176,7 @@ module.exports = React.createClass({
             content = this.state.series_list.map(function(series) {
                 return <SeriesItem url={series.url} name={series.name}
                     thumb={series.thumb_url}
-                    ajax={self.props.ajax} key={series.url} chapter_num="6" />;
+                    ajax={self.props.ajax} key={series.url} />;
             });
         }
 

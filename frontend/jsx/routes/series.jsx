@@ -70,7 +70,7 @@ module.exports = React.createClass({
         }
 
         url = '/api/series?url=' + encodeURIComponent(this.props.url);
-        url += '&chapter_limit=-1';
+        url += '&only_unread=0';
 
         var self = this;
         this.props.ajax({

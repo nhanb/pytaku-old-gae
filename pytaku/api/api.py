@@ -1,6 +1,7 @@
 from threading import Thread
 import traceback
 from Queue import Queue
+from collections import deque
 import webapp2
 from google.appengine.api import mail
 from google.appengine.api.app_identity import get_application_id
@@ -121,7 +122,7 @@ class SeriesHandler(webapp2.RequestHandler):
 
     @wrap_json
     @auth(required=False)
-    @unpack_get(url=['ustring', 'urlencoded'], chapter_limit=['integer'])
+    @unpack_get(url=['ustring', 'urlencoded'], only_unread=['boolean'])
     def get(self):
 
         series = create_or_get_series(self.data['url'])
@@ -129,30 +130,49 @@ class SeriesHandler(webapp2.RequestHandler):
         resp = {
             field: getattr(series, field)
             for field in ('site', 'name', 'thumb_url', 'tags', 'status',
-                          'description', 'authors')
+                          'description', 'authors', 'chapters')
         }
 
-        # If the provided chapter_limit is valid, return only that many
-        # chapters in API response.
-        chapters = series.chapters
-        chapter_limit = self.data['chapter_limit']
-        if chapter_limit in range(len(chapters)):
-            chapters = chapters[:chapter_limit]
-        resp['chapters'] = chapters
+        if not hasattr(self, 'user'):
+            return resp
 
-        # If user is logged in
-        if hasattr(self, 'user'):
-            # tell if this series is in their bookmarks
-            resp['is_bookmarked'] = series.is_bookmarked_by(self.user)
+        # tell if this series is in their bookmarks
+        resp['is_bookmarked'] = series.is_bookmarked_by(self.user)
 
-            # insert user's reading progress into each chapter too
-            progresses = ChapterProgress.get_by_series_url(self.user.key.id(),
-                                                           self.data['url'])
+        # insert user's reading progress into each chapter too
+        progresses = ChapterProgress.get_by_series_url(self.user.key.id(),
+                                                       self.data['url'])
+
+        # Only show chapters that come after the latest "finished" chapter, or
+        # starting from the latest "reading" chapter, whichever comes last.
+        if self.data['only_unread']:
+            shown_chapters = deque(maxlen=6)
+
+            for chap in resp['chapters']:
+
+                if chap['url'] in progresses:
+                    chap['progress'] = progresses[chap['url']]
+                    if chap['progress'] == 'finished':
+                        break
+                    elif chap['progress'] == 'reading':
+                        shown_chapters.append(chap)
+                        break
+
+                else:
+                    chap['progress'] = 'unread'
+
+                shown_chapters.append(chap)
+
+            resp['chapters'] = list(shown_chapters)
+
+        # Show all chapters:
+        else:
             for chap in resp['chapters']:
                 if chap['url'] in progresses:
                     chap['progress'] = progresses[chap['url']]
                 else:
                     chap['progress'] = 'unread'
+
         return resp
 
 
