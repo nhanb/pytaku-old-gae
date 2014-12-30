@@ -155,8 +155,8 @@ module.exports = React.createClass({
             });
             authors = intersperse(authors, ', ');
 
-            var desc = info.description.map(function(paragraph) {
-                return <p>{paragraph}</p>;
+            var desc = info.description.map(function(paragraph, id) {
+                return <p key={id}>{paragraph}</p>;
             });
             desc = intersperse(desc);
 
