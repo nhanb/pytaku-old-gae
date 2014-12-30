@@ -12,8 +12,32 @@ var SeriesItem = React.createClass({
         return {
             chapters: [],
             loading: false,
-            removed: false,
+            removing: false,
         };
+    },
+
+    removeBookmark: function() {
+        this.setState({removing: true});
+        var self = this;
+        this.props.ajax({
+            url: '/api/series-bookmark',
+            method: 'POST',
+            data: JSON.stringify({
+                url: this.props.url,
+                action: 'remove'
+            }),
+            success: function() {
+                var cachedData = store.get('series_' + self.props.url);
+                if (cachedData !== null) {
+                    cachedData.is_bookmarked = false;
+                    store.set('series_' + self.props.url, cachedData);
+                }
+                self.props.remove(self.props.series);
+            },
+            error: function() {
+                self.setState({removing: false});
+            }
+        });
     },
 
     componentDidMount: function() {
@@ -38,9 +62,6 @@ var SeriesItem = React.createClass({
     },
 
     render: function() {
-        if (this.state.removed) {
-            return <span></span>;
-        }
         var returnVal;
         var chapters = this.state.chapters;
         var latestChapters = '';
@@ -49,8 +70,19 @@ var SeriesItem = React.createClass({
             'width': '100%',
             'margin-bottom': '15px',
         };
-        var removeBtn = <button onClick={this.remove} style={removeBtnCss}
-            className="btn btn-sm btn-danger">{echo('remove')}</button>;
+        var removeBtn;
+        if (this.state.removing === true) {
+            removeBtn = (
+                <button type="button" className="btn btn-sm btn-danger"
+                    style={removeBtnCss}
+                    disabled="disabled">
+                    <i className="fa fa-spinner fa-spin"></i> {echo('removing')}...
+                </button>
+            );
+        } else {
+            removeBtn = <button onClick={this.removeBookmark} style={removeBtnCss}
+                className="btn btn-sm btn-danger">{echo('remove')}</button>;
+        }
 
         var seriesHref = '/series/' + encodeURIComponent(this.props.url);
 
@@ -88,25 +120,6 @@ var SeriesItem = React.createClass({
         return returnVal;
     },
 
-    remove: function() {
-        var self = this;
-        this.props.ajax({
-            url: '/api/series-bookmark',
-            method: 'POST',
-            data: JSON.stringify({
-                url: this.props.url,
-                action: 'remove'
-            }),
-            success: function() {
-                var cachedData = store.get('series_' + self.props.url);
-                if (cachedData !== null) {
-                    cachedData.is_bookmarked = false;
-                    store.set('series_' + self.props.url, cachedData);
-                }
-                self.setState({removed: true});
-            }
-        });
-    }
 });
 
 module.exports = React.createClass({
@@ -143,6 +156,15 @@ module.exports = React.createClass({
         });
     },
 
+    removeSeries: function(s) {
+        var series_list = this.state.series_list;
+        var i = series_list.indexOf(s);
+        if (i > -1) {
+            series_list.splice(i, 1);
+            this.setState({series_list: series_list});
+        }
+    },
+
     render: function() {
         var content;
 
@@ -175,7 +197,8 @@ module.exports = React.createClass({
             var self = this;
             content = this.state.series_list.map(function(series) {
                 return <SeriesItem url={series.url} name={series.name}
-                    thumb={series.thumb_url}
+                    series={series}
+                    thumb={series.thumb_url} remove={self.removeSeries}
                     ajax={self.props.ajax} key={series.url} />;
             });
         }
