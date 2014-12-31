@@ -64,7 +64,7 @@ var SeriesItem = React.createClass({
     renderRemoveBtn: function() {
         var removeBtnCss = {
             'width': '100%',
-            'margin-bottom': '15px',
+            'marginBottom': '15px',
         };
 
         if (this.state.removing === true) {

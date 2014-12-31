@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 module.exports = React.createClass({
     css: {
-        'text-align': 'center',
-        'margin-top': '30px'
+        'textAlign': 'center',
+        'marginTop': '30px'
     },
     render: function(e) {
         if (this.props.hasOwnProperty('loading') &&
