@@ -17,7 +17,6 @@
  */
 
 var gulp = require('gulp');
-var react = require('gulp-react');
 var livereload = require('gulp-livereload');
 var concat = require('gulp-concat');
 var htmlmin = require('gulp-htmlmin');
