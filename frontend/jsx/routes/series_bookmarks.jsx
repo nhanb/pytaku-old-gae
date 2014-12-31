@@ -93,8 +93,33 @@ var SeriesItem = React.createClass({
         );
     },
 
+    renderEmpty: function() {
+        var seriesHref = '/series/' + encodeURIComponent(this.props.url);
+        return (
+            <div className="row">
+
+                {this.renderThumbnail()}
+
+                <div className="col-md-10 alert alert-primary">
+                    <p>
+                        {echo('no_new_chapters')}.
+                    </p>
+                    <p>
+                        <a href={seriesHref}>
+                            {echo('full_chapter_list')}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        );
+    },
+
     render: function() {
         var chapters = this.state.chapters;
+
+        if (chapters.length === 0 && !this.state.loading) {
+            return this.renderEmpty();
+        }
 
         var removeBtn = this.renderRemoveBtn();
         var thumbnail = this.renderThumbnail();
