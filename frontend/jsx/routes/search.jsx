@@ -94,22 +94,27 @@ module.exports = React.createClass({
         }
     },
 
+    handleChange: function(e) {
+        this.setState({query: e.target.value});
+    },
+
     handleSubmit: function(e) {
-        var query = this.refs.queryInput.state.value;
+        var query = this.state.query;
         var type = this.props.type;
         var newRoute = '/search/' + type + '/' + encodeURIComponent(query);
         this.props.router.setRoute(newRoute);
-        return false; // So that browser won't submit an old-fashioned POST
+        e.preventDefault(); // So that browser won't submit an old-fashioned POST
     },
 
     search: function(query) {
-        this.refs.queryInput.setState({value: query});
-
         if (!query || query.trim().length < 2 ||
             (this.state && this.state.searching)) {
             return false;
         }
-        this.setState({searching: true});
+        this.setState({
+            searching: true,
+            query: query,
+        });
         query = query.trim();
 
         var cachedDataKey = 'search_' + this.props.type + '_' + query;
@@ -164,7 +169,8 @@ module.exports = React.createClass({
                 <form className="form-horizontal center-form" role="form" style={this.css}
                     onSubmit={this.handleSubmit}>
 
-                    <input className="form-control" type="text" ref="queryInput"
+                    <input className="form-control" type="text"
+                        onChange={this.handleChange} value={this.state.query}
                         placeholder={placeholder} autoFocus="autofocus" />
 
                     <SearchButton searching={this.state.searching} msg={searchBtnMsg}/>
