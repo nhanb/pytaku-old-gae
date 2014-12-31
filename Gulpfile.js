@@ -164,13 +164,10 @@ gulp.task('watch', function() {
     gulp.watch('frontend/favicon.ico', ['favicon']);
     gulp.watch('frontend/languages/*.yaml', ['lang']);
 
-    var server = livereload();
-    // Livereload server won't be up until at least one "change" event has
-    // occurred, so here it is. It sounds stupid, I know.
-    server.changed('frontend/app.html');
+    livereload.listen();
 
     // If there's a change in dist then trigger livereload
     gulp.watch(['frontend-dist/**/*', 'frontend']).on('change', function(file) {
-        server.changed(file.path);
+        livereload.changed(file);
     });
 });
