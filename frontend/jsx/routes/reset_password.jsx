@@ -68,10 +68,10 @@ var Request = React.createClass({
         }
     },
 
-    handleEmailSubmit: function() {
+    handleEmailSubmit: function(e) {
         var email = this.refs.email.state.value;
         if (!email) {
-            return false;
+            return;
         }
 
         this.setState({
@@ -100,7 +100,7 @@ var Request = React.createClass({
             },
         })
 
-        return false;
+        return;
     }
 });
 
@@ -162,12 +162,14 @@ var Reset = React.createClass({
         }
     },
 
-    handleSubmit: function() {
+    handleSubmit: function(e) {
+        e.preventDefault();
+
         var token = this.props.token;
         var password = this.refs.password.state.value;
         var confirm = this.refs.confirm.state.value;
         if (!token || !password || !confirm) {
-            return false;
+            return;
         }
 
         if (password !== confirm) {
@@ -175,7 +177,7 @@ var Reset = React.createClass({
                 msg: 'password_confirm_mismatch',
                 msgType: 'danger',
             });
-            return false;
+            return;
         }
 
         this.setState({
@@ -207,7 +209,7 @@ var Reset = React.createClass({
             },
         })
 
-        return false;
+        return;
     }
 });
 

@@ -109,7 +109,7 @@ module.exports = React.createClass({
     search: function(query) {
         if (!query || query.trim().length < 2 ||
             (this.state && this.state.searching)) {
-            return false;
+            return;
         }
         this.setState({
             searching: true,

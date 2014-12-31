@@ -37,7 +37,9 @@ module.exports = React.createClass({
         );
     },
 
-    handleSubmit: function() {
+    handleSubmit: function(e) {
+        e.preventDefault();
+
         var chosenLang = this.refs.langSelect.state.value;
 
         if (this.props.loggedIn) {
@@ -56,6 +58,6 @@ module.exports = React.createClass({
             lang.set(chosenLang);
         }
 
-        return false;
+        return
     }
 });

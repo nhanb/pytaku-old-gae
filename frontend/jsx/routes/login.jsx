@@ -18,13 +18,15 @@ module.exports = React.createClass({
         };
     },
 
-    handleSubmit: function() {
+    handleSubmit: function(e) {
+        e.preventDefault();
+
         var email = this.refs.email.state.value;
         var password = this.refs.password.state.value;
         var remember = this.refs.remember.state.value;
 
         if (!email || !password) {
-            return false;
+            return;
         }
 
         this.setState({
@@ -63,7 +65,7 @@ module.exports = React.createClass({
             }
         });
 
-        return false;
+        return;
     },
 
     render: function() {

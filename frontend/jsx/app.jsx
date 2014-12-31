@@ -250,5 +250,5 @@ $(document).on('click', 'a', function (e) {
     // remove the "http://domain.com" part:
     var route = this.href.replace(/^.*\/\/[^\/]+/, '');
     router.setRoute(route);
-    return false;
+    e.preventDefault();
 });
