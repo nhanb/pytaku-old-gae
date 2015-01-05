@@ -27,7 +27,7 @@ class HomeRoute(webapp2.RequestHandler):
     def get(self, query=None):
         template = jinja.get_template('home.html')
         self.response.write(template.render({
-            'title': 'Home',
+            'title': "Pytaku - The last online manga reader you'll ever need",
         }))
 
 
@@ -52,8 +52,10 @@ class ChapterRoute(webapp2.RequestHandler):
     def get(self, query=None):
         url = unquote(query)
         chapter = create_or_get_chapter(url)
+        series = create_or_get_series(chapter.series_url)
         template = jinja.get_template('series.html')
         self.response.write(template.render({
             'title': '%s - %s' % (chapter.name, chapter.series_name),
             'thumb_url': chapter.pages[0],
+            'descriptions': series.description if series.description else [],
         }))
