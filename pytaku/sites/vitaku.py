@@ -59,8 +59,12 @@ class Vitaku(Site):
         description = [desc_h4.parent.nextSibling.text]
 
         chapter_hrefs = soup.find_all(_chapter_href)
+
+        def strip_slash(href):
+            return href if not href.endswith('/') else href[:-1]
+
         chapters = [{
-            'url': a['href'],
+            'url': strip_slash(a['href']),
             'name': a.text.strip(),
         } for a in chapter_hrefs]
 
