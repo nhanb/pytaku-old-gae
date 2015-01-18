@@ -60,8 +60,7 @@ module.exports = React.createClass({
                 });
             }
         });
-
-        return;
+        e.preventDefault();
     },
 
     render: function() {
