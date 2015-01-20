@@ -171,7 +171,9 @@ var PytakuApp = React.createClass({
             <div>
                 <Navbar loggedIn={this.state.loggedIn}
                     logout={this.logoutFunc()}
-                    email={this.state.email}/>
+                    email={this.state.email}
+                    route={this.state.route}
+                />
                 {routeComponent}
             </div>
         );
