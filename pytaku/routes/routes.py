@@ -27,7 +27,7 @@ class HomeRoute(webapp2.RequestHandler):
     def get(self, query=None):
         template = jinja.get_template('home.html')
         self.response.write(template.render({
-            'title': "Pytaku - The last online manga reader you'll ever need",
+            'title': "Pytaku - The only online manga reader you'll ever need",
         }))
 
 

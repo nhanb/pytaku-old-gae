@@ -1,6 +1,6 @@
 # Pytaku
 
-... is the last online manga reader you'll ever need!
+... is the only online manga reader you'll ever need!
 
 Join the chat room for latest development updates and official support:  
 [![Gitter chat](https://badges.gitter.im/nhanb/pytaku.png)](https://gitter.im/nhanb/pytaku)

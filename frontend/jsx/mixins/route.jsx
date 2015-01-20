@@ -10,7 +10,7 @@ var updateTitle = function() {
             title = this.pageTitle() + ' | Pytaku';
             break;
         default:
-            title = "Pytaku - The last manga reader page you'll ever need";
+            title = "Pytaku - The only manga reader page you'll ever need";
     }
     document.title = title;
 };
