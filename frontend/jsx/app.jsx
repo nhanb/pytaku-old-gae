@@ -244,6 +244,8 @@ if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navig
 
 // Hijack href clicks so that the browser won't reload
 $(document).on('click', 'a', function (e) {
+
+    // don't hijack external links or mod-key clicks
     if (this.className === 'external'
         || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
         return true;
@@ -251,6 +253,7 @@ $(document).on('click', 'a', function (e) {
 
     // remove the "http://domain.com" part:
     var route = this.href.replace(/^.*\/\/[^\/]+/, '');
+
     router.setRoute(route);
     e.preventDefault();
 });
