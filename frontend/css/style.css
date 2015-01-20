@@ -48,6 +48,10 @@ button#logout {
     text-align: center;
 }
 
+a, a:active, a:focus {
+    outline: none;
+}
+
 a.list-group-item:visited,
 a.list-group-item:visited:hover,
 a.list-group-item:focus {
