@@ -11,8 +11,14 @@ var Request = React.createClass({
             submitting: false,
             msg: '',
             msgType: '',
+            email: '',
         };
     },
+
+    handleChange: function(event) {
+        this.setState({email: event.target.value});
+    },
+
     render: function() {
         var msgBlock ='';
         if (this.state.msg) {
@@ -30,8 +36,10 @@ var Request = React.createClass({
                 <div className="form-group">
                     <div className="col-sm-12">
                         <div className="input-group">
-                            <input type="text" ref="email" className="form-control"
+                            <input type="text" className="form-control"
                                 autofocus="autofocus"
+                                value={this.state.email}
+                                onChange={this.handleChange}
                                 placeholder={echo('your_email')} />
                             <span className="input-group-btn">
                                 {submitBtn}
@@ -69,7 +77,8 @@ var Request = React.createClass({
     },
 
     handleEmailSubmit: function(e) {
-        var email = this.refs.email.state.value;
+        e.preventDefault();
+        var email = this.state.email;
         if (!email) {
             return;
         }
@@ -98,9 +107,7 @@ var Request = React.createClass({
             complete: function() {
                 self.setState({submitting: false});
             },
-        })
-
-        return;
+        });
     }
 });
 
