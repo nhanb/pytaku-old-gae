@@ -7,12 +7,28 @@ module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: echo('user_settings'),
 
+    getInitialState: function() {
+        return {saving: false};
+    },
+
     render: function() {
         langOptions = lang.supported.map(function(l) {
             var code = l[0];
             var name = l[1];
             return <option key={'opt_' + code} value={code}>{echo(name)}</option>;
         });
+
+        var saveBtn;
+        console.log(this)
+        if (this.state.saving) {
+            saveBtn = (
+                <button type="submit" className="btn btn-default">
+                    <i className='fa fa-spinner fa-spin'></i> {echo('saving')}...
+                </button>
+            );
+        } else {
+            saveBtn = <button type="submit" className="btn btn-default">{echo('save')}</button>;
+        }
 
         return (
             <form className="form-horizontal center-form" role="form"
@@ -29,7 +45,7 @@ module.exports = React.createClass({
 
                 <div className="form-group">
                     <div className="col-sm-offset-3 col-sm-9">
-                        <button type="submit" className="btn btn-default">{echo('save')}</button>
+                        {saveBtn}
                     </div>
                 </div>
 
@@ -41,7 +57,9 @@ module.exports = React.createClass({
         e.preventDefault();
 
         var chosenLang = this.refs.langSelect.state.value;
+        this.setState({saving: true});
 
+        var self = this;
         if (this.props.loggedIn) {
             this.props.ajax({
                 url: '/api/settings',
@@ -52,12 +70,16 @@ module.exports = React.createClass({
                 success: function(data) {
                     lang.set(chosenLang);
                 },
+                complete: function() {
+                    self.setState({saving: false});
+                },
             });
 
-        } else if (chosenLang !== lang.chosen) {
-            lang.set(chosenLang);
+        } else {
+            if (chosenLang !== lang.chosen) {
+                lang.set(chosenLang);
+            }
+            self.setState({saving: false});
         }
-
-        return
     }
 });
