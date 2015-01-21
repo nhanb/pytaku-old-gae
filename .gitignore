@@ -8,3 +8,5 @@ index.yaml
 /pytaku/config.py
 .idea
 env
+/frontend/jsx/languages/en.js
+/frontend/jsx/languages/vi.js

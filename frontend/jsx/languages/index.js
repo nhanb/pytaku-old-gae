@@ -7,18 +7,19 @@ var supported = [
     ['vi', 'vietnamese'],
 ];
 
+// For some reason, 'require' commands fail when called inside a loop, so we'll
+// hardcode the languages for now...
+var allLanguages = {};
+allLanguages['en'] = require('./en.js');
+allLanguages['vi'] = require('./vi.js');
+
+
 var chosen = localStorage.getItem('lang_chosen');
 if (!chosen) {
     chosen = supported[0][0];
 }
 
-var url = '/static/languages/' + chosen + '.yaml'
-var loaded = $.ajax({
-    async: false,
-    url: url
-}).responseText;
-
-loaded = yaml.load(loaded);
+loaded = allLanguages[chosen];
 
 var echo = function(code) {
     try {

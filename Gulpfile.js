@@ -28,6 +28,12 @@ var uglify = require('gulp-uglify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
+var through = require('through2');
+var yaml = require('js-yaml');
+
+var gutil = require('gulp-util');
+var PluginError = gutil.PluginError
+
 
 var target = 'DEV';
 var PRODUCTION = 'PROD';
@@ -92,8 +98,39 @@ gulp.task('lib', function() {
     });
 });
 
+// Convert yaml languages files into a single js that can be included as a
+// commonjs module
+gulp.task('lang', function() {
+
+    // Creating a stream through which each file will pass.
+    // This will turn yaml files to commonjs-compliant js files.
+    var stream = through.obj(function(file, enc, cb) {
+        if (file.isStream()) {
+            this.emit('error', new PluginError('YamlToJS', 'Streams not supported!'));
+            return cb();
+        }
+
+        // turn yaml code into commonJS code
+        if (file.isBuffer()) {
+            var jsStr = yaml.load(file.contents.toString());
+            file.contents = new Buffer("module.exports = " + JSON.stringify(jsStr) + ";");
+
+            // change extension to js too
+            file.path = file.path.toString().replace(/\.yaml$/, '.js');
+        }
+
+        this.push(file); // make sure file goes through the gulp plugin
+        cb(); // tell the stream engine that we are done with this file
+    });
+
+
+    gulp.src('./frontend/languages/*.yaml')
+    .pipe(stream)
+    .pipe(gulp.dest('./frontend/jsx/languages'));
+});
+
 // Compile application jsx
-gulp.task('jsx', function() {
+gulp.task('jsx', ['lang'], function() {
     browserify([
         './frontend/jsx/app.jsx'
     ]).bundle()
@@ -128,12 +165,6 @@ gulp.task('favicon', function() {
     .pipe(gulp.dest('frontend-dist'));
 });
 
-// Copy languages to static dir
-gulp.task('lang', function() {
-    gulp.src('frontend/languages/*.yaml')
-    .pipe(gulp.dest('frontend-dist/static/languages'));
-});
-
 // Run this once to fetch bower components and build for the first time
 gulp.task('init', [], function() {
     bower.commands.install([], {save: true}, {})
@@ -144,7 +175,7 @@ gulp.task('init', [], function() {
 
 // Build everything for development
 gulp.task('default', [], function() {
-    gulp.start('jslib', 'csslib', 'jsx', 'css', 'html', 'favicon', 'lang');
+    gulp.start('jslib', 'csslib', 'jsx', 'css', 'html', 'favicon');
 });
 
 // Download & build & minify everything for deployment
