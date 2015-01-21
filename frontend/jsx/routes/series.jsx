@@ -4,7 +4,7 @@ var Loading = require('../shared_components/loading.jsx');
 var ChapterList = require('../shared_components/chapter_list.jsx');
 var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
-var echo = require('../language.jsx').echo;
+var echo = require('../languages/index.js').echo;
 
 /* intersperse: Return an array with the separator interspersed between
  * each element of the input array.

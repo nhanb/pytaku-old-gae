@@ -4,7 +4,7 @@ var auth = require('../mixins/auth.jsx');
 var HideWhenLoggedInMixin = auth.HideWhenLoggedInMixin;
 var TextInput = require('../shared_components/text_input.jsx');
 var CheckboxInput = require('../shared_components/checkbox_input.jsx');
-var lang = require('../language.jsx');
+var lang = require('../languages/index.js');
 
 module.exports = React.createClass({
     mixins: [RouteMixin, HideWhenLoggedInMixin],

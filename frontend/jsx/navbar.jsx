@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var echo = require('./language.jsx').echo;
+var echo = require('./languages/index.js').echo;
 
 module.exports = React.createClass({
 

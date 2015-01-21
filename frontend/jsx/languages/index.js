@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var yaml = require('js-yaml');
-var store = require('./store.js');
+var store = require('../store.js');
 var loaded = {};
 var supported = [
     ['en', 'english'],

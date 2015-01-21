@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var Loading = require('../shared_components/loading.jsx');
-echo = require('../language.jsx').echo;
+echo = require('../languages/index.js').echo;
 
 module.exports = React.createClass({
 

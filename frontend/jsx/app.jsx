@@ -11,7 +11,7 @@ var Navbar = require('./navbar.jsx');
 var Settings = require('./routes/settings.jsx');
 var ResetPassword = require('./routes/reset_password.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
-var lang = require('./language.jsx');
+var lang = require('./languages/index.js');
 
 var HOME = 'home',
     REGISTER = 'register',

@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var TextInput = require('../shared_components/text_input.jsx');
-var echo = require('../language.jsx').echo;
+var echo = require('../languages/index.js').echo;
 
 var Request = React.createClass({
     pageTitle: echo('reset_password'),

@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
-var lang = require('../language.jsx');
+var lang = require('../languages/index.js');
 var echo = lang.echo;
 
 module.exports = React.createClass({

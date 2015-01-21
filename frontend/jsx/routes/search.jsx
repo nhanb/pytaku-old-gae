@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
 var store = require('../store.js');
-var echo = require('../language.jsx').echo;
+var echo = require('../languages/index.js').echo;
 var Alert = require('../shared_components/alert.jsx');
 
 var SeriesList = React.createClass({
