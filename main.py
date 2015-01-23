@@ -6,6 +6,8 @@ from pytaku.api.api import RegisterHandler, LoginHandler, SeriesHandler,\
     ChapterBookmarkHandler, ChapterProgressHandler, SettingsHandler,\
     ResetPasswordHandler, SetNewPasswordHandler
 
+from pytaku.api.workers import FetchChapterWorker
+
 from pytaku.routes.routes import AppOnlyRoute, HomeRoute, SeriesRoute,\
     ChapterRoute
 
@@ -35,4 +37,6 @@ app = webapp2.WSGIApplication([
     ('/settings', AppOnlyRoute),
     ('/login', AppOnlyRoute),
     ('/register', AppOnlyRoute),
+
+    ('/workers/fetch-chapter', FetchChapterWorker),
 ], debug=True)

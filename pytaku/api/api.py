@@ -3,7 +3,7 @@ import traceback
 from Queue import Queue
 from collections import deque
 import webapp2
-from google.appengine.api import mail
+from google.appengine.api import mail, taskqueue
 from google.appengine.api.app_identity import get_application_id
 from pytaku.models import User, createUser, Chapter, Series, ChapterProgress
 from pytaku import sites
@@ -120,6 +120,12 @@ class SettingsHandler(webapp2.RequestHandler):
 
 class SeriesHandler(webapp2.RequestHandler):
 
+    def _fetch_first_chapter(self, chapters):
+        if len(chapters) > 0:
+            taskqueue.add(queue_name='fetch-chapter',
+                          url='/workers/fetch-chapter',
+                          params={'url': chapters[-1]})
+
     @wrap_json
     @auth(required=False)
     @unpack_get(url=['ustring', 'urlencoded'], only_unread=['boolean'])
@@ -134,6 +140,7 @@ class SeriesHandler(webapp2.RequestHandler):
         }
 
         if not hasattr(self, 'user'):
+            self._fetch_first_chapter(resp['chapters'])
             return resp
 
         # tell if this series is in their bookmarks
@@ -173,6 +180,7 @@ class SeriesHandler(webapp2.RequestHandler):
                 else:
                     chap['progress'] = 'unread'
 
+        self._fetch_first_chapter(resp['chapters'])
         return resp
 
 
@@ -243,6 +251,12 @@ class ChapterHandler(webapp2.RequestHandler):
             resp['is_bookmarked'] = chapter.is_bookmarked(user)
             resp['progress'] = self.user.chapter_progress(resp['url'])
 
+        # Fetch next chapter in background
+        next_url = resp['next_chapter_url']
+        if next_url is not None:
+            taskqueue.add(queue_name='fetch-chapter',
+                          url='/workers/fetch-chapter',
+                          params={'url': next_url})
         return resp
 
 

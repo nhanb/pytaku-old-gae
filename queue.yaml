@@ -1,0 +1,4 @@
+total_storage_limit: 500M
+queue:
+  - name: fetch-chapter
+    rate: 10/s
