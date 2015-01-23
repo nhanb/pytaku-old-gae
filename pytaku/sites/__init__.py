@@ -9,8 +9,6 @@ class Site:
 
     def get_html(self, url, **kwargs):
         resp = urlfetch.fetch(url, **kwargs)
-        print url
-        print resp.status_code
         if resp.status_code != 200:
             raise PyError({'msg': 'external_request_fail', 'url': url})
         return resp.content
