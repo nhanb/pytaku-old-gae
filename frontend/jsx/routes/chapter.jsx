@@ -83,6 +83,66 @@ var BookmarkButton = React.createClass({
     },
 });
 
+var Pages = React.createClass({
+    getInitialState: function() {
+        return {
+            loaded: [],
+        };
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+
+        if (nextProps.imgs.length > 0) {
+
+            // Leave pages as-is if already rendered
+            var loaded = this.state.loaded;
+            if (loaded.length > 0 && loaded[0] === nextProps.imgs[0]) {
+                return;
+            }
+
+            // Render first image which has an onLoad event handler which
+            // renders the second image which has an onload event handler to
+            // render the third image... and so on.
+            this.setState({
+                loaded: [nextProps.imgs[0]],
+            });
+
+        } else {
+            // Clean up when changed to another chapter
+            this.setState({
+                loaded: [],
+            });
+        }
+    },
+
+    render: function() {
+        var all = this.props.imgs;
+        var loaded = this.state.loaded;
+        var self = this;
+
+        var images = loaded.map(function(url, index) {
+            // function to append the next image into the DOM when this image
+            // has finished loading:
+            var appendFunc = function() {
+                if (index + 1 < all.length) {
+                    loaded.push(all[index + 1]);
+                    self.setState({loaded: loaded});
+                }
+            };
+            return (
+                <img className="page-img" key={url + index} src={url}
+                    onLoad={appendFunc} />
+            );
+        });
+        return (
+            <div>
+                {images}
+                <Loading loading={all.length > loaded.length} />
+            </div>
+        );
+    }
+});
+
 module.exports = React.createClass({
     mixins: [RouteMixin],
     pageTitle: function() {
@@ -99,11 +159,7 @@ module.exports = React.createClass({
         var prev = info.prev_chapter_url;
         var fetching = this.state.fetching;
 
-        var pages = info.pages.map(function(url, index) {
-            return (
-                <img className="page-img" key={url + index} src={url} />
-            );
-        });
+        var pages = <Pages imgs={info.pages} />;
 
         var setState = this.setState.bind(this);
         var setProgress = this.setProgress;
