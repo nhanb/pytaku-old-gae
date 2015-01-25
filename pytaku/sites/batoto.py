@@ -20,6 +20,24 @@ class Batoto(Site):
 
     netlocs = ['bato.to']
 
+    def _normalize_series_url(self, url):
+        """
+        Series URLs from search results are in this form:
+            http://bato.to/comic/_/beelzebub-r4
+        while in other places the URL is
+            http://bato.to/comic/_/comics/beelzebub-r4
+
+        This function transforms the first form into the second for
+        consistency, otherwise url-based features like chapter progresses won't
+        work properly.
+        """
+        parts = url.split('/')
+        if len(parts) == 6 and parts[:5] == ['http:', '', 'bato.to', 'comic',
+                                             '_']:
+            parts.insert(5, 'comics')
+            return '/'.join(parts)
+        return url
+
     def search_series(self, keyword):
         url = 'http://bato.to/search?'
         params = {
@@ -42,7 +60,7 @@ class Batoto(Site):
             url = a['href']
             name = a.contents[1].strip()
             series_list.append({
-                'url': url,
+                'url': self._normalize_series_url(url),
                 'name': name,
                 'site': 'batoto',
             })
