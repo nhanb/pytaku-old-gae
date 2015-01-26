@@ -84,6 +84,10 @@ var BookmarkButton = React.createClass({
 });
 
 var Pages = React.createClass({
+
+    // Max number of pages to load concurrently
+    NUM_CONCURRENT: 3,
+
     getInitialState: function() {
         return {
             loaded: [],
@@ -104,7 +108,7 @@ var Pages = React.createClass({
             // renders the second image which has an onload event handler to
             // render the third image... and so on.
             this.setState({
-                loaded: [nextProps.imgs[0]],
+                loaded: nextProps.imgs.slice(0, this.NUM_CONCURRENT),
             });
 
         } else {
@@ -121,13 +125,24 @@ var Pages = React.createClass({
         var self = this;
 
         var images = loaded.map(function(url, index) {
-            // function to append the next image into the DOM when this image
-            // has finished loading:
+
+            // function to append the next NUM_CONCURRENT images into the DOM
+            // when this image has finished loading:
             var appendFunc = function() {
-                if (index + 1 < all.length) {
-                    loaded.push(all[index + 1]);
-                    self.setState({loaded: loaded});
+                for (var i = 1, len = self.NUM_CONCURRENT; i <= len; i++) {
+                    var nextIndex = index + i;
+                    var nextImgUrl = all[nextIndex];
+
+                    if (nextIndex < all.length) {
+                        if(loaded.indexOf(nextImgUrl) === -1) {
+                            loaded.push(nextImgUrl);
+                        }
+                    } else {
+                        break;
+                    }
                 }
+
+                self.setState({loaded: loaded});
             };
             return (
                 <img className="page-img" key={url + index} src={url}
