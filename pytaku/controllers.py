@@ -61,7 +61,7 @@ def create_or_get_chapter(url):
     chapter = Chapter.get_by_url(url)
     if chapter is None:
         page_html = site.fetch_chapter_seed_page(url)
-        info = site.chapter_info(page_html)
+        info = site.chapter_info(page_html, url=url)
         series = create_or_get_series(info['series_url'])
 
         chapter = Chapter.create(url,

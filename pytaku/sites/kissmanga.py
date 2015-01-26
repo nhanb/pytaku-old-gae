@@ -97,7 +97,7 @@ class Kissmanga(Site):
     # - prev_chapter_url
     # - next_chapter_url
     # - series_url
-    def chapter_info(self, html):
+    def chapter_info(self, html, **kwargs):
         pages = self._chapter_pages(html)
         soup = BeautifulSoup(html)
         name = self._chapter_name(soup)

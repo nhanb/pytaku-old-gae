@@ -157,7 +157,7 @@ class Batoto(Site):
                             results.append(name)
         return results
 
-    def chapter_info(self, html):
+    def chapter_info(self, html, **kwargs):
         soup = BeautifulSoup(html)
         pages = self._chapter_pages(soup, html)
         name = self._chapter_name(soup)

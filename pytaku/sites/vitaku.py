@@ -104,7 +104,7 @@ class Vitaku(Site):
     # - prev_chapter_url
     # - next_chapter_url
     # - series_url
-    def chapter_info(self, html):
+    def chapter_info(self, html, **kwargs):
         soup = BeautifulSoup(html)
 
         # One Piece - Đọc truyện tranh One Piece chapter 664 - Vitaku

@@ -37,11 +37,13 @@ class Site:
 from kissmanga import Kissmanga
 from batoto import Batoto
 from vitaku import Vitaku
+from mangafox import Mangafox
 
 available_sites = [
     Kissmanga(),
     Vitaku(),
     Batoto(),
+    Mangafox(),
 ]
 
 
