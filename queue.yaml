@@ -1,4 +1,7 @@
 total_storage_limit: 500M
 queue:
   - name: fetch-chapter
-    rate: 10/s
+    rate: 20/s
+    retry_parameters:
+      task_retry_limit: 2
+      task_age_limit: 1d
