@@ -124,7 +124,7 @@ class SeriesHandler(webapp2.RequestHandler):
         if len(chapters) > 0:
             taskqueue.add(queue_name='fetch-chapter',
                           url='/workers/fetch-chapter',
-                          params={'url': chapters[-1]})
+                          params={'url': chapters[-1]['url']})
 
     @wrap_json
     @auth(required=False)
