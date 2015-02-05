@@ -31,8 +31,9 @@ To build client side assets, you'll need `gulp`. If you're not familiar with nod
 $ npm install -g gulp bower
 $ npm install
 $ bower install
-$ gulp
-# If you want to minify css/js, use `gulp deploy` instead of `gulp`
+$ gulp init
+# You only need to run `gulp init` once. After that, calling `gulp` is enough to recompile
+# everything. If you want to minify css/js, use `gulp deploy` instead of `gulp`.
 ```
 
 All the frontend code is in `frontend/` directory, except for `Gulpfile.js` and `bower.json`. Built
@@ -69,7 +70,8 @@ Then use Google App Engine SDK to serve it normally at [http://localhost:8080][6
 
 ## Run your own site
 
-- Follow frontend setup instructions to build frontend assets
+- Follow frontend setup instructions.
+- Follow backend setup instructions.
 - Register a new app from https://appengine.google.com/
 - Change the first line of `app.yaml` into `application: your_app_name` (must match the name you
   just registered)
