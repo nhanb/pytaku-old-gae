@@ -44,11 +44,19 @@ You can also use `gulp watch` to watch for frontend code changes and trigger liv
 ## Backend
 
 I strongly recommend using `virtualenv` + `virtualenvwrapper`. If you're not already using them,
-Google is your friend. Once you've made and activated a virtualenv for pytaku, it's optional but
-recommended to install the packages in `requirements.txt`:
+Google is your friend.
+
+Once you've made and activated a virtualenv for pytaku, install the
+neccessary libraries in to `./lib/`:
 
 ```bash
-$ pip install -r requirements.txt
+$ pip install -r requirements.txt -t ./lib
+```
+
+It's optional but recommended to install the packages in `requirements-dev.txt`:
+
+```bash
+$ pip install -r requirements-dev.txt
 ```
 
 Remember to create a `./pytaku/config.py` file that stores a secret key of your choosing. Example

@@ -1,7 +1,4 @@
-# GAE SDK requires PIL, which is provided by pillow:
-pillow
-# To check if your code conforms to PEP-8 style guide:
-flake8
-# To enable Jedi code suggestions for webapp2:
-webapp2
-nose
+Unidecode==0.04.17
+beautifulsoup4==4.3.2
+itsdangerous==0.24
+passlib==1.6.2

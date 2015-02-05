@@ -1,5 +1,3 @@
-import sys
-sys.path.insert(0, 'lib')
 import webapp2
 from pytaku.api.api import RegisterHandler, LoginHandler, SeriesHandler,\
     SearchHandler, ChapterHandler, LogoutHandler, SeriesBookmarkHandler,\
