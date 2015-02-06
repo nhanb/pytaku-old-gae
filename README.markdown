@@ -78,17 +78,9 @@ Then use Google App Engine SDK to serve it normally at [http://localhost:8080][6
 - Use [Google App Engine Python SDK][3] to deploy
 - Your app should now be live at [https://your_app_name.appspot.com](#)
 
-# Credit where it's due
-
-The backend code uses [BeautifulSoup][7] and [passlib][8] libraries, whose licenses are included in
-their respective directories in `lib/`.
-
-Frontend code uses [React][9] for views and [director][10] for routing. A bunch of other libraries
-are also used, which you can find in `bower.json`.
-
 # License
 
-GPLv3, obviously! (see `LICENSE.txt`)
+PYtaku's source code is released under the GPLv3. See LICENSE.txt for details.
 
 [1]: http://www.batoto.net/
 [2]: http://kissmanga.com/
