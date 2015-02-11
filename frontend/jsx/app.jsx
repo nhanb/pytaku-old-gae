@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+var EasterEgg = require('./easter_egg.jsx');
 var Chapter = require('./routes/chapter.jsx');
 var Home = require('./routes/home.jsx');
 var Login = require('./routes/login.jsx');
@@ -175,6 +176,7 @@ var PytakuApp = React.createClass({
                     route={this.state.route}
                 />
                 {routeComponent}
+                <EasterEgg url={this.state.url} />
             </div>
         );
     },
