@@ -9,7 +9,7 @@ def crawlable(func):
     """
     def wrapped(handler, query=None):
         # If requester is a bot, serve custom "bot version"
-        crawlers = ('Googlebot', 'facebookexternalhit')
+        crawlers = ('Googlebot', 'facebookexternalhit', 'Slackbot')
         for crawler in crawlers:
             if crawler in handler.request.headers['User-Agent']:
                 return func(handler, query)

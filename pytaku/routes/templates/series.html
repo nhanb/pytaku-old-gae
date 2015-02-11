@@ -4,7 +4,9 @@
 
 {% block metadata %}
 <meta property="og:image" content="{{thumb_url}}" />
-<meta property="og:site_name" content="Pytaku manga reader" />
+<meta property="og:site_name" content="Pytaku" />
+<meta property="og:description" content="{{'. '.join(descriptions)}}" />
+<meta property="og:title" content="{{title}}" />
 {% endblock %}
 
 {% block content %}
