@@ -6,6 +6,14 @@ var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../languages/index.js').echo;
 
+getCachedSeries = function(url) {
+    return store.get('bookmarked_series_' + url);
+};
+
+setCachedSeries = function(url, data) {
+    return store.set('bookmarked_series_' + url, data);
+}
+
 // Each item represents a series, displaying its name and latest chapters
 var SeriesItem = React.createClass({
     getInitialState: function() {
@@ -47,10 +55,21 @@ var SeriesItem = React.createClass({
         url += '&only_unread=1';
 
         var self = this;
+
+        var cached = getCachedSeries(this.props.url);
+        if (cached !== null) {
+            self.setState({
+                chapters: cached.chapters,
+                loading: false,
+            });
+            return;
+        }
+
         this.props.ajax({
             url: url,
             success: function(data) {
                 self.setState({chapters: data.chapters});
+                setCachedSeries(self.props.url, data);
             },
             error: function(data) {
                 self.setState({errorMsg: data.responseJSON.msg});
