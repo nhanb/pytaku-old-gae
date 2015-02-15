@@ -28,6 +28,7 @@
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^1.0.2",
     "gulp-util": "^3.0.2",
+    "js-yaml": "^3.2.5",
     "reactify": "^0.17.1",
     "through2": "^0.6.3",
     "vinyl-source-stream": "^1.0.0"
@@ -43,9 +44,5 @@
     ]
   },
   "dependencies": {
-    "gulp-htmlmin": "^0.2.0",
-    "gulp-uglify": "^1.0.2",
-    "js-yaml": "^3.2.5",
-    "vinyl-source-stream": "^1.0.0"
   }
 }
