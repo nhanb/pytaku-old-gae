@@ -124,11 +124,11 @@ var PytakuApp = React.createClass({
         switch (this.state.route) {
             case REGISTER:
                 routeComponent = <Register loggedIn={this.state.loggedIn}
-                    setLoggedIn={this.setLoggedInFunc()} />;
+                    setLoggedIn={this.setLoggedInFunc()} router={router} />;
                 break;
             case LOGIN:
                 routeComponent = <Login loggedIn={this.state.loggedIn}
-                    setLoggedIn={this.setLoggedInFunc()} />;
+                    setLoggedIn={this.setLoggedInFunc()} router={router} />;
                 break;
             case SEARCH:
                 routeComponent = <Search loggedIn={this.state.loggedIn}

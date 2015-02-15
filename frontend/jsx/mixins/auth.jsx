@@ -22,6 +22,9 @@ exports.RequireLoginMixin = {
     },
 };
 
+/**
+ * This mixin assumes component has prop "router"
+ */
 exports.HideWhenLoggedInMixin = {
     componentWillReceiveProps: function(nextProps) {
         this.hideWhenLoggedIn(nextProps.loggedIn);
@@ -36,7 +39,7 @@ exports.HideWhenLoggedInMixin = {
             if (history.length > 2) { // new tab (blank) page + current page
                 history.back();
             } else {
-                window.location.href = '/';
+                this.props.router.setRoute('/');
             }
         }
     }
