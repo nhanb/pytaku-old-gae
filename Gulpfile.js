@@ -81,7 +81,7 @@ gulp.task('csslib', function() {
     }
 
     gulp.src(files)
-    .pipe(gulpif(target === PRODUCTION, minifycss()))
+    .pipe(gulpif(target === PRODUCTION, minifycss({processImport: false})))
     .pipe(concat('lib.css'))
     .pipe(gulp.dest('frontend-dist/static/css'));
 
