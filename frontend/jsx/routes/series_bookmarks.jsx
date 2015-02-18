@@ -6,11 +6,11 @@ var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../languages/index.js').echo;
 
-getCachedSeries = function(url) {
+var getCachedSeries = function(url) {
     return store.get('bookmarked_series_' + url);
 };
 
-setCachedSeries = function(url, data) {
+var setCachedSeries = function(url, data) {
     return store.set('bookmarked_series_' + url, data);
 }
 
@@ -242,10 +242,11 @@ module.exports = React.createClass({
         // Everything worked! Let's render some useful data:
         } else {
             var self = this;
-            content = this.state.series_list.map(function(series) {
+            content = this.state.series_list.map(function(series, index) {
                 return <SeriesItem url={series.url} name={series.name}
-                    series={series}
+                    series={series} key={series.url}
                     thumb={series.thumb_url} remove={self.removeSeries}
+                    moveToBottom={self.moveSeriesToBottom(index)}
                     ajax={self.props.ajax} key={series.url} />;
             });
         }
@@ -255,5 +256,16 @@ module.exports = React.createClass({
                 {content}
             </div>
         );
+    },
+
+    moveSeriesToBottom: function(index) {
+        var self = this;
+        return function() {
+            var array = self.state.series_list;
+            var series = array.splice(index, 1)[0];
+            array.push(series);
+            self.setState({series_list: array});
+            //console.log(array);
+        };
     }
 });
