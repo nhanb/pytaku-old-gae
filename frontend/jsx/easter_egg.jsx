@@ -1,40 +1,5 @@
 /** @jsx React.DOM */
 
-/**
- * Trigger something totally inappropriate when user enters the
- * right sequence of the Konami code.
- *
- * callback is the function you want to execute when the complete sequence
- * has been entered.
- */
-var konamiCode = function(callback) {
-
-    // The famous Konami sequence in keycodes
-    // up up down down left right left right b a
-    var sequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
-    var ko = sequence.slice();  // deep copy it
-
-    // Get the rest of this function's arguments (if any).
-    // These will be used as the callback's arguments.
-    var args = [];
-    for (var i = 1, len = arguments.length; i < len; i++) {
-        args.push(arguments[i]);
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.keyCode == ko[0]) {
-            ko.splice(0,1);
-            if (ko.length === 0) {
-                callback.apply(null, args);
-                ko = sequence.slice();
-            }
-        } else {
-            ko = sequence.slice();
-        }
-    });
-};
-
-
 var modalId = 'myModal';
 var modalSelector = '#' + modalId;
 
@@ -45,7 +10,7 @@ var EasterEgg = React.createClass({
 
     componentDidMount: function() {
         var self = this;
-        konamiCode(function() {
+        Mousetrap.bind('up up down down left right left right b a', function() {
             self.show();
         });
     },
@@ -79,7 +44,7 @@ var EasterEgg = React.createClass({
                     </div>
                 </div>
             </div>
-        )
+        );
     },
 
     /*
