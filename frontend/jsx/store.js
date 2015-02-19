@@ -1,6 +1,6 @@
 var get = function(storage, key, defaultVal) {
-    var val = JSON.parse(storage.getItem(key));
-    return (val !== undefined) ? val : defaultVal;
+    var val = storage.getItem(key);
+    return (val !== 'undefined') ? JSON.parse(val) : defaultVal;
 };
 
 var set = function(storage, key, val) {

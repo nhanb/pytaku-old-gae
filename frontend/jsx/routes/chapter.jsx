@@ -4,6 +4,7 @@ var Loading = require('../shared_components/loading.jsx');
 var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../languages/index.js').echo;
+var shortcut = require('../keyboard_shortcuts.jsx');
 
 var BookmarkButton = React.createClass({
     getInitialState: function() {
@@ -25,14 +26,16 @@ var BookmarkButton = React.createClass({
 
             } else if (info.is_bookmarked) {
                 bookmarkBtn = (
-                    <button className="btn btn-danger" onClick={this.removeBookmark}>
+                    <button className="btn btn-danger" onClick={this.removeBookmark}
+                        id="bookmark-btn">
                         <i className='fa fa-lg fa-ban'></i> {echo('unbookmark')}
                     </button>
                 );
 
             } else {
                 bookmarkBtn = (
-                    <button className="btn btn-success" onClick={this.addBookmark}>
+                    <button className="btn btn-success" onClick={this.addBookmark}
+                        id="bookmark-btn">
                         <i className='fa fa-bookmark'></i> {echo('bookmark')}
                     </button>
                 );
@@ -357,10 +360,8 @@ module.exports = React.createClass({
             complete: function() {
                 self.setState({updatingProgress: false});
             },
-        })
+        });
     }
-
-
 });
 
 var ProgressButton = React.createClass({
@@ -438,7 +439,7 @@ var ActionBar = React.createClass({
         if (prev !== null) {
             prev = '/chapter/' + encodeURIComponent(prev);
             prevBtn =(
-                <a href={prev} className="btn btn-primary">
+                <a href={prev} className="btn btn-primary" id="prev-btn">
                     <i className="fa fa-lg fa-angle-double-left"></i> {echo('prev')}
                 </a>
             );
@@ -447,7 +448,7 @@ var ActionBar = React.createClass({
         if (next !== null) {
             next = '/chapter/' + encodeURIComponent(next);
             nextBtn =(
-                <a href={next} className="btn btn-primary">
+                <a href={next} className="btn btn-primary" id="next-btn">
                     {echo('next')} <i className="fa fa-lg fa-angle-double-right"></i>
                 </a>
             );
@@ -455,7 +456,7 @@ var ActionBar = React.createClass({
 
         series = '/series/' + encodeURIComponent(series);
         seriesBtn =(
-            <a href={series} className="btn btn-info">
+            <a href={series} className="btn btn-info" id="chapter-list-btn">
                 <i className="fa fa-lg fa-angle-double-up"></i> {echo('chapter_list')}
             </a>
         );
@@ -474,3 +475,44 @@ var ActionBar = React.createClass({
         );
     },
 });
+
+
+/*
+ * HERE BE DRAGONS !!
+ * (translation: ugly shit follows)
+ *
+ * The following code assigns keyboard shortcuts to certain actions by
+ * emulating click events on buttons, which are queried using jQuery, which is
+ * most likely less performant than a proper react-based implementation. I
+ * haven't come up with a clean way to do that, so for now I'll have to make do
+ * with dragons. Sue me.
+ */
+
+if (shortcut.isEnabled()) {
+
+    // UpDownLeftRight / kjhl / wsad
+
+    Mousetrap.bind(['k', 'w'], function() {
+        window.scrollBy(0, -100);  // scroll up
+    });
+
+    Mousetrap.bind(['j', 's'], function() {
+        window.scrollBy(0, 100);  // scroll down
+    });
+
+    Mousetrap.bind(['left', 'h', 'a'], function() {
+        $('#prev-btn').trigger('click');  // previous chapter
+    });
+
+    Mousetrap.bind(['right', 'l', 'd'], function() {
+        $('#next-btn').trigger('click');  // next chapter
+    });
+
+    Mousetrap.bind('b', function() {
+        $('#bookmark-btn').trigger('click'); // [b]ookmark chapter
+    });
+
+    Mousetrap.bind(['p', 'c'], function() {
+        $('#chapter-list-btn').trigger('click'); // [c]hapter list / [p]arent
+    });
+}

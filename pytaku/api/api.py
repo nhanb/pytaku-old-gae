@@ -106,16 +106,27 @@ class SettingsHandler(webapp2.RequestHandler):
 
     @wrap_json
     @auth()
-    @unpack_post(language=['ustring', 'urlencoded'])
+    @unpack_post(language=['ustring', 'urlencoded'],
+                 enable_shortcut=['boolean'])
     def post(self):
         language = self.data['language']
+        enable_shortcut = self.data['enable_shortcut']
+        changed_fields = []
+
         if language not in ('en', 'vi'):
             # TODO: refactor out hardcoded supported language list
             raise PyError({'msg': 'unsupported_language'})
 
+        for field in ('language', 'enable_shortcut'):
+            if getattr(self.user, field) != locals()[field]:
+                changed_fields.append(field)
+
         self.user.language = language
+        self.user.enable_shortcut = enable_shortcut
         self.user.put()
-        return {}
+        return {
+            'changed_fields': changed_fields,
+        }
 
 
 class SeriesHandler(webapp2.RequestHandler):

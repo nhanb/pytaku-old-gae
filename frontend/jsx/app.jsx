@@ -12,6 +12,7 @@ var Navbar = require('./navbar.jsx');
 var Settings = require('./routes/settings.jsx');
 var ResetPassword = require('./routes/reset_password.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
+var shortcut = require('./keyboard_shortcuts.jsx');
 var lang = require('./languages/index.js');
 
 var HOME = 'home',
@@ -99,11 +100,25 @@ var PytakuApp = React.createClass({
             self.authedAjax({
                 url: '/api/settings',
                 success: function(data) {
+                    var reloadNeeded = false;
+
+                    if (shortcut.isEnabled() !== data.enable_shortcut) {
+                        shortcut.set(data.enable_shortcut);
+                        reloadNeeded = true;
+                    }
 
                     if (lang.chosen !== data.language) {
                         lang.set(data.language);
+                        reloadNeeded = true;
                     }
 
+                    if (reloadNeeded === true) {
+                        location.reload();
+                    }
+
+                    // WARNING: if settings values returned from server never
+                    // match those in our local store, this will result in an
+                    // infinite loop of reloads. Don't fuck this up.
                 },
                 error: function() {
                     localStorage.removeItem('token');
@@ -115,7 +130,7 @@ var PytakuApp = React.createClass({
         return {
             route: HOME,
             loggedIn: loggedIn,
-            email: email
+            email: email,
         };
     },
 
@@ -248,8 +263,8 @@ if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navig
 $(document).on('click', 'a', function (e) {
 
     // don't hijack external links or mod-key clicks
-    if (this.className === 'external'
-        || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
+    if (this.className === 'external' ||
+        e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
         return true;
     }
 

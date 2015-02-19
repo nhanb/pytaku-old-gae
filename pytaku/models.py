@@ -80,6 +80,7 @@ class User(ndb.Model):
 
     # user settings
     language = ndb.StringProperty(default=u'en')  # use ISO 639-1 language code
+    enable_shortcut = ndb.BooleanProperty(default=False)
 
     reset_pw_token = ndb.StringProperty(indexed=True)
     reset_pw_exp = ndb.DateTimeProperty()
@@ -88,6 +89,7 @@ class User(ndb.Model):
     def settings(self):
         return {
             'language': self.language,
+            'enable_shortcut': self.enable_shortcut,
         }
 
     def verify_password(self, password):

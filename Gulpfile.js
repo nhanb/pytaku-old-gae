@@ -32,7 +32,7 @@ var through = require('through2');
 var yaml = require('js-yaml');
 
 var gutil = require('gulp-util');
-var PluginError = gutil.PluginError
+var PluginError = gutil.PluginError;
 
 
 var target = 'DEV';
@@ -44,6 +44,7 @@ gulp.task('jslib', function() {
     if (target === PRODUCTION) {
         files = [
             'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/mousetrap/mousetrap.min.js',
             'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/react/react.min.js',
             'bower_components/director/build/director.min.js',
@@ -51,6 +52,7 @@ gulp.task('jslib', function() {
     } else {
         files = [
             'bower_components/jquery/dist/jquery.js',
+            'bower_components/mousetrap/mousetrap.js',
             'bower_components/bootstrap/dist/js/bootstrap.js',
             'bower_components/react/react.js',
             'bower_components/director/build/director.js',

@@ -31,7 +31,6 @@ var echo = function(code) {
 
 var setLanguage = function(lang, callback) {
     localStorage.setItem('lang_chosen', lang);
-    location.reload();
 };
 
 module.exports = {

@@ -22,6 +22,7 @@
     "react": "~0.12.2",
     "director": "~1.2.5",
     "fontawesome": "~4.3.0",
-    "normalize-css": "~3.0.2"
+    "normalize-css": "~3.0.2",
+    "mousetrap": "https://github.com/ccampbell/mousetrap.git#~1.4.6"
   }
 }
