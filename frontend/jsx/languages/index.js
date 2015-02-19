@@ -10,8 +10,8 @@ var supported = [
 // For some reason, 'require' commands fail when called inside a loop, so we'll
 // hardcode the languages for now...
 var allLanguages = {};
-allLanguages['en'] = require('./en.js');
-allLanguages['vi'] = require('./vi.js');
+allLanguages.en = require('../../languages/en.js');
+allLanguages.vi = require('../../languages/vi.js');
 
 
 var chosen = localStorage.getItem('lang_chosen');

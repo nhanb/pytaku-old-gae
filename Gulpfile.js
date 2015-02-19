@@ -126,7 +126,7 @@ gulp.task('lang', function() {
 
     gulp.src('./frontend/languages/*.yaml')
     .pipe(stream)
-    .pipe(gulp.dest('./frontend/jsx/languages'));
+    .pipe(gulp.dest('./frontend/languages'));
 });
 
 // Compile application jsx
@@ -191,9 +191,9 @@ gulp.task('watch', function() {
     gulp.watch('frontend/css/**/*.css', ['css']);
     gulp.watch('frontend/jsx/**/*.jsx', ['jsx']);
     gulp.watch('frontend/jsx/**/*.js', ['jsx']);
+    gulp.watch('frontend/languages/*.yaml', ['jsx']);
     gulp.watch('frontend/app.html', ['html']);
     gulp.watch('frontend/favicon.ico', ['favicon']);
-    gulp.watch('frontend/languages/*.yaml', ['lang']);
 
     livereload.listen();
 
