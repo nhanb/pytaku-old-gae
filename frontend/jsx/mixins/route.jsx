@@ -1,5 +1,3 @@
-// Closure to avoid polluting global namespace with updateTitle.
-// TODO: I should probably consider a real solution like CommonJS or AMD...
 var updateTitle = function() {
     var title;
     switch (typeof(this.pageTitle)) {
