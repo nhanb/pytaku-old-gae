@@ -17,6 +17,12 @@ module.exports = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        this.setState({
+            enableShortcut: shortcut.isEnabled(),
+        });
+    },
+
     handleLangChange: function(e) {
         this.setState({
             chosenLang: e.target.value,

@@ -5,6 +5,7 @@ var HideWhenLoggedInMixin = auth.HideWhenLoggedInMixin;
 var TextInput = require('../shared_components/text_input.jsx');
 var CheckboxInput = require('../shared_components/checkbox_input.jsx');
 var lang = require('../languages/index.js');
+var shortcut = require('../keyboard_shortcuts.jsx');
 
 module.exports = React.createClass({
     mixins: [RouteMixin, HideWhenLoggedInMixin],
@@ -49,8 +50,9 @@ module.exports = React.createClass({
                     msgType: 'success',
                     msg: 'Successfully logged in.'
                 });
-                self.props.setLoggedIn(email, data.token, remember);
+                shortcut.set(data.settings.enable_shortcut);
                 lang.set(data.settings.language);
+                self.props.setLoggedIn(email, data.token, remember);
             },
             error: function(data) {
                 self.setState({
