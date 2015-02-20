@@ -105,3 +105,9 @@ can_be_found_on_github: Mã nguồn trang web được đặt trên GitHub
 
 no_new_chapters: Không có chapter mới
 full_chapter_list: Danh sách tất cả các chapter
+
+scroll_up: Cuộn lên
+scroll_down: Cuộn xuống
+to_previous_chapter: Xem chapter trước
+to_next_chapter: Xem chapter sau
+to_chapter_list: Xem danh sách chapter

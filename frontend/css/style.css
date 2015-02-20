@@ -65,3 +65,20 @@ a.list-group-item:focus {
 .navbar-default .navbar-text {
     color: white;
 }
+
+/*
+ * CSS-based slash-separated lists
+ * http://stackoverflow.com/questions/23618744/rendering-comma-separated-list-of-links
+ */
+.slash-separated {
+    padding-left: 0;
+}
+.slash-separated > li {
+    display: inline;
+}
+.slash-separated > li:before {
+    content:'\0000a0/\0000a0'; /* Non-breaking space */
+}
+.slash-separated > li:first-child:before {
+    content: normal;
+}

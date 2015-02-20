@@ -105,3 +105,9 @@ can_be_found_on_github: The source code can be found on GitHub
 
 no_new_chapters: No new chapters found
 full_chapter_list: Full chapter list
+
+scroll_up: Scroll up
+scroll_down: Scroll down
+to_previous_chapter: Go to previous chapter
+to_next_chapter: Go to next chapter
+to_chapter_list: Go to chapter list

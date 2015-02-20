@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 var RouteMixin = require('../mixins/route.jsx');
+var HasShortcutMixin = require('../mixins/has_shortcut.jsx');
 var Loading = require('../shared_components/loading.jsx');
 var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
@@ -162,7 +163,7 @@ var Pages = React.createClass({
 });
 
 module.exports = React.createClass({
-    mixins: [RouteMixin],
+    mixins: [RouteMixin, HasShortcutMixin],
     pageTitle: function() {
         if (!this.state.info.name) {
             return echo('loading_chapter_info');
@@ -211,6 +212,7 @@ module.exports = React.createClass({
                         setProgress={setProgress} />
 
                 </div>
+                {this.renderBindings()}
             </div>
         );
     },
@@ -220,6 +222,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        bindKeyboardShortcuts.apply(this);
         this.fetchPages(this.props.url);
     },
 
@@ -488,31 +491,34 @@ var ActionBar = React.createClass({
  * with dragons. Sue me.
  */
 
-if (shortcut.isEnabled()) {
+var bindKeyboardShortcuts = function() {
+    if (!shortcut.isEnabled()) {
+        return;
+    }
 
     // UpDownLeftRight / kjhl / wsad
 
-    Mousetrap.bind(['k', 'w'], function() {
-        window.scrollBy(0, -100);  // scroll up
+    this.bindShortcut('scroll_up', ['k', 'w'], function() {
+        window.scrollBy(0, -100);
     });
 
-    Mousetrap.bind(['j', 's'], function() {
-        window.scrollBy(0, 100);  // scroll down
+    this.bindShortcut('scroll_down', ['j', 's'], function() {
+        window.scrollBy(0, 100);
     });
 
-    Mousetrap.bind(['left', 'h', 'a'], function() {
-        $('#prev-btn').trigger('click');  // previous chapter
+    this.bindShortcut('to_previous_chapter', ['left', 'h', 'a'], function() {
+        $('#prev-btn').trigger('click');
     });
 
-    Mousetrap.bind(['right', 'l', 'd'], function() {
-        $('#next-btn').trigger('click');  // next chapter
+    this.bindShortcut('to_next_chapter', ['right', 'l', 'd'], function() {
+        $('#next-btn').trigger('click');
     });
 
-    Mousetrap.bind('b', function() {
-        $('#bookmark-btn').trigger('click'); // [b]ookmark chapter
+    this.bindShortcut('bookmark', 'b', function() {
+        $('#bookmark-btn').trigger('click');
     });
 
-    Mousetrap.bind(['p', 'c'], function() {
-        $('#chapter-list-btn').trigger('click'); // [c]hapter list / [p]arent
+    this.bindShortcut('to_chapter_list', 'u', function() {
+        $('#chapter-list-btn').trigger('click');
     });
-}
+};
