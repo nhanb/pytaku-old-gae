@@ -274,3 +274,5 @@ $(document).on('click', 'a', function (e) {
     router.setRoute(route);
     e.preventDefault();
 });
+
+$('[data-toggle="tooltip"]').tooltip();

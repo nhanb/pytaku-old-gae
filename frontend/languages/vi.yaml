@@ -50,7 +50,7 @@ language: Ngôn ngữ
 vietnamese: Tiếng Việt
 english: Tiếng Anh
 keyboard_shortcuts: Phím tắt
-enable: Dùng
+enable: Chơi luôn!
 save: Lưu
 saving: Đang lưu
 
@@ -111,3 +111,4 @@ scroll_down: Cuộn xuống
 to_previous_chapter: Xem chapter trước
 to_next_chapter: Xem chapter sau
 to_chapter_list: Xem danh sách chapter
+press_question_mark_for_help: Bấm phím "?" để xem các phím tắt khả dụng

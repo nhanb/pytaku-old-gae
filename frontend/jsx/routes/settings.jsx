@@ -72,7 +72,7 @@ module.exports = React.createClass({
                     <label className="col-sm-4 control-label">{echo('keyboard_shortcuts')}</label>
                     <div className="col-sm-8">
                         <div className="checkbox">
-                            <label>
+                            <label data-toggle="tooltip" data-placement="right" title={echo('press_question_mark_for_help')}>
                                 <input type="checkbox" onChange={this.handleShortcutChange}
                                     checked={this.state.enableShortcut} /> {echo('enable')}
                             </label>
