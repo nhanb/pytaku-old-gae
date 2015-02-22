@@ -2,10 +2,11 @@
 var EasterEgg = require('./easter_egg.jsx');
 var Chapter = require('./routes/chapter.jsx');
 var Home = require('./routes/home.jsx');
-var Login = require('./routes/login.jsx');
+var authRoutes = require('./routes/auth.jsx');
+var Login = authRoutes.Login;
+var Register = authRoutes.Register;
 var SeriesBookmarks = require('./routes/series_bookmarks.jsx');
 var ChapterBookmarks = require('./routes/chapter_bookmarks.jsx');
-var Register = require('./routes/register.jsx');
 var Search = require('./routes/search.jsx');
 var Series = require('./routes/series.jsx');
 var Navbar = require('./navbar.jsx');
@@ -14,6 +15,7 @@ var ResetPassword = require('./routes/reset_password.jsx');
 var ScrollToTopBtn = require('./scroll_to_top.jsx');
 var shortcut = require('./keyboard_shortcuts.jsx');
 var lang = require('./languages/index.js');
+var sessionStore = require('./stores/session-store.js');
 
 var HOME = 'home',
     REGISTER = 'register',
@@ -30,8 +32,21 @@ var HOME = 'home',
 // script. Somewhat ugly, but hey, as long as it works, right?
 var router;
 
+var getAppState = function() {
+    var state = sessionStore.getAll();
+    state.loggedIn = sessionStore.checkLoggedIn();
+    return state;
+};
+
 var PytakuApp = React.createClass({
+
+    componentWillUnmount: function() {
+        sessionStore.unbind(this.onChange);
+    },
+
     componentDidMount: function() {
+        sessionStore.bind(this.onChange);
+
         var setState = this.setState;
         var self = this;
         router = Router({
@@ -87,51 +102,11 @@ var PytakuApp = React.createClass({
     },
 
     getInitialState: function() {
-        var email = localStorage.getItem('email');
-        var token = localStorage.getItem('token');
-        var loggedIn = (typeof(email) === 'string' &&
-                        typeof(token) === 'string');
+        return getAppState();
+    },
 
-        if (loggedIn === true) {
-            var self = this;
-
-            // Check if credentials stored on client are still valid by trying
-            // to get user's settings.
-            self.authedAjax({
-                url: '/api/settings',
-                success: function(data) {
-                    var reloadNeeded = false;
-
-                    if (shortcut.isEnabled() !== data.enable_shortcut) {
-                        shortcut.set(data.enable_shortcut);
-                        reloadNeeded = true;
-                    }
-
-                    if (lang.chosen !== data.language) {
-                        lang.set(data.language);
-                        reloadNeeded = true;
-                    }
-
-                    if (reloadNeeded === true) {
-                        location.reload();
-                    }
-
-                    // WARNING: if settings values returned from server never
-                    // match those in our local store, this will result in an
-                    // infinite loop of reloads. Don't fuck this up.
-                },
-                error: function() {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('email');
-                    self.setState({loggedIn: false});
-                },
-            });
-        }
-        return {
-            route: HOME,
-            loggedIn: loggedIn,
-            email: email,
-        };
+    onChange: function() {
+        this.setState(getAppState());
     },
 
     render: function() {

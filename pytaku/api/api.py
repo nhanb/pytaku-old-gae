@@ -84,16 +84,21 @@ class SetNewPasswordHandler(webapp2.RequestHandler):
 class RegisterHandler(webapp2.RequestHandler):
 
     @wrap_json
-    @unpack_post(email=['ustring', 'email'], password=['ustring'])
+    @unpack_post(email=['ustring', 'email'],
+                 password=['ustring'],
+                 remember=['boolean'])
     def post(self):
         email = self.data['email']
         password = self.data['password']
+        expires = not self.data['remember']
 
         new_user = createUser(email, password)
         if new_user is None:
             raise PyError({'msg': 'existing_email'})
+
         return {
-            'token': gen_token(new_user)
+            'token': gen_token(new_user, expires=expires),
+            'settings': new_user.settings,
         }
 
 

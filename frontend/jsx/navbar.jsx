@@ -6,7 +6,7 @@ module.exports = React.createClass({
     render: function() {
         var currentRoute = this.props.route;
         var active = function(routeName) {
-            return routeName === currentRoute ? 'active' : ''
+            return routeName === currentRoute ? 'active' : '';
         };
 
         var right_navs;
