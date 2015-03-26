@@ -6,11 +6,11 @@ var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../languages/index.js').echo;
 
-getCachedSeries = function(url) {
+var getCachedSeries = function(url) {
     return store.get('bookmarked_series_' + url);
 };
 
-setCachedSeries = function(url, data) {
+var setCachedSeries = function(url, data) {
     return store.set('bookmarked_series_' + url, data);
 }
 
@@ -255,5 +255,9 @@ module.exports = React.createClass({
                 {content}
             </div>
         );
-    }
+    },
+
 });
+
+module.exports.getCachedSeries = getCachedSeries;
+module.exports.setCachedSeries = setCachedSeries;

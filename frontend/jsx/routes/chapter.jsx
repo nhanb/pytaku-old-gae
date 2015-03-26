@@ -6,6 +6,9 @@ var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../languages/index.js').echo;
 var shortcut = require('../keyboard_shortcuts.jsx');
+var SeriesBookMarks = require('./series_bookmarks.jsx');
+var getCachedBS = SeriesBookMarks.getCachedSeries;
+var setCachedBS = SeriesBookMarks.setCachedSeries;
 
 var BookmarkButton = React.createClass({
     getInitialState: function() {
@@ -345,7 +348,7 @@ module.exports = React.createClass({
                 // XXX: it's reaaaally wasteful to load and rewrite the whole
                 // series' info just to update a chapter... but it's easier
                 // this way so...
-                cachedSeries = store.get('series_' + info.series_url);
+                var cachedSeries = store.get('series_' + info.series_url);
                 if (cachedSeries) {
                     for (var i=0; i < cachedSeries.chapters.length; i++) {
                         var chap = cachedSeries.chapters[i];
@@ -356,6 +359,24 @@ module.exports = React.createClass({
                     }
                     store.set('series_' + info.series_url, cachedSeries);
                 }
+
+                // Update in "bookmarked series" route too
+                // XXX: We should really implement a proper client-side model
+                // store to get rid of all this manual, repetitive cache
+                // updating. Facebook's flux could be it, I guess.
+                var cachedBS = getCachedBS(info.series_url);
+                if (!cachedBS) {
+                    return;
+                }
+
+                for (var i=0; i < cachedBS.chapters.length; i++) {
+                    var chap = cachedBS.chapters[i];
+                    if (chap.url == self.props.url) {
+                        chap.progress = progress;
+                        break;
+                    }
+                }
+                setCachedBS(info.series_url, cachedBS);
             },
             error: function(err) {
                 console.log('error while setting progress:', err);
