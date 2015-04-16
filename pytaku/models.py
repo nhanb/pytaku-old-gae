@@ -21,7 +21,8 @@ class Series(ndb.Model):
 
     def is_fresh(self):
         # fresh == updated no longer than 12 hours ago
-        return (datetime.now() - self.last_update).seconds <= 43200
+        delta = datetime.now() - self.last_update
+        return delta.days <= 0 and delta.seconds <= 43200
 
     @classmethod
     def create(cls, url, site, name, thumb_url, chapters, status, tags, desc,
