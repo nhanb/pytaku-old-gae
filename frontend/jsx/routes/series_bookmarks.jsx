@@ -123,11 +123,6 @@ var SeriesItem = React.createClass({
                     <p>
                         {echo('no_new_chapters')}.
                     </p>
-                    <p>
-                        <a href={seriesHref}>
-                            {echo('full_chapter_list')}
-                        </a>
-                    </p>
                 </div>
             </div>
         );
