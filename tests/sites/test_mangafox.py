@@ -133,6 +133,29 @@ class SeriesInfo(TestCase):
         for key, val in expected.iteritems():
             self.assertEqual(info[key], val)
 
+    def test_no_desc(self):
+        """
+        Some series don't have descriptions
+        """
+
+        # Just for the record, I don't read this. Some user did and brought
+        # this bug to my attention...
+        url = 'http://mangafox.me/manga/joou_sama_no_eshi'
+        info = site.series_info(site.fetch_manga_seed_page(url))
+        self.assertIsInstance(info, dict)
+
+        # Attributes that can be asserted by exact value:
+        expected = {
+            'name': 'Joou sama no Eshi',
+            'site': 'mangafox',
+            'thumb_url': 'http://a.mfcdn.net/store/manga/14292/cover.jpg?1430729735',
+            'tags': ['ecchi', 'school life', 'seinen'],
+            'authors': ['Watashiya Kaworu'],
+            'description': [],
+        }
+        for key, val in expected.iteritems():
+            self.assertEqual(info[key], val)
+
 class ChapterInfo(TestCase):
 
     def test_normal(self):

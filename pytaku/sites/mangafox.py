@@ -89,7 +89,9 @@ class Mangafox(Site):
         tags = [a.text.strip().lower() for a in tds[3].find_all('a')]
 
         # Descriptions are in a <p> tag below
-        desc = div.find('p', class_='summary').text.split('\r\n')
+        desc_tag = div.find('p', class_='summary')
+        desc = [] if desc_tag is None else desc_tag.text.split('\r\n')
+
         description = [d.strip() for d in desc]
 
         # === Status
