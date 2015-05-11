@@ -11,6 +11,8 @@ Join the chat room for latest development updates and official support:
 - Click **Search**
 - ... it's pretty straightforward, really!
 
+Read more about it on [my blog post][11].
+
 Pytaku currently gets data from [batoto][1] and [kissmanga][2]. Manga info is saved to Pytaku's own
 database after first view, so naturally popular manga titles will be blazing fast because somebody
 else has probably triggered the first view before you :)
@@ -92,3 +94,4 @@ PYtaku's source code is released under the GPLv3. See LICENSE.txt for details.
 [8]: https://pythonhosted.org/passlib/
 [9]: http://facebook.github.io/react/
 [10]: https://github.com/flatiron/director
+[11]: http://www.nerdyweekly.com/posts/introducing-pytaku-the-only-online-manga-reader-youll-ever-need/
