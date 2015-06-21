@@ -196,10 +196,7 @@ class Batoto(Site):
         webtoon = soup.find('a', href='?supress_webtoon=t')
         if webtoon is not None:
             img_tags = soup.find_all(_page_img_tag)
-            return [{
-                'url': tag['src'],
-                'filename': tag['src'].split('/')[-1]
-            } for tag in img_tags]
+            return [tag['src'] for tag in img_tags]
 
         # a <select> tag has options that each points to a page
         opts = soup.find('select', id='page_select').find_all('option')
