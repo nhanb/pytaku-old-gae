@@ -6,6 +6,7 @@ var Alert = require('../shared_components/alert.jsx');
 var store = require('../store.js');
 var echo = require('../languages/index.js').echo;
 var shortcut = require('../keyboard_shortcuts.jsx');
+var webtoonMode = require('../webtoon_mode.jsx');
 var SeriesBookMarks = require('./series_bookmarks.jsx');
 var getCachedBS = SeriesBookMarks.getCachedSeries;
 var setCachedBS = SeriesBookMarks.setCachedSeries;
@@ -151,8 +152,13 @@ var Pages = React.createClass({
 
                 self.setState({loaded: loaded});
             };
+
+            var className = "page-img";
+            if (webtoonMode.isEnabled()) {
+                className += ' no-gap';
+            }
             return (
-                <img className="page-img" key={url + index} src={url}
+                <img className={className} key={url + index} src={url}
                     onLoad={appendFunc} />
             );
         });

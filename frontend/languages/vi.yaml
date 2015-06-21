@@ -50,7 +50,9 @@ language: Ngôn ngữ
 vietnamese: Tiếng Việt
 english: Tiếng Anh
 keyboard_shortcuts: Phím tắt
-enable: Chơi luôn!
+webtoon_mode: Chế độ Webtoon
+show_no_gap_between_pages: Hiện các trang truyện liền nhau
+enable: Dùng
 save: Lưu
 saving: Đang lưu
 

@@ -50,6 +50,8 @@ language: Language
 vietnamese: Vietnamese
 english: English
 keyboard_shortcuts: Keyboard shorcuts
+webtoon_mode: Webtoon mode
+show_no_gap_between_pages: Show no gap between pages
 enable: Enable
 save: Save
 saving: Saving

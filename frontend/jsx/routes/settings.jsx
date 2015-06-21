@@ -2,8 +2,8 @@
 var RouteMixin = require('../mixins/route.jsx');
 var lang = require('../languages/index.js');
 var shortcut = require('../keyboard_shortcuts.jsx');
+var webtoonMode = require('../webtoon_mode.jsx');
 var echo = lang.echo;
-
 
 module.exports = React.createClass({
     mixins: [RouteMixin],
@@ -14,6 +14,7 @@ module.exports = React.createClass({
             saving: false,
             chosenLang: lang.chosen,
             enableShortcut: shortcut.isEnabled(),
+            enableWebtoonMode: webtoonMode.isEnabled(),
         };
     },
 
@@ -32,6 +33,12 @@ module.exports = React.createClass({
     handleShortcutChange: function(e) {
         this.setState({
             enableShortcut: e.target.checked,
+        });
+    },
+
+    handleWebtoonChange: function(e) {
+        this.setState({
+            enableWebtoonMode: e.target.checked,
         });
     },
 
@@ -80,6 +87,18 @@ module.exports = React.createClass({
                     </div>
                 </div>
 
+                <div className="form-group">
+                    <label className="col-sm-4 control-label">{echo('webtoon_mode')}</label>
+                    <div className="col-sm-8">
+                        <div className="checkbox">
+                            <label data-toggle="tooltip" data-placement="right" title={echo('show_no_gap_between_pages')}>
+                                <input type="checkbox" onChange={this.handleWebtoonChange}
+                                    checked={this.state.enableWebtoonMode} /> {echo('enable')}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <br />
                 <div className="form-group">
                     <div className="col-sm-offset-4 col-sm-8">
@@ -96,6 +115,7 @@ module.exports = React.createClass({
 
         var chosenLang = this.state.chosenLang;
         var enableShortcut = this.state.enableShortcut;
+        var enableWebtoonMode = this.state.enableWebtoonMode;
         this.setState({saving: true});
 
         var self = this;
@@ -106,9 +126,11 @@ module.exports = React.createClass({
                 data: JSON.stringify({
                     language: chosenLang,
                     enable_shortcut: enableShortcut ? '1' : '0',
+                    webtoon_mode: enableWebtoonMode ? '1' : '0',
                 }),
                 success: function(data) {
                     shortcut.set(enableShortcut);
+                    webtoonMode.set(enableWebtoonMode);
                     lang.set(chosenLang);
 
                     if (data.changed_fields.length > 0) {
@@ -123,6 +145,7 @@ module.exports = React.createClass({
         } else {
             lang.set(chosenLang);
             shortcut.set(enableShortcut);
+            webtoonMode.set(enableWebtoonMode);
             location.reload();
             self.setState({saving: false});
         }

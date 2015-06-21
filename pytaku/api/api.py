@@ -107,22 +107,24 @@ class SettingsHandler(webapp2.RequestHandler):
     @wrap_json
     @auth()
     @unpack_post(language=['ustring', 'urlencoded'],
-                 enable_shortcut=['boolean'])
+                 enable_shortcut=['boolean'], webtoon_mode=['boolean'])
     def post(self):
         language = self.data['language']
         enable_shortcut = self.data['enable_shortcut']
+        webtoon_mode = self.data['webtoon_mode']
         changed_fields = []
 
-        if language not in ('en', 'vi'):
+        if language not in ['en', 'vi']:
             # TODO: refactor out hardcoded supported language list
             raise PyError({'msg': 'unsupported_language'})
 
-        for field in ('language', 'enable_shortcut'):
+        for field in ['language', 'enable_shortcut', 'webtoon_mode']:
             if getattr(self.user, field) != locals()[field]:
                 changed_fields.append(field)
 
         self.user.language = language
         self.user.enable_shortcut = enable_shortcut
+        self.user.webtoon_mode = webtoon_mode
         self.user.put()
         return {
             'changed_fields': changed_fields,
