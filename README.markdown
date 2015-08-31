@@ -1,3 +1,11 @@
+# DEPRECATION NOTICE!!
+
+I've decided to rewrite Pytaku from scratch to a) migrate away from Google App Engine and b)
+restructure frontend code to make a bit more sense. This repo will not be maintained anymore, but
+the production site will be kept live for the foreseeable future.
+
+I'll announce Pytaku 2 once it's ready. Stay tuned!
+
 # Pytaku
 
 ... is the only online manga reader you'll ever need!
