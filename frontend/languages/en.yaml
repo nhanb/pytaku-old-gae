@@ -90,6 +90,18 @@ remember_me: Remember me
 login: Login
 register: Register
 
+pytaku_is_deprecated: This version of Pytaku is DEPRECATED!
+
+deprecation_warning: |
+  For various reasons, I've decided to rewrite Pytaku in a completely different
+  tech stack. While this old version of Pytaku will no longer be developed on,
+  it will still be live for the foreseeable future. However, note that it only
+  supports Kissmanga now because Batoto and Mangafox code have some bugs.
+
+  If you're a registered user, you'll receive an email notification when the
+  new Pytaku is up. In the meantime, hit me up on Gitter if you want more
+  detail.
+
 welcome_to_pytaku: Welcome to Pytaku!
 
 pytaku_is: |

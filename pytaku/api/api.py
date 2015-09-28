@@ -226,7 +226,8 @@ class SearchHandler(webapp2.RequestHandler):
 
         q = Queue()
 
-        for order, site in enumerate(sites.available_sites):
+        # Dirty fix: search Kissmanga (site index 0) only
+        for order, site in enumerate([sites.available_sites[0]]):
             q.put((keyword, site, order))
             worker = Thread(target=_search, args=(q,))
             worker.setDaemon(True)

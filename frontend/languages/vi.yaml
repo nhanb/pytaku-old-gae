@@ -90,6 +90,18 @@ remember_me: Nhớ thông tin đăng nhập
 login: Đăng nhập
 register: Đăng ký
 
+pytaku_is_deprecated: Đây là PHIÊN BẢN CŨ của Pytaku!
+
+deprecation_warning: |
+  Hiện Pytaku đang được viết lại hoàn toàn. Phiên bản này sẽ không còn được
+  phát triển nữa nhưng, trang web này vẫn sẽ tiếp tục online và bạn vẫn có
+  thể sử dụng nó bình thường. Tuy nhiên, code cho Batoto và Mangafox đã ngoẻo
+  nên hiện tại chỉ còn truyện từ Kissmanga là hoạt động bình thường.
+
+  Nếu bạn đã đăng ký tài khoản ở đây, bạn sẽ nhận được email thông báo khi
+  phiên bản mới bắt đầu chạy. Để biết thêm chi tiết, vui lòng liên hệ tác giả
+  qua Gitter :)
+
 welcome_to_pytaku: Chào mừng bạn đến với Pytaku!
 
 pytaku_is: |
