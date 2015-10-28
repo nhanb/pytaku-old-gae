@@ -52,7 +52,6 @@ available_sites = [
 
 searchable_sites = [
     kis,
-    fox,
 ]
 
 

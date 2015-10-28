@@ -205,7 +205,16 @@ class Mangafox(Site):
             viewer = soup.find('div', id='viewer')
             # Viewer div now as 2 img tags inside, first one is a "loading"
             # gif, second one is the correct page image.
-            img_url = viewer.find_all('img')[-1].attrs['src']
+            imgs = viewer.find_all('img')
+            if len(imgs) == 0:
+                print '>> LICENSED & REMOVED.'
+                # So while it works file on my PC from Vietnam, running Pytaku
+                # on US-based GAE gives me this stupid empty page with some
+                # "this series is licensed and removed" message. I've tried
+                # different series but it seems to always yield this result.
+                # Well, let's just disable Mangafox (again) for now.
+                print page_html
+            img_url = imgs[-1].attrs['src']
             returns.append(img_url)
         return returns
 
