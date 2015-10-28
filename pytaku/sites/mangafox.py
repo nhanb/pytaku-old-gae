@@ -191,7 +191,10 @@ class Mangafox(Site):
         returns = []
         for page_html in pages_htmls:
             soup = BeautifulSoup(page_html)
-            img_url = soup.find('div', id='viewer').find('img').attrs['src']
+            viewer = soup.find('div', id='viewer')
+            # Viewer div now as 2 img tags inside, first one is a "loading"
+            # gif, second one is the correct page image.
+            img_url = viewer.find_all('img')[-1].attrs['src']
             returns.append(img_url)
         return returns
 
