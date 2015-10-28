@@ -1,4 +1,5 @@
 import urllib
+import re
 from google.appengine.api import urlfetch
 from pytaku.sites import Site
 from bs4 import BeautifulSoup
@@ -19,6 +20,18 @@ class Mangafox(Site):
             return []
 
         soup = BeautifulSoup(resp.content)
+
+        # Okay so Mangafox's advanced search is so stupid that if there is no
+        # series matching the name it will just return the list of all manga
+        # series it has.
+        #
+        # Detecting this case by checking if the match count is outrageous:
+        result_count_regex = re.compile('Total Manga Series: (\d+)')
+        t = soup.find('div', text=result_count_regex)
+        if t is not None:
+            count = int(result_count_regex.match(t.text).groups()[0])
+            if count > 15100:
+                return []
 
         table = soup.find('table', id='listing')
         if table is None:  # no author of this name

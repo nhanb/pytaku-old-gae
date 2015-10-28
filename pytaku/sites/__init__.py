@@ -35,15 +35,24 @@ class Site:
         return []
 
 from kissmanga import Kissmanga
+kis = Kissmanga()
 from batoto import Batoto
+bat = Batoto()
 from vitaku import Vitaku
+vit = Vitaku()
 from mangafox import Mangafox
+fox = Mangafox()
 
 available_sites = [
-    Kissmanga(),
-    Vitaku(),
-    Batoto(),
-    Mangafox(),
+    kis,
+    bat,
+    vit,
+    fox,
+]
+
+searchable_sites = [
+    kis,
+    fox,
 ]
 
 
