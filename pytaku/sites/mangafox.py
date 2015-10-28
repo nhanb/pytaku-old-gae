@@ -166,13 +166,24 @@ class Mangafox(Site):
         base_url = '/'.join(page1_url.split('/')[:-1]) + '/%s.html'
 
         # a <select> tag has options that each points to a page
-        opts = soup.find('select', class_='m').find_all('option')
-        urls = [base_url % opt['value'] for opt in opts]
+        select_tag = soup.find('select', class_='m')
+        if select_tag is not None:
+            opts = select_tag.find_all('option')
+            urls = [base_url % opt['value'] for opt in opts]
+            # first page already fetched, last page is comments
+            urls = urls[1:-1]
+        else:
+            # For whatever stupid reason, mangafox seems to serve a different
+            # version of the reader page for our requests from GAE. Gotta
+            # find the page count in their haxx0r JS codez instead.
+            page_count_regex = re.compile('var total_pages=(\d+)')
+            count_tag = soup.find('script', text=page_count_regex)
+            count = int(page_count_regex.search(count_tag.text).groups()[0])
+            urls = [base_url % num for num in range(2, count + 1)]
 
         # Page 1 has already been fetched (stored in this html param, duh!)
         # so let's save ourselves an http request
         pages_htmls = [html]
-        urls = urls[1:-1]  # also remove last one since it's a comments page
 
         rpcs = []
         for url in urls:
