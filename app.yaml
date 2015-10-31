@@ -1,5 +1,5 @@
 application: pytaku
-version: 0-6
+version: 0-7
 runtime: python27
 api_version: 1
 threadsafe: yes
