@@ -20,9 +20,9 @@ class Series(ndb.Model):
         return self.url in user.bookmarked_series
 
     def is_fresh(self):
-        # fresh == updated no longer than 12 hours ago
+        # fresh == updated no longer than 30 minutes ago
         delta = datetime.now() - self.last_update
-        return delta.days <= 0 and delta.seconds <= 43200
+        return delta.days <= 0 and delta.seconds <= 1800
 
     @classmethod
     def create(cls, url, site, name, thumb_url, chapters, status, tags, desc,
