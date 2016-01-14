@@ -1,4 +1,5 @@
-# DEPRECATION NOTICE!!
+# DEPRECATION NOTICE!!  
+ [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 I've decided to rewrite Pytaku from scratch to a) migrate away from Google App Engine and b)
 restructure frontend code to make a bit more sense. This repo will not be maintained anymore, but
