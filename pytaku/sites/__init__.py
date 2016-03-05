@@ -36,6 +36,8 @@ class Site:
 
 from kissmanga import Kissmanga
 kis = Kissmanga()
+from readcomiconline import ReadComicOnline
+rco = ReadComicOnline()
 from batoto import Batoto
 bat = Batoto()
 from vitaku import Vitaku
@@ -45,6 +47,7 @@ fox = Mangafox()
 
 available_sites = [
     kis,
+    rco,
     bat,
     vit,
     fox,
@@ -52,6 +55,7 @@ available_sites = [
 
 searchable_sites = [
     kis,
+    rco,
 ]
 
 
