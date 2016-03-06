@@ -155,8 +155,13 @@ class ReadComicOnline(Site):
         return self.get_html(new_url, headers=headers)
 
     def search_by_author(self, author):
-        url = 'http://readcomiconline.com/AuthorArtist/'
-        + author.replace(' ', '-')
+        # Ugly 2 requests, I know.
+        return self._search_author(author, 'Writer') +\
+            self._search_author(author, 'Artist')
+
+    def _search_author(self, author, kind):
+        url = 'http://readcomiconline.com/%s/' % kind +\
+              author.replace(' ', '-')
         resp = urlfetch.fetch(url)
 
         if resp.status_code != 200:
