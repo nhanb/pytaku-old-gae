@@ -144,7 +144,8 @@ class Kissmanga(Site):
         # safe.
         base = url[:url.rfind('/') + 1]  # http://.../Manga-Name/
         id = url[url.rfind('?id='):]  # ?id=XXXXXX
-        return self.get_html(base + '_' + id)
+        header = {'Cookie': 'vns_readType1=1'}
+        return self.get_html(base + '_' + id, headers=header)
 
     def search_by_author(self, author):
         url = 'http://kissmanga.com/AuthorArtist/' + author.replace(' ', '-')
