@@ -27,7 +27,7 @@ class Kissmanga(Site):
         # Kissmanga returns manga series and links in xml format
         soup = BeautifulSoup(resp.content)
         atags = soup.find_all('a')
-        return [{'name': a.string.strip(),
+        return [{'name': a.text.strip(),
                  'url': a['href'],
                  'site': 'kissmanga'} for a in atags]
 
