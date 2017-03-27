@@ -4,6 +4,7 @@ import re
 from bs4 import BeautifulSoup
 import bs4
 from pytaku.sites import Site
+from .decoder import decode_url, get_unhashed_key
 
 
 class Kissmanga(Site):
@@ -125,8 +126,12 @@ class Kissmanga(Site):
         return select.find('option', selected=True).text.strip()
 
     def _chapter_pages(self, html):
-        pat = re.compile('lstImages\.push\("(.+?)"\);')
-        return pat.findall(html)
+        soup = BeautifulSoup(html)
+        unhashed_key = get_unhashed_key(soup)
+
+        pat = re.compile('lstImages\.push\(wrapKA\("(.+?)"\)\);')
+        encrypted_urls = pat.findall(html)
+        return [decode_url(url, unhashed_key) for url in encrypted_urls]
 
     def _chapter_series_url(self, soup):
         a_tag = soup.find('div', id='navsubbar').find('p').find('a')
